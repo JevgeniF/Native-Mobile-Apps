@@ -8,9 +8,10 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/player1sats"
+        style="@style/statsBoards"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/colorPrimaryLight"
+        android:layout_margin="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1.75"
         app:layout_constraintEnd_toStartOf="@+id/player2stats"
@@ -120,9 +121,10 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/player2stats"
+        style="@style/statsBoards"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/colorPrimary"
+        android:layout_margin="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1.75"
         app:layout_constraintEnd_toEndOf="parent"

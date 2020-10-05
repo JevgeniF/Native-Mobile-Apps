@@ -9,7 +9,7 @@
     <item>
         <shape android:shape="oval">
             <stroke android:color="@color/colorPrimaryDark" android:width="5dp" />
-            <solid android:color="#ffffff"/>
+            <solid android:color="@color/colorButtonPOne"/>
         </shape>
     </item>
 </layer-list>
