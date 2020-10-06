@@ -1,29 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/player1sats"
-        style="@style/statsBoards"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="3dp"
+        style="@style/playersBoards"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1.75"
         app:layout_constraintEnd_toStartOf="@+id/player2stats"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/PlayerOne"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Player One"
+            style="@style/textViews"
+            android:text="@string/player_one"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.1"
@@ -33,9 +27,8 @@
 
         <TextView
             android:id="@+id/playerOneWins"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Wins"
+            style="@style/textViews"
+            android:text="@string/pOneWins"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.1"
@@ -45,9 +38,8 @@
 
         <TextView
             android:id="@+id/p1winsQtty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
+            style="@style/textViews"
+            android:text="@string/pOneWins_0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.9"
@@ -57,9 +49,8 @@
 
         <TextView
             android:id="@+id/playerOneLosses"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Losses"
+            style="@style/textViews"
+            android:text="@string/pOneLosses"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.1"
@@ -69,9 +60,8 @@
 
         <TextView
             android:id="@+id/p1lossesQtty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
+            style="@style/textViews"
+            android:text="@string/pOneLosses_0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.9"
@@ -92,9 +82,9 @@
 
         <TextView
             android:id="@+id/p1winPossibilityText"
-            android:layout_width="wrap_content"
+            style="@style/textViews"
             android:layout_height="wrap_content"
-            android:text="Player One Win Possibility"
+            android:text="@string/player_one_win_possibility"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -103,8 +93,9 @@
 
         <RadioButton
             android:id="@+id/p1turnIndicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/textViews"
+            android:checked="true" android:buttonTint="@color/colorSecondary"
+            android:clickable="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -114,16 +105,14 @@
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
+        style="@style/textViews"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/player2stats"
-        style="@style/statsBoards"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        style="@style/playersBoards"
         android:layout_margin="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1.75"
@@ -133,9 +122,8 @@
 
         <TextView
             android:id="@+id/playerTwo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Player Two"
+            style="@style/textViews"
+            android:text="@string/player_two"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.9"
@@ -145,9 +133,8 @@
 
         <TextView
             android:id="@+id/playerTwoWins"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Wins"
+            style="@style/textViews"
+            android:text="@string/pTwoWins"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.9"
@@ -157,9 +144,8 @@
 
         <TextView
             android:id="@+id/p2winsQtty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
+            style="@style/textViews"
+            android:text="@string/pTwoWins_0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/playerTwoWins"
             app:layout_constraintHorizontal_bias="0.1"
@@ -169,9 +155,8 @@
 
         <TextView
             android:id="@+id/playerTwoLosses"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Losses"
+            style="@style/textViews"
+            android:text="@string/pTwoLosses"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.9"
@@ -181,9 +166,8 @@
 
         <TextView
             android:id="@+id/p2lossesQtty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
+            style="@style/textViews"
+            android:text="@string/pTwoLosses_0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/playerTwoLosses"
             app:layout_constraintHorizontal_bias="0.1"
@@ -204,9 +188,8 @@
 
         <TextView
             android:id="@+id/p2winPossibilityText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Player Two Win Possibility"
+            style="@style/textViews"
+            android:text="@string/player_two_win_possibility"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -215,8 +198,7 @@
 
         <RadioButton
             android:id="@+id/p2turnIndicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/textViews"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
