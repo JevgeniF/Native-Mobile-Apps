@@ -34,15 +34,15 @@ class MainActivity : AppCompatActivity() {
                         if (nextMoveByPOne) {
                             findViewById<Button>(buttonId + i).text = "1"
                             findViewById<Button>(buttonId + i).setBackgroundResource(R.drawable.roundedbuttonp1pressed)
-                            findViewById<Button>(2131231008).setBackgroundResource(R.drawable.indicator)
-                            findViewById<Button>(2131231009).setBackgroundResource(R.drawable.indicatornexttwo)
+                            findViewById<Button>(2131231009).setBackgroundResource(R.drawable.indicator)
+                            findViewById<Button>(2131231010).setBackgroundResource(R.drawable.indicatornexttwo)
                             nextMoveByPOne = !nextMoveByPOne
                             break
                         } else {
                             findViewById<Button>(buttonId + i).text = "2"
                             findViewById<Button>(buttonId + i).setBackgroundResource(R.drawable.roundedbuttonp2pressed)
-                            findViewById<Button>(2131231008).setBackgroundResource(R.drawable.indicatornextone)
-                            findViewById<Button>(2131231009).setBackgroundResource(R.drawable.indicator)
+                            findViewById<Button>(2131231009).setBackgroundResource(R.drawable.indicatornextone)
+                            findViewById<Button>(2131231010).setBackgroundResource(R.drawable.indicator)
                             nextMoveByPOne = !nextMoveByPOne
                             break
                         }
@@ -53,10 +53,10 @@ class MainActivity : AppCompatActivity() {
         winCheck()
         if (endGame) {
             if (nextMoveByPOne) {
-                Snackbar.make(findViewById(R.id.board), "Player Two Wins. Player One Sucks", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(findViewById(R.id.main), "Player Two Wins. Player One Sucks", Snackbar.LENGTH_LONG).show()
             } else {
                 println("p1wins")
-                Snackbar.make(findViewById(R.id.board), "Player One Wins. Nah, You're so clever as you think, Player Two", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(findViewById(R.id.main), "Player One Wins. Nah, You're so clever as you think, Player Two", Snackbar.LENGTH_LONG).show()
             }
         } else if (counter == 42 && !endGame) {
             endGame = true
