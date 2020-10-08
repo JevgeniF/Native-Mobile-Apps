@@ -10,12 +10,12 @@ import com.google.android.material.snackbar.Snackbar
 
 
 class MainActivity : AppCompatActivity() {
-    var nextMoveByPOne = true
-    var endGame = false
-    var board = Board().board
-    var counter = 0
-    var pOneWins = 0
-    var pTwoWins = 0
+    private var nextMoveByPOne = true
+    private var endGame = false
+    private var board = Board().board
+    private var counter = 0
+    private var pOneWins = 0
+    private var pTwoWins = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun winCheck() {
+    private fun winCheck() {
         for (row in board.indices step 1) {
             for (col in board[row].indices step 1) {
                 val currentId = board[row][col]
@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun snackbarNotice () {
+    private fun snackbarNotice () {
         if (endGame) {
             if (nextMoveByPOne) {
                 Snackbar.make(
@@ -124,7 +124,7 @@ class MainActivity : AppCompatActivity() {
                     Snackbar.LENGTH_LONG
                 ).show()
                 pTwoWins++
-                findViewById<TextView>(R.id.pTwoWinsData).text = "" + pTwoWins
+                findViewById<TextView>(R.id.pTwoWinsData).text = "$pTwoWins"
             } else {
                 Snackbar.make(
                     findViewById(R.id.main),
@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity() {
                     Snackbar.LENGTH_LONG
                 ).show()
                 pOneWins++
-                findViewById<TextView>(R.id.pOneWinsData).text = "" + pOneWins
+                findViewById<TextView>(R.id.pOneWinsData).text = "$pOneWins"
             }
         } else if (counter == 42 && !endGame) {
             endGame = true
@@ -144,7 +144,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun oneMoreGame(vew: View) {
+    fun oneMoreGame(view: View) {
         if(endGame){
             for (row in board.indices step 1) {
                 for (col in board[row].indices step 1) {
@@ -156,7 +156,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun reset(view: View){
+    fun reset(view: View) {
         recreate()
     }
 }

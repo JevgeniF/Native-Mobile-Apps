@@ -1,15 +1,12 @@
 <resources>
     <string name="app_name">Connect4</string>
     <string name="player_one">Player One</string>
-    <string name="pOneWins">Wins</string>
-    <string name="pOneWins_0">0</string>
-    <string name="pOneLosses">Losses</string>
-    <string name="pOneLosses_0">0</string>
-    <string name="player_one_win_possibility">Player One Win Possibility</string>
     <string name="player_two">Player Two</string>
-    <string name="pTwoWins">Wins</string>
-    <string name="pTwoWins_0">0</string>
-    <string name="pTwoLosses">Losses</string>
-    <string name="pTwoLosses_0">0</string>
-    <string name="player_two_win_possibility">Player Two Win Possibility</string>
+
+    <string name="reset">Reset</string>
+    <string name="pTwoWinsData">0</string>
+    <string name="P2wins">Wins</string>
+    <string name="one_more_game">One More Game</string>
+    <string name="pOneWinsData">0</string>
+    <string name="P1wins">Wins</string>
 </resources>

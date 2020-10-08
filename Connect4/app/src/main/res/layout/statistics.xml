@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark">
@@ -41,7 +40,7 @@
         <TextView
             android:id="@+id/pOneWins"
             style="@style/textViews"
-            android:text="Wins"
+            android:text="@string/P1wins"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +49,7 @@
         <TextView
             android:id="@+id/pOneWinsData"
             style="@style/textViews"
-            android:text="0"
+            android:text="@string/pOneWinsData"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +60,7 @@
             android:id="@+id/oneMoreGame"
             style="@style/roundedcornersbutton"
             android:onClick="oneMoreGame"
-            android:text=" One More Game "
+            android:text="@string/one_more_game"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -111,7 +110,7 @@
         <TextView
             android:id="@+id/pTwoWins"
             style="@style/textViews"
-            android:text="Wins"
+            android:text="@string/P2wins"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -120,7 +119,7 @@
         <TextView
             android:id="@+id/pTwoWinsData"
             style="@style/textViews"
-            android:text="0"
+            android:text="@string/pTwoWinsData"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -130,7 +129,7 @@
         <Button
             android:id="@+id/reset"
             style="@style/roundedcornersbutton"
-            android:text=" Reset "
+            android:text="@string/reset"
             android:onClick="reset"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
