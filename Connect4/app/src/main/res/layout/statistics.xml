@@ -69,37 +69,17 @@
             app:layout_constraintTop_toBottomOf="@+id/p1winsQtty"
             app:layout_constraintVertical_bias="0.050000012" />
 
-        <ProgressBar
-            android:id="@+id/p1winPossibility"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="180dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/playerOneLosses"
-            app:layout_constraintVertical_bias="0.13" />
-
-        <TextView
-            android:id="@+id/p1winPossibilityText"
-            style="@style/textViews"
-            android:layout_height="wrap_content"
-            android:text="@string/player_one_win_possibility"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/p1winPossibility"
-            app:layout_constraintVertical_bias="0.050000012" />
-
-        <RadioButton
+        <Button
             android:id="@+id/p1turnIndicator"
-            style="@style/textViews"
-            android:checked="true" android:buttonTint="@color/colorSecondary"
-            android:clickable="false"
+            style="@style/indicator"
+            android:background="@drawable/indicatornextone"
+            android:onClick="gameButtonOnClick"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/p1winPossibilityText" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -175,34 +155,17 @@
             app:layout_constraintTop_toBottomOf="@+id/p2winsQtty"
             app:layout_constraintVertical_bias="0.050000012" />
 
-        <ProgressBar
-            android:id="@+id/p2winPossibility"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="180dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/playerTwoLosses"
-            app:layout_constraintVertical_bias="0.13" />
-
-        <TextView
-            android:id="@+id/p2winPossibilityText"
-            style="@style/textViews"
-            android:text="@string/player_two_win_possibility"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/p2winPossibility"
-            app:layout_constraintVertical_bias="0.050000012" />
-
-        <RadioButton
+        <Button
             android:id="@+id/p2turnIndicator"
-            style="@style/textViews"
+            style="@style/indicator"
+            android:background="@drawable/indicator"
+            android:onClick="gameButtonOnClick"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/p2winPossibilityText" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
