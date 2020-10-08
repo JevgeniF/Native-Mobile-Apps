@@ -20,54 +20,9 @@
             android:text="@string/player_one"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.050000012" />
-
-        <TextView
-            android:id="@+id/playerOneWins"
-            style="@style/textViews"
-            android:text="@string/pOneWins"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/PlayerOne"
-            app:layout_constraintVertical_bias="0.050000012" />
-
-        <TextView
-            android:id="@+id/p1winsQtty"
-            style="@style/textViews"
-            android:text="@string/pOneWins_0"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.9"
-            app:layout_constraintStart_toStartOf="@+id/playerOneWins"
-            app:layout_constraintTop_toBottomOf="@+id/PlayerOne"
-            app:layout_constraintVertical_bias="0.050000012" />
-
-        <TextView
-            android:id="@+id/playerOneLosses"
-            style="@style/textViews"
-            android:text="@string/pOneLosses"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/playerOneWins"
-            app:layout_constraintVertical_bias="0.050000012" />
-
-        <TextView
-            android:id="@+id/p1lossesQtty"
-            style="@style/textViews"
-            android:text="@string/pOneLosses_0"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.9"
-            app:layout_constraintStart_toStartOf="@+id/playerOneLosses"
-            app:layout_constraintTop_toBottomOf="@+id/p1winsQtty"
-            app:layout_constraintVertical_bias="0.050000012" />
+            app:layout_constraintVertical_bias="0.4" />
 
         <Button
             android:id="@+id/p1turnIndicator"
@@ -106,54 +61,9 @@
             android:text="@string/player_two"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.9"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.050000012" />
-
-        <TextView
-            android:id="@+id/playerTwoWins"
-            style="@style/textViews"
-            android:text="@string/pTwoWins"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.9"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/playerTwo"
-            app:layout_constraintVertical_bias="0.050000012" />
-
-        <TextView
-            android:id="@+id/p2winsQtty"
-            style="@style/textViews"
-            android:text="@string/pTwoWins_0"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/playerTwoWins"
-            app:layout_constraintHorizontal_bias="0.1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/playerTwo"
-            app:layout_constraintVertical_bias="0.050000012" />
-
-        <TextView
-            android:id="@+id/playerTwoLosses"
-            style="@style/textViews"
-            android:text="@string/pTwoLosses"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.9"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/playerTwoWins"
-            app:layout_constraintVertical_bias="0.050000012" />
-
-        <TextView
-            android:id="@+id/p2lossesQtty"
-            style="@style/textViews"
-            android:text="@string/pTwoLosses_0"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/playerTwoLosses"
-            app:layout_constraintHorizontal_bias="0.1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/p2winsQtty"
-            app:layout_constraintVertical_bias="0.050000012" />
+            app:layout_constraintVertical_bias="0.4" />
 
         <Button
             android:id="@+id/p2turnIndicator"
