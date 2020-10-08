@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 
@@ -13,6 +14,8 @@ class MainActivity : AppCompatActivity() {
     var endGame = false
     var board = Board().board
     var counter = 0
+    var pOneWins = 0
+    var pTwoWins = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -34,33 +37,23 @@ class MainActivity : AppCompatActivity() {
                         if (nextMoveByPOne) {
                             findViewById<Button>(buttonId + i).text = "1"
                             findViewById<Button>(buttonId + i).setBackgroundResource(R.drawable.roundedbuttonp1pressed)
-                            findViewById<Button>(2131231009).setBackgroundResource(R.drawable.indicator)
-                            findViewById<Button>(2131231010).setBackgroundResource(R.drawable.indicatornexttwo)
+                            findViewById<Button>(2131231008).setBackgroundResource(R.drawable.indicator)
+                            findViewById<Button>(2131231009).setBackgroundResource(R.drawable.indicatornexttwo)
                             nextMoveByPOne = !nextMoveByPOne
                             break
                         } else {
                             findViewById<Button>(buttonId + i).text = "2"
                             findViewById<Button>(buttonId + i).setBackgroundResource(R.drawable.roundedbuttonp2pressed)
-                            findViewById<Button>(2131231009).setBackgroundResource(R.drawable.indicatornextone)
-                            findViewById<Button>(2131231010).setBackgroundResource(R.drawable.indicator)
+                            findViewById<Button>(2131231008).setBackgroundResource(R.drawable.indicatornextone)
+                            findViewById<Button>(2131231009).setBackgroundResource(R.drawable.indicator)
                             nextMoveByPOne = !nextMoveByPOne
                             break
                         }
                     }
                 }
             }
-        }
-        winCheck()
-        if (endGame) {
-            if (nextMoveByPOne) {
-                Snackbar.make(findViewById(R.id.main), "Player Two Wins. Player One Sucks", Snackbar.LENGTH_LONG).show()
-            } else {
-                println("p1wins")
-                Snackbar.make(findViewById(R.id.main), "Player One Wins. Nah, You're so clever as you think, Player Two", Snackbar.LENGTH_LONG).show()
-            }
-        } else if (counter == 42 && !endGame) {
-            endGame = true
-            Snackbar.make(findViewById(R.id.board), "It's a Draw. Can you imagine more stupid situation? What a waste of time", Snackbar.LENGTH_LONG).show()
+            winCheck()
+            snackbarNotice()
         }
     }
 
@@ -120,5 +113,50 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    fun snackbarNotice () {
+        if (endGame) {
+            if (nextMoveByPOne) {
+                Snackbar.make(
+                    findViewById(R.id.main),
+                    "Player Two Wins. Player One Sucks",
+                    Snackbar.LENGTH_LONG
+                ).show()
+                pTwoWins++
+                findViewById<TextView>(R.id.pTwoWinsData).text = "" + pTwoWins
+            } else {
+                Snackbar.make(
+                    findViewById(R.id.main),
+                    "Player One Wins. Nah, You're so clever as you think, Player Two",
+                    Snackbar.LENGTH_LONG
+                ).show()
+                pOneWins++
+                findViewById<TextView>(R.id.pOneWinsData).text = "" + pOneWins
+            }
+        } else if (counter == 42 && !endGame) {
+            endGame = true
+            Snackbar.make(
+                findViewById(R.id.board),
+                "It's a Draw. Can you imagine more stupid situation? What a waste of time",
+                Snackbar.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    fun oneMoreGame(vew: View) {
+        if(endGame){
+            for (row in board.indices step 1) {
+                for (col in board[row].indices step 1) {
+                    findViewById<Button>(board[row][col]).text = ""
+                    findViewById<Button>(board[row][col]).setBackgroundResource(R.drawable.roundedbutton)
+                }
+            }
+            endGame = false
+        }
+    }
+
+    fun reset(view: View){
+        recreate()
     }
 }
