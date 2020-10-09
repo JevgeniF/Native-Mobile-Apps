@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity() {
             if (nextMoveByPOne) {
                 Snackbar.make(
                     findViewById(R.id.main),
-                    "Player Two Wins. Player One Sucks",
+                    "Player Two Wins. Don't cry, Player One, dont' cry",
                     Snackbar.LENGTH_LONG
                 ).show()
                 pTwoWins++
@@ -128,7 +128,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 Snackbar.make(
                     findViewById(R.id.main),
-                    "Player One Wins. Nah, You're so clever as you think, Player Two",
+                    "Player One Wins. Nah, You're not so clever as you think, Player Two",
                     Snackbar.LENGTH_LONG
                 ).show()
                 pOneWins++
