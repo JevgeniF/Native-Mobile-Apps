@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Contacts</string>
+    <string name="skype">Skype</string>
+    <string name="last_name">Last Name</string>
+    <string name="contact">Contact</string>
+    <string name="name">Name</string>
+    <string name="mobile_phone">Mobile Phone</string>
+    <string name="e_mail">E-Mail</string>
+    <string name="save_contact">Save Contact</string>
+</resources>
