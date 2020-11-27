@@ -152,6 +152,7 @@ class MainActivity : AppCompatActivity() {
                     findViewById<Button>(board[row][col]).setBackgroundResource(R.drawable.roundedbutton)
                 }
             }
+            counter = 0
             endGame = false
         }
     }
