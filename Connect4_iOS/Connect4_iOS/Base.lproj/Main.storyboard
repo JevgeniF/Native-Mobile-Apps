@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connect 4" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OSm-km-ftC">
-                                <rect key="frame" x="118.66666666666669" y="48.999999999999993" width="153" height="69.333333333333314"/>
+                                <rect key="frame" x="118.66666666666669" y="49" width="153" height="59.333333333333343"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -1215,7 +1215,7 @@
                                 <variation key="heightClass=compact-widthClass=regular" alignment="bottom" axis="vertical" distribution="equalSpacing"/>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="22" translatesAutoresizingMaskIntoConstraints="NO" id="k8t-Jf-bOg">
-                                <rect key="frame" x="15" y="133.33333333333337" width="360" height="338"/>
+                                <rect key="frame" x="15" y="123.33333333333331" width="360" height="338"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZZG-VL-JlN">
                                         <rect key="frame" x="0.0" y="0.0" width="169" height="338"/>
@@ -1262,13 +1262,11 @@
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemPinkColor"/>
                                         <constraints>
-                                            <constraint firstAttribute="bottomMargin" secondItem="pp2-ur-ErM" secondAttribute="bottom" constant="5" id="Eag-SO-wyp"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="pp2-ur-ErM" secondAttribute="trailing" constant="20" id="Fd3-52-0qB"/>
                                             <constraint firstAttribute="bottom" secondItem="pp2-ur-ErM" secondAttribute="bottom" constant="13" id="drf-t8-W9M"/>
                                             <constraint firstItem="pp2-ur-ErM" firstAttribute="top" secondItem="ZZG-VL-JlN" secondAttribute="top" constant="13" id="gaw-4x-v0V"/>
                                             <constraint firstItem="pp2-ur-ErM" firstAttribute="top" secondItem="ZZG-VL-JlN" secondAttribute="topMargin" constant="5" id="iJc-j0-EBo"/>
                                             <constraint firstItem="pp2-ur-ErM" firstAttribute="leading" secondItem="ZZG-VL-JlN" secondAttribute="leadingMargin" constant="20" id="iZS-S6-njs"/>
-                                            <constraint firstAttribute="bottomMargin" secondItem="pp2-ur-ErM" secondAttribute="bottom" constant="5" id="mMz-jA-2WE"/>
                                             <constraint firstItem="pp2-ur-ErM" firstAttribute="top" secondItem="ZZG-VL-JlN" secondAttribute="topMargin" constant="5" id="psg-1b-8nr"/>
                                             <constraint firstAttribute="width" secondItem="ZZG-VL-JlN" secondAttribute="height" multiplier="1:2" id="qgK-Vg-eHT"/>
                                         </constraints>
@@ -1343,12 +1341,11 @@
                         <color key="backgroundColor" systemColor="systemBlueColor"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="k8t-Jf-bOg" secondAttribute="trailing" constant="15" id="0MS-bT-Fqf"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="k8t-Jf-bOg" secondAttribute="bottom" constant="338.66666666666663" id="15U-W3-kBd"/>
                             <constraint firstItem="k8t-Jf-bOg" firstAttribute="top" secondItem="OSm-km-ftC" secondAttribute="bottom" constant="15" id="45x-YD-VZW"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="MoE-kk-B2q" secondAttribute="trailing" constant="15" id="5co-k2-6qK"/>
                             <constraint firstItem="k8t-Jf-bOg" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="15" id="7gw-sG-5rK"/>
                             <constraint firstItem="OSm-km-ftC" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="5" id="CEp-N3-Fam"/>
-                            <constraint firstItem="OSm-km-ftC" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="EK9-MX-v8T"/>
+                            <constraint firstItem="MoE-kk-B2q" firstAttribute="top" secondItem="k8t-Jf-bOg" secondAttribute="bottom" constant="25" id="JX7-Oo-JXS"/>
                             <constraint firstItem="OSm-km-ftC" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="SPe-gr-xwz"/>
                             <constraint firstItem="MoE-kk-B2q" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="15" id="YUm-8W-QNX"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="MoE-kk-B2q" secondAttribute="bottom" constant="15" id="aQA-Pg-AT7"/>

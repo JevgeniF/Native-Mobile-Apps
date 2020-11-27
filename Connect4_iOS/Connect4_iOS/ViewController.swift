@@ -43,6 +43,14 @@ class ViewController: UIViewController {
         
     }
     
+    override open var shouldAutorotate: Bool {
+        return false
+    }
+    
+    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return.portrait
+    }
+    
     func updateUI(){
         pOneCounter.text = "\(game.pOneCounter)"
         pTwoCounter.text = "\(game.pTwoCounter)"
