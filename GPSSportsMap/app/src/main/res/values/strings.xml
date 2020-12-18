@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">GPS Sports Map</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="buttonMapView">Map View</string>
+    <string name="buttonReset">Reset Activity</string>
+    <string name="buttonCompass">Compass</string>
+    <string name="buttonOptions">Options</string>
+    <string name="buttonStart">Start</string>
+    <string name="buttonAddCP">Add CPoint</string>
+    <string name="buttonAddWP">Add WPoint</string>
+    <string name="textFromStart">From Start</string>
+    <string name="textFromStartDistanceLabel">Dist.:</string>
+    <string name="textFromStartDistance">0 m</string>
+    <string name="textFromStartTime">hh:mm:ss</string>
+    <string name="textFromStartLabel">Time:</string>
+    <string name="textFromStartSpeedLabel">Speed:</string>
+    <string name="textFromStartSpeed">0 km/h</string>
+    <string name="textFromCPoint">From CheckPoint</string>
+    <string name="textFromCPointDistanceLabel">Dist.:</string>
+    <string name="textFromCPointDistance">0 m</string>
+    <string name="textFromCPointTime">hh:mm:ss</string>
+    <string name="textFromCPointLabel">Time:</string>
+    <string name="textFromCPointSpeedLabel">Speed:</string>
+    <string name="textFromCPointSpeed">0 km/h</string>
+    <string name="textFromWPoint">From WayPoint</string>
+    <string name="textFromWPointDistanceLabel">Dist.:</string>
+    <string name="textFromWPointDistance">0 m</string>
+    <string name="textFromWPointTime">hh:mm:ss</string>
+    <string name="textFromWPointLabel">Time:</string>
+    <string name="textFromWPointSpeedLabel">Speed:</string>
+    <string name="textFromWPointSpeed">0 km/h</string>
+</resources>
