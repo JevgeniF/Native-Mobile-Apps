@@ -28,7 +28,8 @@ class MainActivity : AppCompatActivity() {
             counter++
             if ((view as Button).text == "") {
                 val buttonId = view.id
-                println(buttonId)
+                println(board.size)
+                println(board[0].size)
                 for (i in 35 downTo 0 step 7) {
                     if (buttonId <= (buttonId + i) && (buttonId + i) <= 2131230850 && findViewById<Button>(
                             buttonId + i
@@ -63,11 +64,14 @@ class MainActivity : AppCompatActivity() {
                 val currentId = board[row][col]
                 if (findViewById<Button>(currentId).text != "") {
                     //3 to right
-                    if (col <= board[row].size - 4 && findViewById<Button>(currentId).text == findViewById<Button>(
+                    if (col <= board[row].size - 4
+                        && findViewById<Button>(currentId).text == findViewById<Button>(
                             board[row][col + 1]
-                        ).text && findViewById<Button>(currentId).text == findViewById<Button>(
+                        ).text
+                        && findViewById<Button>(currentId).text == findViewById<Button>(
                             board[row][col + 2]
-                        ).text && findViewById<Button>(
+                        ).text
+                        && findViewById<Button>(
                             currentId
                         ).text == findViewById<Button>(board[row][col + 3]).text
                     ) {
