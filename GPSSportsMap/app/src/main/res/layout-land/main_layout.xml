@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -104,7 +105,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:layout_marginEnd="50dp"
+        android:layout_marginEnd="64dp"
         android:autoSizeMaxTextSize="100sp"
         android:autoSizeMinTextSize="10sp"
         android:autoSizeStepGranularity="2sp"
@@ -146,34 +147,13 @@
         android:autoSizeMinTextSize="12sp"
         android:autoSizeStepGranularity="2sp"
         android:autoSizeTextType="uniform"
+        android:onClick="buttonMapViewOnClick"
         android:text="@string/buttonMapView"
         app:iconTint="#FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/buttonReset"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineVertL"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:targetApi="o" />
-
-    <Button
-        android:id="@+id/buttonReset"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="2dp"
-        android:autoSizeMaxTextSize="100sp"
-        android:autoSizeMinTextSize="10sp"
-        android:autoSizeStepGranularity="2sp"
-        android:autoSizeTextType="uniform"
-        android:text="@string/buttonReset"
         app:layout_constraintBottom_toTopOf="@+id/buttonCompass"
         app:layout_constraintEnd_toStartOf="@+id/map"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonMapView"
+        app:layout_constraintTop_toTopOf="parent"
         tools:targetApi="o" />
 
     <Button
@@ -193,9 +173,8 @@
         android:text="@string/buttonCompass"
         app:layout_constraintBottom_toTopOf="@+id/buttonOptions"
         app:layout_constraintEnd_toStartOf="@+id/map"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonReset"
+        app:layout_constraintTop_toBottomOf="@+id/buttonMapView"
         tools:targetApi="o" />
 
     <Button
@@ -213,9 +192,8 @@
         android:autoSizeTextType="uniform"
         android:maxLines="1"
         android:text="@string/buttonOptions"
-        app:layout_constraintBottom_toTopOf="@+id/buttonAddWP"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineVertL"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintBottom_toTopOf="@+id/buttonResetWP"
+        app:layout_constraintEnd_toStartOf="@+id/map"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonCompass"
         tools:targetApi="o" />
@@ -254,7 +232,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.20" />
+        app:layout_constraintGuide_percent="0.15" />
 
     <TextView
         android:id="@+id/textFromStart"
@@ -321,25 +299,26 @@
         tools:targetApi="o" />
 
     <Button
-        android:id="@+id/buttonStart"
+        android:id="@+id/buttonResetWP"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="2dp"
         android:autoSizeMaxTextSize="100sp"
         android:autoSizeMinTextSize="12sp"
         android:autoSizeStepGranularity="2sp"
         android:autoSizeTextType="uniform"
-        android:text="@string/buttonStart"
-        app:icon="@android:drawable/ic_media_play"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineVertL"
-        app:layout_constraintHorizontal_bias="0.5"
+        android:onClick="buttonResetWPointOnClick"
+        android:text="@string/buttonRemoveWP"
+        android:textAlignment="viewStart"
+        app:icon="@android:drawable/ic_input_delete"
+        app:layout_constraintBottom_toTopOf="@+id/buttonAddCP"
+        app:layout_constraintEnd_toStartOf="@+id/map"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonAddCP"
+        app:layout_constraintTop_toBottomOf="@+id/buttonOptions"
         tools:targetApi="o" />
 
     <Button
@@ -355,37 +334,35 @@
         android:autoSizeMinTextSize="12sp"
         android:autoSizeStepGranularity="2sp"
         android:autoSizeTextType="uniform"
+        android:onClick="buttonAddCPointOnClick"
         android:text="@string/buttonAddCP"
         android:textAlignment="viewStart"
         app:icon="@android:drawable/ic_menu_myplaces"
         app:layout_constraintBottom_toTopOf="@+id/buttonStart"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineVertL"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toStartOf="@+id/map"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonAddWP"
+        app:layout_constraintTop_toBottomOf="@+id/buttonResetWP"
         tools:targetApi="o" />
 
     <Button
-        android:id="@+id/buttonAddWP"
+        android:id="@+id/buttonStart"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginBottom="2dp"
+        android:layout_marginBottom="5dp"
         android:autoSizeMaxTextSize="100sp"
         android:autoSizeMinTextSize="12sp"
         android:autoSizeStepGranularity="2sp"
         android:autoSizeTextType="uniform"
-        android:text="@string/buttonAddWP"
-        android:textAlignment="viewStart"
-        app:icon="@android:drawable/ic_menu_add"
-        app:layout_constraintBottom_toTopOf="@+id/buttonAddCP"
+        android:onClick="buttonStartOnClick"
+        android:text="@string/buttonStart"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guidelineVertL"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonOptions"
+        app:layout_constraintTop_toBottomOf="@+id/buttonAddCP"
         tools:targetApi="o" />
 
     <TextView

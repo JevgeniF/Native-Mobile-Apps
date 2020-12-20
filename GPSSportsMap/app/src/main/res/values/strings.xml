@@ -1,13 +1,13 @@
 <resources>
     <string name="app_name">GPS Sports Map</string>
     <string name="title_activity_maps">Map</string>
-    <string name="buttonMapView">Map View</string>
-    <string name="buttonReset">Reset Activity</string>
+    <string name="buttonMapView">Head Up</string>
+    <string name="buttonReset">Reset WPoint</string>
     <string name="buttonCompass">Compass</string>
     <string name="buttonOptions">Options</string>
     <string name="buttonStart">Start</string>
     <string name="buttonAddCP">Add CPoint</string>
-    <string name="buttonAddWP">Add WPoint</string>
+    <string name="buttonRemoveWP">Reset WPoint</string>
     <string name="textFromStart">From Start</string>
     <string name="textFromStartDistanceLabel">Dist.:</string>
     <string name="textFromStartDistance">0 m</string>
@@ -22,7 +22,7 @@
     <string name="textFromCPointLabel">Time:</string>
     <string name="textFromCPointSpeedLabel">Speed:</string>
     <string name="textFromCPointSpeed">0 km/h</string>
-    <string name="textFromWPoint">From WayPoint</string>
+    <string name="textFromWPoint">Till WayPoint</string>
     <string name="textFromWPointDistanceLabel">Dist.:</string>
     <string name="textFromWPointDistance">0 m</string>
     <string name="textFromWPointTime">hh:mm:ss</string>
