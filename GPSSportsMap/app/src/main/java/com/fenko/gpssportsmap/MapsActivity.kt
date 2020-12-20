@@ -2,35 +2,33 @@ package com.fenko.gpssportsmap
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Criteria
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
 import com.androidadvance.topsnackbar.TSnackbar
 import com.google.android.gms.common.api.internal.ConnectionCallbacks
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
-import org.json.JSONObject
+
+//TODO SAVING ACTIVITY
+//TODO RESTORING ACTIVITY
+//TODO NOTIFICATIONS
+//TODO DATABASE???
+//TODO CORRECT DATA
+//TODO FUSED LOCATION SERVICE 2ND PRIORITY
+//TODO COLORED SEGMENTS 2ND PRIORITY
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener, ConnectionCallbacks, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener {
@@ -38,36 +36,44 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener, 
     private var myPerMissionRequestLocation = 99
 
     private lateinit var mMap: GoogleMap
-    private var northUp: Boolean = false
-    private var started: Boolean = false
-    private var paused: Boolean = false
     private lateinit var locationManager: LocationManager
     private var provider: String? = ""
-    private var lastLocation: Location? = null
-    private var wayPoint: Marker? = null
-    private var checkPoint: Marker? = null
-    private var marker: Marker? = null
-    private var passedRouteOptions = PolylineOptions().width(7F).color(Color.RED)
-    private var passedRoute: Polyline? = null
-    private var pathOptions = PolylineOptions().width(5F).color(Color.YELLOW)
-    private var path: Polyline? = null
 
-    var volley = Volley()
+    private var volley = Volley()
+    private var settings = Settings()
+    private var activity = Activity()
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("ActivityStarted",activity.started)
+        outState.putBoolean("ActivityPaused",activity.paused)
+        outState.putBoolean("ActivityCompleted",activity.completed)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if(savedInstanceState != null) {
+            activity.started = savedInstanceState.getBoolean("ActivityStarted")
+            activity.paused = savedInstanceState.getBoolean("ActivityPaused")
+            activity.completed = savedInstanceState.getBoolean("ActivityCompleted")
+        }
+
         supportActionBar?.hide()
         setContentView(R.layout.main_layout)
 
+        //login dialog popup and login to backend
+        if (volley.volleyUser== null)
         volley.login(this)
 
+        //location permission request
         checkLocationPermissions()
 
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val criteria = Criteria()
         provider = locationManager.getBestProvider(criteria, true)
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            lastLocation = locationManager.getLastKnownLocation(provider!!)!!
+            activity.currentLocation = locationManager.getLastKnownLocation(provider!!)!!
+            activity.currentLatLng = LatLng(activity.currentLocation!!.latitude, activity.currentLocation!!.longitude)
         } else {
             return
         }
@@ -88,46 +94,59 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener, 
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        mMap.mapType = 2
-        mMap.uiSettings.isZoomControlsEnabled = true
-        mMap.uiSettings.isZoomGesturesEnabled = true
-        mMap.uiSettings.isCompassEnabled = false
+        mMap.mapType = settings.mapType
+        mMap.uiSettings.isZoomControlsEnabled = settings.isZoomControlsEnabled
+        mMap.uiSettings.isZoomGesturesEnabled = settings.isZoomGesturesEnabled
+        mMap.uiSettings.isCompassEnabled = settings.isCompassEnabled
         mMap.setOnMapClickListener(this)
         mMap.setOnMapLongClickListener(this)
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mMap.isMyLocationEnabled = true
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission
+                        .ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mMap.isMyLocationEnabled = settings.isMyLocationEnabled
         }
-        val currentLatLng = LatLng(lastLocation!!.latitude, lastLocation!!.longitude)
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(17f))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng))
-        updateCameraBearing(mMap, lastLocation!!.bearing)
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(settings.defaultZoom))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(activity.currentLatLng))
+        updateCameraBearing(mMap, activity.currentLocation!!.bearing)
     }
 
     override fun onConnected(p0: Bundle?) {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(provider!!, 400, 1f, this, Looper.getMainLooper())
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission
+                        .ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(provider!!, 400, 1f,
+                    this, Looper.getMainLooper())
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onLocationChanged(location: Location) {
-        lastLocation = location
-        if (passedRoute != null) {
-            passedRoute!!.remove()
+        activity.currentLocation = location
+        activity.currentLatLng = LatLng(location.latitude, location.longitude)
+        if (activity.passedRoute != null) {
+            activity.passedRoute!!.remove()
         }
-        if (path != null) {
-            path!!.remove()
-            pathOptions = PolylineOptions().width(5F).color(Color.YELLOW)
+        if (activity.path != null) {
+            activity.path!!.remove()
+            settings.pathOptions = PolylineOptions().width(5F).color(Color.YELLOW)
         }
-        val currentLatLng = LatLng(lastLocation!!.latitude, lastLocation!!.longitude)
-        if(wayPoint != null) {
-            val pathLatLng = LatLng(wayPoint!!.position.latitude, wayPoint!!.position.longitude)
-            path = mMap.addPolyline(pathOptions.add(currentLatLng, pathLatLng))
+        if(activity.wayPoint != null) {
+            activity.path = mMap.addPolyline(settings.pathOptions!!
+                    .add(activity.currentLatLng, activity.wayPointLatLng))
         }
-        if(started) {
-            passedRoute = mMap.addPolyline(passedRouteOptions.add(currentLatLng))
+        if(activity.started && !activity.paused) {
+            activity.passedRoute = mMap.addPolyline(settings.passedRouteOptions!!
+                    .add(activity.currentLatLng))
+            volley.postLU(this, activity)
+            volley.getSession(this, activity.sessionId!!, activity)
+
+            val totalDistance = findViewById<TextView>(R.id.textFromStartDistance)
+            totalDistance.text = activity.totalDistance.toString()
+            val duration = findViewById<TextView>(R.id.textFromStartTime)
+            duration.text = activity.duration.toString()
+            val averageSpeed = findViewById<TextView>(R.id.textFromStartSpeed)
+            averageSpeed.text = activity.averageSpeed.toString()
         }
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng))
-        if (northUp) {
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(activity.currentLatLng))
+        if (settings.northUp) {
             updateCameraBearing(mMap, 0f)
         } else {
             updateCameraBearing(mMap, location.bearing)
@@ -135,29 +154,36 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener, 
     }
 
     override fun onMapClick(p0: LatLng?) {
-        if (marker != null) {
-            marker!!.remove()
+        if (activity.marker != null) {
+            activity.marker!!.remove()
         }
-        marker = mMap.addMarker(MarkerOptions().position(p0!!).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)).title("Add as WP"))
-        if(started) {
-            TSnackbar.make(findViewById(R.id.main), "Long press on map to create WayPoint on Marker position. Click to change position of Marker.", TSnackbar.LENGTH_LONG).show()
-        }
+        activity.marker = mMap.addMarker(MarkerOptions().icon(BitmapDescriptorFactory
+                .defaultMarker(BitmapDescriptorFactory.HUE_CYAN)).title("Add as WP").position(p0!!))
+        activity.markerLatLng = LatLng(activity.marker!!.position.latitude, activity.marker!!.position.longitude)
+        TSnackbar.make(findViewById(R.id.main), "Long press on map to create WayPoint on Marker position. Click to change position of Marker.", TSnackbar.LENGTH_LONG).show()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onMapLongClick(p0: LatLng?) {
-        if(started) {
-            if (wayPoint!= null){
-                wayPoint!!.remove()
-                path!!.remove()
-                pathOptions = PolylineOptions().width(5F).color(Color.YELLOW)
-            }
-            if (marker != null) {
-                wayPoint = mMap.addMarker(MarkerOptions().position(marker!!.position).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)).title("WP"))
-                marker!!.remove()
-                TSnackbar.make(findViewById(R.id.main), "WayPoint created.", TSnackbar.LENGTH_LONG).show()
-                val pathLatLng = LatLng(wayPoint!!.position.latitude, wayPoint!!.position.longitude)
-                val currentLatLng = LatLng(lastLocation!!.latitude, lastLocation!!.longitude)
-                path = mMap.addPolyline(pathOptions.add(currentLatLng, pathLatLng))
+        if (activity.wayPoint != null) {
+            activity.wayPoint!!.remove()
+            activity.path!!.remove()
+            settings.pathOptions = PolylineOptions().width(5F).color(Color.YELLOW)
+        }
+        if (activity.marker != null) {
+            activity.wayPoint = mMap.addMarker(MarkerOptions().icon(BitmapDescriptorFactory
+                    .defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)).title("WP").position(activity.markerLatLng as LatLng))
+            activity.wayPointLatLng = activity.markerLatLng
+            activity.marker!!.remove()
+            TSnackbar.make(findViewById(R.id.main), "WayPoint created.", TSnackbar.LENGTH_LONG).show()
+            activity.path = mMap.addPolyline(settings.pathOptions!!.add(activity.currentLatLng, activity.wayPointLatLng))
+            if (activity.started) {
+                if (activity.wayPointId != null) {
+                    volley.deletePoint(activity.wayPointId!!, this)
+                    volley.postWP(this, activity)
+                } else {
+                    volley.postWP(this, activity)
+                }
             }
         }
     }
@@ -180,7 +206,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener, 
         }
     }
 
-    private fun updateCameraBearing(googleMap: GoogleMap?, bearing: Float) {
+    fun updateCameraBearing(googleMap: GoogleMap?, bearing: Float) {
         if (googleMap == null) return
         val camPos = CameraPosition
                 .builder(
@@ -208,61 +234,24 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, LocationListener, 
     }
 
     //BUTTON COMMANDS
-    @SuppressLint("SetTextI18n")
     fun buttonMapViewOnClick(view: View) {
-        if (!northUp) {
-            northUp = true
-            (view as Button).text = "North Up"
-            updateCameraBearing(mMap, 0f)
-        } else {
-            northUp = false
-            (view as Button).text = "Head Up"
-            updateCameraBearing(mMap, lastLocation!!.bearing)
-        }
+        UiButtons().mapViewButton(settings, activity, view, mMap)
     }
 
     fun buttonResetWPointOnClick(view: View) {
-        if(wayPoint != null) {
-            wayPoint!!.remove()
-            path!!.remove()
-            pathOptions = PolylineOptions().width(5F).color(Color.YELLOW)
-        }
+        UiButtons().resetWPointButton(settings, activity, this, volley)
+
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun buttonAddCPointOnClick(view: View) {
-        val cpLatLng = LatLng(lastLocation!!.latitude, lastLocation!!.longitude)
-        checkPoint = mMap.addMarker(MarkerOptions().position(cpLatLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).title("CP"))
+        UiButtons().addCPointButton(this,activity, mMap, volley)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     fun buttonStartOnClick(view: View){
-        if (!started && !paused) {
-            started = true
-            (view as Button).text = "Pause"
-            TSnackbar.make(findViewById(R.id.main), "Activity started", TSnackbar.LENGTH_LONG).show()
-            return
-        } else if (started && !paused) {
-            paused = true
-            started = false
-            (view as Button).text = "Finish"
-            TSnackbar.make(findViewById(R.id.main), "Activity Paused", TSnackbar.LENGTH_LONG).show()
-            return
-        } else if (paused) {
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle("Finish Activity")
-            builder.setMessage("Do you want to finish or to continue activity?")
-            builder.setPositiveButton("Continue") { _: DialogInterface, _: Int ->
-                started = true
-                paused = false
-                (view as Button).text = "Pause"
-            }
-            builder.setNegativeButton("Finish") { _: DialogInterface, _: Int ->
-                started = false
-                paused = false
-                (view as Button).text = "Start"
-            }
-            val dialog = builder.create()
-            dialog.show()
-        }
+        UiButtons().startButton(activity, view, this, mMap, volley)
+        //todo new activity clean start
     }
 }

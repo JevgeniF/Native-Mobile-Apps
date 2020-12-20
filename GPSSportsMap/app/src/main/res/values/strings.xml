@@ -10,11 +10,11 @@
     <string name="buttonRemoveWP">Reset WPoint</string>
     <string name="textFromStart">From Start</string>
     <string name="textFromStartDistanceLabel">Dist.:</string>
-    <string name="textFromStartDistance">0 m</string>
-    <string name="textFromStartTime">hh:mm:ss</string>
+    <string name="textFromStartDistance">0</string>
+    <string name="textFromStartTime">00:00:00</string>
     <string name="textFromStartLabel">Time:</string>
     <string name="textFromStartSpeedLabel">Speed:</string>
-    <string name="textFromStartSpeed">0 km/h</string>
+    <string name="textFromStartSpeed">0</string>
     <string name="textFromCPoint">From CheckPoint</string>
     <string name="textFromCPointDistanceLabel">Dist.:</string>
     <string name="textFromCPointDistance">0 m</string>
@@ -29,4 +29,18 @@
     <string name="textFromWPointLabel">Time:</string>
     <string name="textFromWPointSpeedLabel">Speed:</string>
     <string name="textFromWPointSpeed">0 km/h</string>
+    <string name="textPleaseRegister">Please Register</string>
+    <string name="textFirstName">First Name</string>
+    <string name="textLastName">Last Name</string>
+    <string name="textEmail">E-mail</string>
+    <string name="textPassword">Password</string>
+    <string name="buttonRegister">Register</string>
+    <string name="enter_your_first_name">Enter your first name</string>
+    <string name="enter_your_last_name">Enter your last name</string>
+    <string name="enter_your_e_mail">Enter your E-mail</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="textPleaseLogin">Please LogIn</string>
+    <string name="buttonLogin">Log in</string>
+    <string name="buttonNewUser">New User</string>
+    <string name="buttonBack">Back</string>
 </resources>

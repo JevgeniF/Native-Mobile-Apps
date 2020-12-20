@@ -6,7 +6,7 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
 
-class HttpSingletonHandler {
+class HttpSingletonHandler(context: Context) {
     companion object {
         private val TAG = HttpSingletonHandler::class.java.simpleName
         private var context: Context? = null
@@ -22,33 +22,33 @@ class HttpSingletonHandler {
         }
     }
 
-    constructor(context: Context) {
-        HttpSingletonHandler.context = context
-    }
-
-    val requestQueue: RequestQueue? = null
+    private val requestQueue: RequestQueue? = null
         get() {
             if (field == null) {
                 return Volley.newRequestQueue(context)
             }
-            return field;
+            return field
         }
 
 
     fun <T> addToRequestQueue(request: Request<T>, tag: String) {
         request.tag = if (TextUtils.isEmpty(tag)) TAG else tag
-        requestQueue?.add(request);
+        requestQueue?.add(request)
     }
 
     fun <T> addToRequestQueue(request: Request<T>) {
         request.tag = TAG
-        requestQueue?.add(request);
+        requestQueue?.add(request)
     }
 
     fun cancelPendingRequests(tag: Any) {
         if (requestQueue != null) {
             requestQueue!!.cancelAll(tag)
         }
+    }
+
+    init {
+        HttpSingletonHandler.context = context
     }
 
 }
