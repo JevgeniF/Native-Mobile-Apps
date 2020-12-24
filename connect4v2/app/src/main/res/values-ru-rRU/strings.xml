@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Четыре в Ряд</string>
+
+    <!-- main view strings -->
+    <string name="butReset">Сбросить игру</string>
+    <string name="butSettings">Настройки</string>
+    <string name="butNewGame">Ещё одну игру</string>
+    <string name="textWins">Победы</string>
+    <string name="textStatsPoneHint" />
+    <string name="textStatsPtwoHint" />
+
+    <string name="zero">0</string>
+
+    <!-- settings pop-up strings -->
+    <string name="settingsName">Настройки</string>
+    <string name="settingsWelcome">Привет, Игроки! Добро пожаловать в игру!</string>
+    <string name="settingsText">Для начала настройте игру… если хотите, конечно.</string>
+    <string name="textPoneName">Имя первого игрока:</string>
+    <string name="texPlayerTwoName">Имя второго игрока:</string>
+    <string name="hintPlayerName">пожалуйста введите имя</string>
+    <string name="textFirstRoundMove">Первый ход первой игры за…</string>
+    <string name="textPoneTurn">Первым игроком</string>
+    <string name="textPtwoTurn">Вторым игроком</string>
+    <string name="textColorThemes">Цветовые Темы</string>
+    <string name="textThemeDefault">Обычная</string>
+    <string name="textThemeZephyr">Зефир</string>
+    <string name="textThemeAkaver">\"akaver\"</string>
+    <string name="butOk">Закрыть</string>
+
+    <string name="toastMessage">Настройки сохранены</string>
+
+    <!-- Reset Game strings -->
+    <string name="playerOneName">Игрок Один</string>
+    <string name="playerTwoName">Игрок Два</string>
+
+    <!-- win alert message strings -->
+    <string name="winDialogTitle">Игра окончена!</string>
+    <string name="congratulations">Поздравляю,</string>
+    <string name="messageForPtwo">У тебя зоркий глаз и быстрый ум!</string>
+    <string name="messageForPone">Ты такой умный, иди лучше попробуй шахматы!</string>
+    <string name="messageDraw">Не повезло! Это была долгая и бесполезная игра.</string>
+    <string name="winDialogButton">Спасибо!</string>
+
+</resources>

@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/settingsPopUp"
+    android:layout_width="match_parent"
+    android:layout_height="350dp">
+
+    <TextView
+        style="@style/TextView"
+        android:id="@+id/textSettingsName"
+        android:layout_marginStart="150dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="150dp"
+        android:text="@string/settingsName"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:id="@+id/settingsScroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textSettingsName"
+        app:layout_constraintVertical_bias="0.0">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/settingsScrollConstrain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/TextView"
+                android:id="@+id/textSettingsWelcome"
+                android:layout_marginTop="8dp"
+                android:text="@string/settingsWelcome"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/textSettingsText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                style="@style/TextView"
+                android:id="@+id/textSettingsText"
+                android:layout_marginTop="8dp"
+                android:text="@string/settingsText"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textSettingsWelcome" />
+
+            <TextView
+                style="@style/TextView"
+                android:id="@+id/textPoneName"
+                android:layout_marginTop="16dp"
+                android:text="@string/textPoneName"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textSettingsText" />
+
+            <EditText
+                android:id="@+id/editTextPoneName"
+                style="@style/TextView"
+                android:layout_marginTop="8dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/hintPlayerName"
+                android:inputType="textPersonName"
+                android:textAlignment="center"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textPoneName" />
+
+            <TextView
+                style="@style/TextView"
+                android:id="@+id/textPlayerTwoName"
+                android:layout_marginTop="8dp"
+                android:text="@string/texPlayerTwoName"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextPoneName" />
+
+            <EditText
+                android:id="@+id/editTextPtwoName"
+                style="@style/TextView"
+                android:layout_marginTop="8dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/hintPlayerName"
+                android:inputType="textPersonName"
+                android:textAlignment="center"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textPlayerTwoName" />
+
+            <TextView
+                style="@style/TextView"
+                android:id="@+id/textFirstRoundMove"
+                android:layout_marginTop="16dp"
+                android:text="@string/textFirstRoundMove"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextPtwoName" />
+
+            <TextView
+                style="@style/TextView"
+                android:id="@+id/textPoneTurn"
+                android:layout_marginTop="12dp"
+                android:text="@string/textPoneTurn"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toStartOf="@+id/switchFirstMove"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textFirstRoundMove" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switchFirstMove"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/textPtwoTurn"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/textPoneTurn"
+                app:layout_constraintTop_toBottomOf="@+id/textFirstRoundMove" />
+
+            <TextView
+                style="@style/TextView"
+                android:id="@+id/textPtwoTurn"
+                android:layout_marginTop="12dp"
+                android:text="@string/textPtwoTurn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/switchFirstMove"
+                app:layout_constraintTop_toBottomOf="@+id/textFirstRoundMove" />
+
+            <TextView
+                android:id="@+id/textColorThemes"
+                style="@style/TextView"
+                android:layout_marginTop="16dp"
+                android:text="@string/textColorThemes"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/switchFirstMove" />
+
+            <TextView
+                style="@style/TextView"
+                android:id="@+id/textThemeDefault"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/textThemeDefault"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toStartOf="@+id/textThemeZephyr"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layoutDefaultThemeDemo" />
+
+            <TextView
+                android:id="@+id/textThemeZephyr"
+                style="@style/TextView"
+                android:layout_marginTop="8dp"
+                android:text="@string/textThemeZephyr"
+                app:layout_constraintEnd_toStartOf="@+id/textThemeAkaver"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/textThemeDefault"
+                app:layout_constraintTop_toBottomOf="@+id/layoutZephyrThemeDemo" />
+
+            <TextView
+                android:id="@+id/textThemeAkaver"
+                style="@style/TextView"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/textThemeAkaver"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/textThemeZephyr"
+                app:layout_constraintTop_toBottomOf="@+id/layoutAkaverThemeDemo" />
+
+            <Button
+                android:id="@+id/buttonOK"
+                style="@style/TextView"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="#673AB7"
+                android:text="@string/butOk"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textThemeZephyr" />
+
+            <LinearLayout
+                style="@style/themeDemoTile"
+                android:id="@+id/layoutDefaultThemeDemo"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/demo_theme_tyle"
+                android:backgroundTint="#1976D2"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toStartOf="@+id/layoutZephyrThemeDemo"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/checkBoxDefaultTheme">
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/themeDemoTile"
+                android:id="@+id/layoutZephyrThemeDemo"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/demo_zephyr_theme_tyle"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toStartOf="@+id/layoutAkaverThemeDemo"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/layoutDefaultThemeDemo"
+                app:layout_constraintTop_toBottomOf="@+id/checkBoxZephyrTheme" />
+
+            <LinearLayout
+                style="@style/themeDemoTile"
+                android:id="@+id/layoutAkaverThemeDemo"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/demo_theme_tyle"
+                android:backgroundTint="#B2FF59"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/layoutZephyrThemeDemo"
+                app:layout_constraintTop_toBottomOf="@+id/checkBoxAkaverTheme" />
+
+            <CheckBox
+                style="@style/checkBox"
+                android:id="@+id/checkBoxDefaultTheme"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/checkBoxZephyrTheme"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textColorThemes" />
+
+            <CheckBox
+                style="@style/checkBox"
+                android:id="@+id/checkBoxZephyrTheme"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/checkBoxAkaverTheme"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/checkBoxDefaultTheme"
+                app:layout_constraintTop_toBottomOf="@+id/textColorThemes" />
+
+            <CheckBox
+                style="@style/checkBox"
+                android:id="@+id/checkBoxAkaverTheme"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/checkBoxZephyrTheme"
+                app:layout_constraintTop_toBottomOf="@+id/textColorThemes" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

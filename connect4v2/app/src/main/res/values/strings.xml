@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">Connect4</string>
+
+    <!-- main view strings -->
+    <string name="butReset">Reset Game</string>
+    <string name="butSettings">Settings</string>
+    <string name="butNewGame">One More Game</string>
+    <string name="textWins">Wins</string>
+    <string name="textStatsPoneHint" />
+    <string name="textStatsPtwoHint" />
+
+    <string name="zero">0</string>
+
+    <!-- settings pop-up strings -->
+    <string name="settingsName">Settings</string>
+    <string name="settingsWelcome">Hello, Players! Welcome to the game!</string>
+    <string name="settingsText">Please set up your game first… If you want.</string>
+    <string name="textPoneName">Player 1 name:</string>
+    <string name="texPlayerTwoName">Player 2 name:</string>
+    <string name="hintPlayerName">please enter name</string>
+    <string name="textFirstRoundMove">First Round First Move by…</string>
+    <string name="textPoneTurn">First Player</string>
+    <string name="textPtwoTurn">Second Player</string>
+    <string name="textColorThemes">Color Themes</string>
+    <string name="textThemeDefault">Default</string>
+    <string name="textThemeZephyr">Zephyr</string>
+    <string name="textThemeAkaver">\"akaver\"</string>
+    <string name="butOk">Close</string>
+
+    <string name="toastMessage">Settings saved</string>
+
+    <!-- Reset Game strings -->
+    <string name="playerOneName">Player One</string>
+    <string name="playerTwoName">Player Two</string>
+
+    <!-- win alert message strings -->
+    <string name="winDialogTitle">Game Over!</string>
+    <string name="congratulations">Congratulations,</string>
+    <string name="messageForPtwo">You have sharp eye and fast mind!</string>
+    <string name="messageForPone">You are so clever, you should try to play chess!</string>
+    <string name="messageDraw">Bad Luck! It was a long game, which led to nothing.</string>
+    <string name="winDialogButton">Thank You!</string>
+</resources>

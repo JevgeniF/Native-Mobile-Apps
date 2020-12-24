@@ -1,0 +1,30 @@
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="TextView" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:autoSizeMaxTextSize" tools:targetApi="o">100sp</item>
+        <item name="android:autoSizeMinTextSize" tools:targetApi="o">10sp</item>
+        <item name="android:autoSizeStepGranularity" tools:targetApi="o">2sp</item>
+        <item name="android:autoSizeTextType" tools:targetApi="o">uniform</item>
+    </style>
+
+    <style name="themeDemoTile" parent="">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">50dp</item>
+    </style>
+
+    <style name="checkBox" parent="">
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">30dp</item>
+    </style>
+
+    <style name="boardChip" parent="">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:text">@string/zero</item>
+        <item name="android:textSize">0sp</item>
+        <item name="android:background">@drawable/board_chips</item>
+    </style>
+
+</resources>

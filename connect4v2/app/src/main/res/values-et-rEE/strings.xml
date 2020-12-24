@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Gravitrips</string>
+
+    <!-- main view strings -->
+    <string name="butReset">Lähesta</string>
+    <string name="butSettings">Seaded</string>
+    <string name="butNewGame">Veel üks mäng</string>
+    <string name="textWins">Võidud</string>
+    <string name="textStatsPoneHint" />
+    <string name="textStatsPtwoHint" />
+
+    <string name="zero">0</string>
+
+    <!-- settings pop-up strings -->
+    <string name="settingsName">Seaded</string>
+    <string name="settingsWelcome">Hei, Mängijad! Tere tulemast mängu!</string>
+    <string name="settingsText">Alguseks seadistage mängu… kui soovite.</string>
+    <string name="textPoneName">Esimese mängija nimi:</string>
+    <string name="texPlayerTwoName">Teise mängija nimi:</string>
+    <string name="hintPlayerName">Palun sisestage nimi</string>
+    <string name="textFirstRoundMove">Esimese mängu alustab</string>
+    <string name="textPoneTurn">Esimene mängija</string>
+    <string name="textPtwoTurn">Teine mängija</string>
+    <string name="textColorThemes">Tausta värvus</string>
+    <string name="textThemeDefault">Tavaline</string>
+    <string name="textThemeZephyr">Sefiir</string>
+    <string name="textThemeAkaver">\"akaver\"</string>
+    <string name="butOk">Sule</string>
+
+    <string name="toastMessage">Seaded salvestatud</string>
+
+    <!-- Reset Game strings -->
+    <string name="playerOneName">Mängija Üks</string>
+    <string name="playerTwoName">Mängija Kaks</string>
+
+    <!-- win alert message strings -->
+    <string name="winDialogTitle">Mängu lõpp!</string>
+    <string name="congratulations">Õnnitlen,</string>
+    <string name="messageForPtwo">Sa oled terava nägemisega ja kiire mõtlemisega!</string>
+    <string name="messageForPone">Sa oled nii tark, mine proovi malet mängida!</string>
+    <string name="messageDraw">Ei vedanud, see oli ajaraiskamine!</string>
+    <string name="winDialogButton">Tänud!</string>
+</resources>
