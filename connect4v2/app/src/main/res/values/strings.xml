@@ -6,8 +6,8 @@
     <string name="butSettings">Settings</string>
     <string name="butNewGame">One More Game</string>
     <string name="textWins">Wins</string>
-    <string name="textStatsPoneHint" />
-    <string name="textStatsPtwoHint" />
+    <string name="textStatsPoneHint" translatable="false" />
+    <string name="textStatsPtwoHint" translatable="false" />
 
     <string name="zero">0</string>
 

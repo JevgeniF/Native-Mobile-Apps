@@ -7,9 +7,6 @@
     <string name="butSettings">Настройки</string>
     <string name="butNewGame">Ещё одну игру</string>
     <string name="textWins">Победы</string>
-    <string name="textStatsPoneHint" />
-    <string name="textStatsPtwoHint" />
-
     <string name="zero">0</string>
 
     <!-- settings pop-up strings -->
@@ -38,7 +35,7 @@
     <string name="winDialogTitle">Игра окончена!</string>
     <string name="congratulations">Поздравляю,</string>
     <string name="messageForPtwo">У тебя зоркий глаз и быстрый ум!</string>
-    <string name="messageForPone">Ты такой умный, иди лучше попробуй шахматы!</string>
+    <string name="messageForPone">Ты такой(ая) умный(ая), иди лучше попробуй шахматы!</string>
     <string name="messageDraw">Не повезло! Это была долгая и бесполезная игра.</string>
     <string name="winDialogButton">Спасибо!</string>
 
