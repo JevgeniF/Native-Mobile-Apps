@@ -1,10 +1,42 @@
 <resources>
     <string name="app_name">Contacts</string>
-    <string name="skype">Skype</string>
-    <string name="last_name">Last Name</string>
-    <string name="contact">Contact</string>
-    <string name="name">Name</string>
-    <string name="mobile_phone">Mobile Phone</string>
-    <string name="e_mail">E-Mail</string>
-    <string name="save_contact">Save Contact</string>
+
+
+    <string name="AddContact">Add Contact</string>
+    <string name="textAddContact">Add Contact</string>
+    <string name="textEditContact">Edit Contact</string>
+    <string name="hintContactName">Name -min 3 char</string>
+    <string name="hintContactFamilyName">Last Name -min 3 char</string>
+    <string name="hintContactOne">Add Contact -mandatory</string>
+    <string name="hintContact">Add Contact</string>
+    <string name="buttonSave">Save</string>
+    <string name="id" translatable="false" />
+    <string name="textName" translatable="false" />
+    <string name="textFamily" translatable="false" />
+    <string name="textTypeOne" translatable="false" />
+    <string name="textContactOne" translatable="false" />
+    <string name="textTypeTwo" translatable="false" />
+    <string name="textContactTwo" translatable="false" />
+    <string name="textTypeThree" translatable="false" />
+    <string name="textContactThree" translatable="false" />
+    <string name="contactSaved">Contact Saved</string>
+    <string name="mandatoryContact">Please add at least one contact.</string>
+    <string name="alreadyInContacts">is already in your contacts!</string>
+    <string name="tooShortName">is too short. Min. 3 characters.</string>
+    <string name="spinnerPhone">phone</string>
+    <string name="spinnerEmail">e-mail</string>
+    <string name="spinnerSkype">skype</string>
+    <string name="invalidContact">is not valid contact!</string>
+    <string name="question">Question</string>
+    <string name="questionBody">Do you want to…</string>
+    <string name="editButton">…edit?</string>
+    <string name="deleteButton">…delete?</string>
+    <string name="contactDeleted">Contact deleted</string>
+
+    <string-array name="types">
+        <item>phone</item>
+        <item>e-mail</item>
+        <item>skype</item>
+    </string-array>
+
 </resources>

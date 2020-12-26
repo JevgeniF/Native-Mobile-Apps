@@ -1,19 +1,48 @@
 package ee.taltech.contacts
 
 class Contact {
-    var id: Int = 0
-    var ownerID = 0
-    var mobilePhone = ""
-    var eMail = ""
-    var skype = ""
+    var id = 0
+    private var ownerID = 0L
+    var typeOne = ""
+    var contactOne = ""
+    var typeTwo = ""
+    var contactTwo = ""
+    var typeThree = ""
+    var contactThree = ""
 
-    constructor(ownerID: Int, mobilePhone: String, eMail: String, skype: String): this(0, ownerID, mobilePhone, eMail, skype)
+    constructor(
+        typeOne: String,
+        contactOne: String,
+        typeTwo: String,
+        contactTwo: String,
+        typeThree: String,
+        contactThree: String
+    ) {
+        this.typeOne = typeOne
+        this.contactOne = contactOne
+        this.typeTwo = typeTwo
+        this.contactTwo = contactTwo
+        this.typeThree = typeThree
+        this.contactThree = contactThree
+    }
 
-    constructor(id: Int, ownerID: Int, mobilePhone: String, eMail: String, skype: String) {
+    constructor(
+        id: Int,
+        ownerID: Long,
+        typeOne: String,
+        contactOne: String,
+        typeTwo: String,
+        contactTwo: String,
+        typeThree: String,
+        contactThree: String
+    ) {
         this.id = id
         this.ownerID = ownerID
-        this.mobilePhone = mobilePhone
-        this.eMail = eMail
-        this.skype = skype
+        this.typeOne = typeOne
+        this.contactOne = contactOne
+        this.typeTwo = typeTwo
+        this.contactTwo = contactTwo
+        this.typeThree = typeThree
+        this.contactThree = contactThree
     }
 }

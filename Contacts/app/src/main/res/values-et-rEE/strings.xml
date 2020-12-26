@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kontaktid</string>
+    <string name="AddContact">Lisa kontakt</string>
+    <string name="textAddContact">Lisa kontakt</string>
+    <string name="textEditContact">Muuda kontakt</string>
+    <string name="hintContactName">Nimi - min. 3 märki</string>
+    <string name="hintContactFamilyName">Perekonnanimi - min. 3 märki</string>
+    <string name="hintContactOne">Kontakt - kohustuslik</string>
+    <string name="hintContact">Kontakt</string>
+    <string name="buttonSave">Salvesta</string>
+    <string name="contactSaved">Kontakt salvestatud</string>
+    <string name="mandatoryContact">Palun lisa minimum üks kontakt.</string>
+    <string name="alreadyInContacts">juba olema teie kontaktides!</string>
+    <string name="tooShortName">liiga lühike. Min. 3 märki.</string>
+    <string name="spinnerPhone">tel.</string>
+    <string name="spinnerEmail">e-mail</string>
+    <string name="spinnerSkype">skype</string>
+    <string name="invalidContact">kehtetu kontakt</string>
+    <string name="question">Küsimus</string>
+    <string name="questionBody">Kas te soovite…</string>
+    <string name="editButton">…muuda?</string>
+    <string name="deleteButton">…kustutada?</string>
+    <string name="contactDeleted">Kontakt kustutatud</string>
+</resources>

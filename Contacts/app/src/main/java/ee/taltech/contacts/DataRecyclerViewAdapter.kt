@@ -1,15 +1,20 @@
 package ee.taltech.contacts
 
-import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.row_view.view.*
 
 
-class DataRecyclerViewAdapter(context: Context, private val repo: PersonRepository) : RecyclerView.Adapter<DataRecyclerViewAdapter.ViewHolder>() {
+class DataRecyclerViewAdapter(context: Context, private val repo: PersonRepository) :
+    RecyclerView.Adapter<DataRecyclerViewAdapter.ViewHolder>() {
 
     private lateinit var dataSet: List<Person>
 
@@ -20,43 +25,68 @@ class DataRecyclerViewAdapter(context: Context, private val repo: PersonReposito
     init {
         refreshData()
     }
+
     private val inflater = LayoutInflater.from(context)
+    private val editContact = Intent(context, EditContactActivity::class.java)
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnLongClickListener {
-        override fun onLongClick(v: View?): Boolean {
-            TODO("Not yet implemented")
-        }
 
-    }
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val rowView = inflater.inflate(R.layout.row_view, parent, false)
-        return ViewHolder(rowView)
+        val holder = ViewHolder(rowView)
+        val context = rowView.context
+        holder.itemView.setOnLongClickListener {
+            val position = holder.adapterPosition
+            val builder = AlertDialog.Builder(context)
+            val person = dataSet[position]
+            builder.setTitle(context.resources.getString(R.string.question))
+                .setMessage(context.resources.getString(R.string.questionBody))
+                .setNegativeButton(context.resources.getString(R.string.editButton)) { _: DialogInterface, _: Int ->
+                    editContact.putExtra("id", person.id.toString())
+                    context.startActivity(editContact)
+                    (context as Activity).finish()
+                }
+                .setPositiveButton(context.resources.getText(R.string.deleteButton)) { _: DialogInterface, _: Int ->
+                    removeItem(person.id)
+                    Toast.makeText(
+                        context,
+                        context.resources.getString(R.string.contactDeleted),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            val dialog = builder.create()
+            dialog.show()
+            true
+        }
+        return holder
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val person = dataSet[position]
-        holder.itemView.viewId.text = person.id.toString()
-        holder.itemView.viewName.text = person.name
-        holder.itemView.ViewLastName.text = person.lastname
-        holder.itemView.viewMobilePhone.text = person.mobilePhone
-        holder.itemView.viewMobType.text = "Mobile"
-        holder.itemView.viewEmail.text = person.eMail
-        holder.itemView.viewMailType.text = "E-Mail"
-        holder.itemView.viewSkype.text = person.skype
-        holder.itemView.viewSkypetype.text = "Skype"
-
+        holder.itemView.textId.text = person.listId.toString()
+        holder.itemView.textName.text = person.name
+        holder.itemView.textLastName.text = person.lastname
+        holder.itemView.textTypeOne.text = person.contact!!.typeOne
+        holder.itemView.textContactOne.text = person.contact!!.contactOne
+        if (person.contact!!.contactTwo != "") {
+            holder.itemView.textTypeTwo.text = person.contact!!.typeTwo
+            holder.itemView.textContactTwo.text = person.contact!!.contactTwo
+        }
+        if (person.contact!!.contactThree != "") {
+            holder.itemView.textTypeThree.text = person.contact!!.typeThree
+            holder.itemView.textContactThree.text = person.contact!!.contactThree
+        }
     }
 
     override fun getItemCount(): Int {
-       return dataSet.count()
+        return dataSet.count()
     }
 
-    /*fun removeItem(position: Int) {
+    private fun removeItem(position: Int) {
+        repo.delete(position)
         dataSet.drop(position)
+        refreshData()
         notifyDataSetChanged()
     }
-     */
-
 }

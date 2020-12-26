@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Контакты</string>
+    <string name="AddContact">Добавить контакт</string>
+    <string name="textAddContact">Добавить контакт</string>
+    <string name="textEditContact">Изменитъ контакт</string>
+    <string name="hintContactName">Имя - мин. 3 знака</string>
+    <string name="hintContactFamilyName">Фамилия - мин. 3 знака</string>
+    <string name="hintContactOne">"Контакт - обязательно "</string>
+    <string name="hintContact">Контакт</string>
+    <string name="buttonSave">Сохранить</string>
+    <string name="contactSaved">Контакт сохранён</string>
+    <string name="mandatoryContact">Пожалуйста добавьте как минимум один контакт.</string>
+    <string name="alreadyInContacts">уже в ваших контактах!</string>
+    <string name="tooShortName">слишком короткое(ая). Мин. 3 знака.</string>
+    <string name="spinnerPhone">тел.</string>
+    <string name="spinnerEmail">е-майл</string>
+    <string name="spinnerSkype">скайп</string>
+    <string name="invalidContact">не действителный контакт</string>
+    <string name="question">Вопрос</string>
+    <string name="questionBody">Вы хотите…</string>
+    <string name="editButton">…изменить?</string>
+    <string name="deleteButton">…удалить?</string>
+    <string name="contactDeleted">Контакт удалён</string>
+</resources>

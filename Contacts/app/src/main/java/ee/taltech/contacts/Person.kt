@@ -2,21 +2,23 @@ package ee.taltech.contacts
 
 class Person {
     var id: Int = 0
-    var name: String =""
-    var lastname: String =""
-    var mobilePhone = ""
-    var eMail = ""
-    var skype = ""
+    var listId: Int? = null
+    var name: String = ""
+    var lastname: String = ""
+    var contact: Contact? = null
 
-    constructor(name: String, lastname: String, mobilePhone: String, eMail: String, skype: String): this(0, name, lastname,  mobilePhone, eMail, skype)
+    constructor(name: String, lastname: String, contact: Contact) {
+        this.name = name
+        this.lastname = lastname
+        this.contact = contact
+    }
 
-    constructor(id: Int, name: String, lastname: String, mobilePhone: String, eMail: String, skype: String) {
+    constructor(id: Int, name: String, lastname: String, contact: Contact) {
         this.id = id
         this.name = name
         this.lastname = lastname
-        this.mobilePhone = mobilePhone
-        this.eMail = eMail
-        this.skype = skype
+        this.contact = contact
     }
 
+    constructor()
 }
