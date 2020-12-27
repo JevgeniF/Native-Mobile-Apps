@@ -29,7 +29,6 @@ class ConnectFour {
                     gameBoard[i][col] = Chip(isPOne: nextMoveByPOne)
                     nextMoveByPOne = !nextMoveByPOne
                     counter += 1
-                    print(counter)
                     break
                 }
             }
