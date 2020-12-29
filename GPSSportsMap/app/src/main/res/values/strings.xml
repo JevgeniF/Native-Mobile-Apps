@@ -2,7 +2,6 @@
     <string name="app_name">GPS Sports Map</string>
     <string name="title_activity_maps">Map</string>
     <string name="buttonMapView">Head Up</string>
-    <string name="buttonReset">Reset WPoint</string>
     <string name="buttonCompass">Compass</string>
     <string name="buttonOptions">Options</string>
     <string name="buttonStart">Start</string>
@@ -43,4 +42,10 @@
     <string name="buttonLogin">Log in</string>
     <string name="buttonNewUser">New User</string>
     <string name="buttonBack">Back</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="northUp">North Up</string>
+    <string name="headUp">Bearing Up</string>
+    <string name="add_wp">Add WP</string>
+    <string name="add_cp">Add CP</string>
 </resources>

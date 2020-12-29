@@ -226,7 +226,7 @@
         android:textAlignment="viewEnd"
         app:layout_constraintBottom_toTopOf="@+id/buttonStart"
         app:layout_constraintEnd_toStartOf="@+id/guidelineVertL"
-        app:layout_constraintStart_toEndOf="@+id/textPaceAvg"
+        app:layout_constraintStart_toEndOf="@+id/textFromStartSpeedLabel"
         app:layout_constraintTop_toBottomOf="@+id/textFromStartTime"
         tools:targetApi="o" />
 
@@ -399,7 +399,7 @@
         android:textAlignment="viewEnd"
         app:layout_constraintBottom_toTopOf="@+id/textFromCPointSpeed"
         app:layout_constraintEnd_toStartOf="@+id/guidelineVertL"
-        app:layout_constraintStart_toEndOf="@+id/textTotalTime"
+        app:layout_constraintStart_toEndOf="@+id/textFromStartTimeLabel"
         app:layout_constraintTop_toBottomOf="@+id/textFromStartDistance"
         tools:targetApi="o" />
 
@@ -440,7 +440,7 @@
         android:textAlignment="viewEnd"
         app:layout_constraintBottom_toTopOf="@+id/textFromStartTime"
         app:layout_constraintEnd_toStartOf="@+id/guidelineVertL"
-        app:layout_constraintStart_toEndOf="@+id/textTotalDist"
+        app:layout_constraintStart_toEndOf="@+id/textFromStartDistanceLabel"
         app:layout_constraintTop_toBottomOf="@+id/textFromStart"
         tools:targetApi="o" />
 
@@ -516,7 +516,7 @@
         tools:targetApi="o" />
 
     <TextView
-        android:id="@+id/textTotalDist"
+        android:id="@+id/textFromStartDistanceLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -527,13 +527,13 @@
         android:autoSizeStepGranularity="2sp"
         android:autoSizeTextType="uniform"
         android:text="@string/textFromStartDistanceLabel"
-        app:layout_constraintBottom_toTopOf="@+id/textTotalTime"
+        app:layout_constraintBottom_toTopOf="@+id/textFromStartTimeLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textFromStart"
         tools:targetApi="o" />
 
     <TextView
-        android:id="@+id/textTotalTime"
+        android:id="@+id/textFromStartTimeLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -544,13 +544,13 @@
         android:autoSizeStepGranularity="2sp"
         android:autoSizeTextType="uniform"
         android:text="@string/textFromStartLabel"
-        app:layout_constraintBottom_toTopOf="@+id/textPaceAvg"
+        app:layout_constraintBottom_toTopOf="@+id/textFromStartSpeedLabel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textTotalDist"
+        app:layout_constraintTop_toBottomOf="@+id/textFromStartDistanceLabel"
         tools:targetApi="o" />
 
     <TextView
-        android:id="@+id/textPaceAvg"
+        android:id="@+id/textFromStartSpeedLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -563,7 +563,7 @@
         android:text="@string/textFromStartSpeedLabel"
         app:layout_constraintBottom_toTopOf="@+id/buttonStart"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textTotalTime"
+        app:layout_constraintTop_toBottomOf="@+id/textFromStartTimeLabel"
         tools:targetApi="o" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

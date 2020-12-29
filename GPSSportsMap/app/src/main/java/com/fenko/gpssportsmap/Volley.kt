@@ -15,6 +15,7 @@ import java.time.LocalDateTime
 import kotlin.math.floor
 
 class Volley {
+    /*
 
     var volleyUser: User? = null
     private var url = "https://sportmap.akaver.com/api/v1.0"
@@ -272,4 +273,6 @@ class Volley {
                 }
         handler.addToRequestQueue(httpRequest)
     }
+
+     */
 }

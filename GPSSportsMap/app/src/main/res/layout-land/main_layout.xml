@@ -19,7 +19,7 @@
         android:textAlignment="viewEnd"
         app:layout_constraintBottom_toTopOf="@+id/textFromCPointDistance"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/textFromStartDistanceLabel"
+        app:layout_constraintTop_toBottomOf="@+id/textTotalDist"
         tools:targetApi="o" />
 
     <TextView
@@ -35,7 +35,7 @@
         android:textAlignment="viewEnd"
         app:layout_constraintBottom_toTopOf="@+id/textCPointTime"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/textFromStartTimeLabel"
+        app:layout_constraintTop_toBottomOf="@+id/textTotalTime"
         tools:targetApi="o" />
 
     <TextView
@@ -51,7 +51,7 @@
         android:textAlignment="viewEnd"
         app:layout_constraintBottom_toTopOf="@+id/textFromCPointSpeed"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toBottomOf="@+id/textFromStartSpeedLabel"
+        app:layout_constraintTop_toBottomOf="@+id/textPaceAvg"
         tools:targetApi="o" />
 
     <TextView
@@ -114,7 +114,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textFromCPoint"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/textFromStartDistanceLabel"
+        app:layout_constraintTop_toBottomOf="@+id/textTotalDist"
         tools:targetApi="o" />
 
     <TextView
@@ -366,7 +366,7 @@
         tools:targetApi="o" />
 
     <TextView
-        android:id="@+id/textFromStartDistanceLabel"
+        android:id="@+id/textTotalDist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -380,7 +380,7 @@
         tools:targetApi="o" />
 
     <TextView
-        android:id="@+id/textFromStartTimeLabel"
+        android:id="@+id/textTotalTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -394,7 +394,7 @@
         tools:targetApi="o" />
 
     <TextView
-        android:id="@+id/textFromStartSpeedLabel"
+        android:id="@+id/textPaceAvg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"

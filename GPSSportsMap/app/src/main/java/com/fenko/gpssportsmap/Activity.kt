@@ -1,44 +1,59 @@
 package com.fenko.gpssportsmap
 
-import android.location.Location
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.Polyline
-import org.json.JSONObject
+import android.os.Parcel
+import android.os.Parcelable
+import java.util.*
 
-class Activity {
+class Activity() : Parcelable {
 
-    //state
-    var started = false
-    var paused = false
-    var completed = false
-    var sessionId: String?  = null
+    var id: Int = 0
+    var name: String = ""
+    private var recordedAt: Long = Calendar.getInstance(TimeZone.getTimeZone("GMT")).timeInMillis
+    private var paceMin: Int = 360
+    private var paceMax: Int = 720
+    private var gpsSessionTypeId: String = "00000000-0000-0000-0000-000000000003"
+    private var description: String = ""
 
-    //polylines
-    var passedRoute: Polyline? = null
-    var path: Polyline? = null
+    var wayPoint: LocationPoint? = null
+    var listOfLocationPoints: ArrayList<LocationPoint> = arrayListOf()
 
-    //locations
-    var currentLocation: Location? = null
-    var currentLatLng: LatLng? = null
+    constructor(name: String) : this() {
+        this.name = name
+    }
 
-    //markers
-    var marker: Marker? = null
-    var markerLatLng: LatLng? = null
-    var wayPoint: Marker? = null
-    var wayPointLatLng: LatLng? = null
-    var wayPointId: String? = null
-    var checkPoint: Marker? = null
-    var checkPointLocation : Location? = null
-    var start: Marker? = null
-    var startLocation: Location? = null
+    constructor(parcel: Parcel) : this() {
+        id = parcel.readInt()
+        recordedAt = parcel.readLong()
+        name = parcel.readString().toString()
+        paceMin = parcel.readInt()
+        paceMax = parcel.readInt()
+        gpsSessionTypeId = parcel.readString().toString()
+        description = parcel.readString().toString()
+        wayPoint = parcel.readParcelable(LocationPoint::class.java.classLoader)
+    }
 
-    //data
-    var totalDistance: Double = 0.0
-    var duration: Double = 0.0
-    var averageSpeed: Double = 0.0
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(id)
+        parcel.writeString(name)
+        parcel.writeInt(paceMin)
+        parcel.writeInt(paceMax)
+        parcel.writeString(gpsSessionTypeId)
+        parcel.writeString(description)
+        parcel.writeParcelable(wayPoint, flags)
+    }
 
-    var locationUpdates: MutableList<JSONObject>? = null
-    var checkPoints: MutableList<JSONObject>? = null
-    var wayPointJson: JSONObject? = null
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Activity> {
+        override fun createFromParcel(parcel: Parcel): Activity {
+            return Activity(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Activity?> {
+            return arrayOfNulls(size)
+        }
+    }
+
 }
