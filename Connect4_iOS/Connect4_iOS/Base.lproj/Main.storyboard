@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -18,8 +18,8 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connect 4" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OSm-km-ftC">
-                                <rect key="frame" x="118.66666666666669" y="49" width="153" height="59.333333333333343"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                <rect key="frame" x="131.66666666666666" y="48.999999999999993" width="126.66666666666666" height="64.333333333333314"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -1212,10 +1212,9 @@
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="layer." value="YES"/>
                                 </userDefinedRuntimeAttributes>
-                                <variation key="heightClass=compact-widthClass=regular" alignment="bottom" axis="vertical" distribution="equalSpacing"/>
                             </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" spacing="22" translatesAutoresizingMaskIntoConstraints="NO" id="k8t-Jf-bOg">
-                                <rect key="frame" x="15" y="123.33333333333331" width="360" height="338"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="22" translatesAutoresizingMaskIntoConstraints="NO" id="k8t-Jf-bOg">
+                                <rect key="frame" x="15" y="118.33333333333331" width="360" height="338"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZZG-VL-JlN">
                                         <rect key="frame" x="0.0" y="0.0" width="169" height="338"/>
@@ -1223,13 +1222,13 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="68" translatesAutoresizingMaskIntoConstraints="NO" id="pp2-ur-ErM">
                                                 <rect key="frame" x="28" y="13" width="113" height="312"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Player One" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4xG-VO-dAK">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Player One" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4xG-VO-dAK">
                                                         <rect key="frame" x="0.0" y="0.0" width="113" height="26.333333333333332"/>
                                                         <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wins" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Weo-ym-Ogt">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Wins" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Weo-ym-Ogt">
                                                         <rect key="frame" x="0.0" y="94.333333333333314" width="113" height="24"/>
                                                         <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1241,7 +1240,7 @@
                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fAV-5I-qaI">
+                                                    <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fAV-5I-qaI">
                                                         <rect key="frame" x="0.0" y="278.33333333333337" width="113" height="33.666666666666686"/>
                                                         <color key="backgroundColor" systemColor="systemBlueColor"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
@@ -1282,13 +1281,13 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="68" translatesAutoresizingMaskIntoConstraints="NO" id="BSh-Wo-43a">
                                                 <rect key="frame" x="28" y="13" width="113" height="312"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Player Two" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9MI-Wr-vqC">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Player Two" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9MI-Wr-vqC">
                                                         <rect key="frame" x="0.0" y="0.0" width="113" height="26.333333333333332"/>
                                                         <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wins" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CJO-Ev-9mC">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Wins" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CJO-Ev-9mC">
                                                         <rect key="frame" x="0.0" y="94.333333333333314" width="113" height="24"/>
                                                         <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
                                                         <nil key="textColor"/>
@@ -1300,7 +1299,7 @@
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z5p-nh-s8h">
+                                                    <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z5p-nh-s8h">
                                                         <rect key="frame" x="0.0" y="278.33333333333337" width="113" height="33.666666666666686"/>
                                                         <color key="backgroundColor" systemColor="systemBlueColor"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
@@ -1340,16 +1339,71 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBlueColor"/>
                         <constraints>
+                            <constraint firstItem="k8t-Jf-bOg" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="33" id="0J7-wc-jmQ"/>
                             <constraint firstAttribute="trailing" secondItem="k8t-Jf-bOg" secondAttribute="trailing" constant="15" id="0MS-bT-Fqf"/>
-                            <constraint firstItem="k8t-Jf-bOg" firstAttribute="top" secondItem="OSm-km-ftC" secondAttribute="bottom" constant="15" id="45x-YD-VZW"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="MoE-kk-B2q" secondAttribute="trailing" constant="15" id="5co-k2-6qK"/>
-                            <constraint firstItem="k8t-Jf-bOg" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="15" id="7gw-sG-5rK"/>
+                            <constraint firstItem="k8t-Jf-bOg" firstAttribute="top" secondItem="OSm-km-ftC" secondAttribute="bottom" constant="5" id="45x-YD-VZW"/>
+                            <constraint firstItem="MoE-kk-B2q" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" constant="-15" id="5Yi-aR-2CK"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="MoE-kk-B2q" secondAttribute="trailing" id="5co-k2-6qK"/>
+                            <constraint firstItem="k8t-Jf-bOg" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="15" id="7gw-sG-5rK"/>
                             <constraint firstItem="OSm-km-ftC" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="5" id="CEp-N3-Fam"/>
-                            <constraint firstItem="MoE-kk-B2q" firstAttribute="top" secondItem="k8t-Jf-bOg" secondAttribute="bottom" constant="25" id="JX7-Oo-JXS"/>
+                            <constraint firstItem="MoE-kk-B2q" firstAttribute="top" secondItem="k8t-Jf-bOg" secondAttribute="bottom" constant="30" id="JX7-Oo-JXS"/>
                             <constraint firstItem="OSm-km-ftC" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="SPe-gr-xwz"/>
                             <constraint firstItem="MoE-kk-B2q" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="15" id="YUm-8W-QNX"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="MoE-kk-B2q" secondAttribute="bottom" constant="15" id="aQA-Pg-AT7"/>
+                            <constraint firstItem="k8t-Jf-bOg" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="dYu-5R-xrt"/>
+                            <constraint firstItem="MoE-kk-B2q" firstAttribute="leading" secondItem="k8t-Jf-bOg" secondAttribute="trailing" constant="20" id="e0S-OE-Oph"/>
+                            <constraint firstItem="MoE-kk-B2q" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="33" id="mSs-rs-iLh"/>
+                            <constraint firstItem="k8t-Jf-bOg" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" constant="-15" id="yus-dk-Lab"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="5co-k2-6qK"/>
+                                <exclude reference="0J7-wc-jmQ"/>
+                                <exclude reference="yus-dk-Lab"/>
+                                <exclude reference="e0S-OE-Oph"/>
+                                <exclude reference="mSs-rs-iLh"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=compact-widthClass=compact">
+                            <mask key="constraints">
+                                <include reference="5co-k2-6qK"/>
+                                <include reference="0J7-wc-jmQ"/>
+                                <exclude reference="0MS-bT-Fqf"/>
+                                <include reference="45x-YD-VZW"/>
+                                <exclude reference="7gw-sG-5rK"/>
+                                <include reference="yus-dk-Lab"/>
+                                <exclude reference="5Yi-aR-2CK"/>
+                                <exclude reference="JX7-Oo-JXS"/>
+                                <exclude reference="YUm-8W-QNX"/>
+                                <include reference="e0S-OE-Oph"/>
+                                <include reference="mSs-rs-iLh"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=compact-widthClass=regular">
+                            <mask key="constraints">
+                                <include reference="5co-k2-6qK"/>
+                                <include reference="0J7-wc-jmQ"/>
+                                <exclude reference="0MS-bT-Fqf"/>
+                                <include reference="45x-YD-VZW"/>
+                                <exclude reference="7gw-sG-5rK"/>
+                                <include reference="yus-dk-Lab"/>
+                                <exclude reference="5Yi-aR-2CK"/>
+                                <exclude reference="JX7-Oo-JXS"/>
+                                <exclude reference="YUm-8W-QNX"/>
+                                <include reference="e0S-OE-Oph"/>
+                                <include reference="mSs-rs-iLh"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="constraints">
+                                <exclude reference="dYu-5R-xrt"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=regular">
+                            <mask key="constraints">
+                                <exclude reference="7gw-sG-5rK"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="moveByPOne" destination="ZZG-VL-JlN" id="rRO-kt-gb0"/>

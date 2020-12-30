@@ -1,0 +1,27 @@
+
+/* Class = "UILabel"; text = "Player One"; ObjectID = "4xG-VO-dAK"; */
+"4xG-VO-dAK.text" = "Игрок 1";
+
+/* Class = "UILabel"; text = "Player Two"; ObjectID = "9MI-Wr-vqC"; */
+"9MI-Wr-vqC.text" = "Игрок 2";
+
+/* Class = "UILabel"; text = "Wins"; ObjectID = "CJO-Ev-9mC"; */
+"CJO-Ev-9mC.text" = "Победы";
+
+/* Class = "UILabel"; text = "Connect 4"; ObjectID = "OSm-km-ftC"; */
+"OSm-km-ftC.text" = "Четыре в Pяд";
+
+/* Class = "UILabel"; text = "Wins"; ObjectID = "Weo-ym-Ogt"; */
+"Weo-ym-Ogt.text" = "Победы";
+
+/* Class = "UILabel"; text = "0"; ObjectID = "WzU-e3-N5u"; */
+"WzU-e3-N5u.text" = "0";
+
+/* Class = "UIButton"; normalTitle = "Reset Game"; ObjectID = "Z5p-nh-s8h"; */
+"Z5p-nh-s8h.normalTitle" = "Сбросить игру";
+
+/* Class = "UIButton"; normalTitle = "One More Game"; ObjectID = "fAV-5I-qaI"; */
+"fAV-5I-qaI.normalTitle" = "Ещё одна игра";
+
+/* Class = "UILabel"; text = "0"; ObjectID = "lwJ-1K-Qkp"; */
+"lwJ-1K-Qkp.text" = "0";

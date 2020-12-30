@@ -43,14 +43,6 @@ class ViewController: UIViewController {
         
     }
     
-    override open var shouldAutorotate: Bool {
-        return false
-    }
-    
-    override open var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return.portrait
-    }
-    
     func updateUI(){
         pOneCounter.text = "\(game.pOneCounter)"
         pTwoCounter.text = "\(game.pTwoCounter)"
@@ -95,19 +87,27 @@ class ViewController: UIViewController {
     
     func sendAlert() {
         var notice = ""
+        
+        let noticeTitle = NSLocalizedString("Game Over", comment: "gameOverNoticeTitle")
+        let drawNotice = NSLocalizedString("Bad Luck! It was a long game, which led to nothing.", comment: "gameOverDrawNotice")
+        let pTwoNotice = NSLocalizedString("Congratulations, Player Two! You have sharp eye and fast mind!", comment: "gameOverPtwoNotice")
+        let pOneNotice = NSLocalizedString("Congratulations, Player One! You are so clever, you should try to play chess!", comment: "gameOverPoneNotice")
+        let oneMoreGameButton = NSLocalizedString("One more game?", comment: "oneMoreGameButton")
+        let gameResetButton = NSLocalizedString("Game reset!", comment: "gameResetButton")
+        
         if game.counter == 42 {
-            notice = "What can be more boring than DRAW in Connect Four? Use your brains and avoid it in future!"
+            notice = drawNotice
         }
         if game.counter != 42 {
             if game.nextMoveByPOne {
-                notice = "Player Two is the smartest player in the World! Remember this, looser!"
+                notice = pTwoNotice
             } else {
-                notice = "Who is the winer? Player One is the winner! You all suck!"
+                notice = pOneNotice
             }
         }
-        let alert = UIAlertController(title: "Game Over", message: notice, preferredStyle: UIAlertController.Style.alert)
-        alert.addAction(UIAlertAction(title: "One More Game", style: UIAlertAction.Style.default, handler: {(action: UIAlertAction!) in self.oneMoreGame()}))
-        alert.addAction(UIAlertAction(title: "Game Reset", style: UIAlertAction.Style.default, handler: {(action: UIAlertAction!) in self.resetGame()}))
+        let alert = UIAlertController(title: noticeTitle, message: notice, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: oneMoreGameButton, style: UIAlertAction.Style.default, handler: {(action: UIAlertAction!) in self.oneMoreGame()}))
+        alert.addAction(UIAlertAction(title: gameResetButton, style: UIAlertAction.Style.default, handler: {(action: UIAlertAction!) in self.resetGame()}))
         if game.endGame {
             self.present(alert, animated: true, completion: nil)
         }
