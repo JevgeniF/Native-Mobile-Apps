@@ -7,7 +7,7 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the "MyLocation" functionality.
     -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -19,7 +19,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GPSSportsMap">
+        <service
+            android:name=".Compass"
+            android:enabled="true"
+            android:exported="true"></service>
+        <service
+            android:name=".CompassSerivce"
+            android:enabled="true"
+            android:exported="true" />
 
+        <activity android:name=".ListActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -33,7 +42,10 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".DataActivity"
+            android:label="@string/title_activity_data" />
+        <activity
+            android:name=".MapActivity"
             android:label="@string/title_activity_maps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,10 +53,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".LocationService"
-            android:foregroundServiceType="location"
+
+        <service
+            android:name=".LocationService"
             android:enabled="true"
             android:exported="true"
+            android:foregroundServiceType="location"
             android:launchMode="singleTask" />
     </application>
 

@@ -1,4 +1,4 @@
-package com.fenko.gpssportsmap
+package com.fenko.gpssportsmap.backend
 
 import android.app.Dialog
 import android.content.Context

@@ -1,62 +1,90 @@
 package com.fenko.gpssportsmap
 
+import android.location.Location
+import android.location.LocationManager
+import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
-import java.util.*
 
-class LocationPoint() : Parcelable{
+class LocationPoint() : Location(LocationManager.GPS_PROVIDER), Parcelable{
 
-    var id: Int = 0
-    private var recordedAt: Long = Calendar.getInstance(TimeZone.getTimeZone("GMT")).timeInMillis
-    var latitude: Double = 0.0
-    var longitude: Double = 0.0
-    private var altitude: Double = 0.0
-    var bearing: Float = 0F
-    var speed: Double = 0.0
-    private var accuracy: Float = 0F
-    var vAccuracy: Float = 0F
-    var typeId: String = ""
-    private var description: String = ""
+    var id: Long = 0L
+    var activityId: Long = 0L
+    var typeId: String = "00000000-0000-0000-0000-000000000001"
+
+    constructor(id: Long, activityId: Long, time: Long, latitude: Double, longitude: Double, accuracy: Float, altitude: Double, verticalAccuracy: Float = 0f, speed: Float, typeId: String) : this() {
+        this.id = id
+        this.activityId = activityId
+        this.time = time
+        this.latitude = latitude
+        this.longitude = longitude
+        this.accuracy = accuracy
+        this.altitude = altitude
+        this.speed = speed
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            this.verticalAccuracyMeters = verticalAccuracy
+        }
+        this.typeId = typeId
+    }
+
+    constructor(location: Location): this() {
+        this.accuracy = location.accuracy
+        this.altitude = location.altitude
+        this.latitude = location.latitude
+        this.longitude = location.longitude
+        this.provider = location.provider
+        this.speed = location.speed
+        this.time = location.time
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            this.verticalAccuracyMeters = location.verticalAccuracyMeters
+        }
+
+
+    }
+
+    constructor(latitude: Double, longitude: Double, accuracy: Float, altitude: Double, time: Long) : this() {
+        this.latitude = latitude
+        this.longitude = longitude
+        this.accuracy = accuracy
+        this.altitude = altitude
+        this.time = time
+    }
 
     constructor(latitude: Double, longitude: Double) : this() {
         this.latitude = latitude
         this.longitude = longitude
     }
-    constructor(latitude: Double, longitude: Double, altitude: Double, bearing: Float, accuracy: Float, typeId: String) : this() {
-        this.latitude = latitude
-        this.longitude = longitude
-        this.altitude = altitude
-        this.bearing = bearing
-        this.accuracy = accuracy
-        this.typeId = typeId
-    }
 
     constructor(parcel: Parcel) : this() {
-        id = parcel.readInt()
-        recordedAt = parcel.readLong()
-        latitude = parcel.readDouble()
-        longitude = parcel.readDouble()
+        id = parcel.readLong()
+        activityId = parcel.readLong()
+        //backendId = parcel.readString().toString()
+        time = parcel.readLong()
+        speed = parcel.readFloat()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            verticalAccuracyMeters = parcel.readFloat()
+        }
         altitude = parcel.readDouble()
-        bearing = parcel.readFloat()
-        speed = parcel.readDouble()
         accuracy = parcel.readFloat()
-        vAccuracy = parcel.readFloat()
+        longitude = parcel.readDouble()
+        latitude = parcel.readDouble()
         typeId = parcel.readString().toString()
-        description = parcel.readString().toString()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(id)
-        parcel.writeLong(recordedAt)
-        parcel.writeDouble(latitude)
-        parcel.writeDouble(longitude)
+        parcel.writeLong(id)
+        parcel.writeLong(activityId)
+        //parcel.writeString(backendId)
+        parcel.writeLong(time)
+        parcel.writeFloat(speed)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            parcel.writeFloat(verticalAccuracyMeters)
+        }
         parcel.writeDouble(altitude)
-        parcel.writeFloat(bearing)
-        parcel.writeDouble(speed)
         parcel.writeFloat(accuracy)
-        parcel.writeFloat(vAccuracy)
+        parcel.writeDouble(longitude)
+        parcel.writeDouble(latitude)
         parcel.writeString(typeId)
-        parcel.writeString(description)
     }
 
     override fun describeContents(): Int {
@@ -72,4 +100,5 @@ class LocationPoint() : Parcelable{
             return arrayOfNulls(size)
         }
     }
+
 }

@@ -65,7 +65,10 @@ class PersonRepository(private val context: Context) {
     fun getAll(): List<Person> {
         val persons = ArrayList<Person>()
         val sqlQuery =
-            "SELECT * FROM ${DBHelper.PERSONS_TABLE_NAME} as persons INNER JOIN ${DBHelper.CONTACTS_TABLE_NAME} as contacts ON persons.${DBHelper.PERSON_ID} = contacts.${DBHelper.CONTACT_OWNER_ID} ORDER BY persons.${DBHelper.PERSON_NAME};"
+            "SELECT * FROM ${DBHelper.PERSONS_TABLE_NAME} as persons " +
+                    "INNER JOIN ${DBHelper.CONTACTS_TABLE_NAME} as contacts " +
+                    "ON persons.${DBHelper.PERSON_ID} = contacts.${DBHelper.CONTACT_OWNER_ID} " +
+                    "ORDER BY persons.${DBHelper.PERSON_NAME};"
         val cursor = db.rawQuery(sqlQuery, null)
 
         while (cursor.moveToNext()) {

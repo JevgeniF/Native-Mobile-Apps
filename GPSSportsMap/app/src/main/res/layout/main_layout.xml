@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/layoutMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -20,14 +20,14 @@
         android:autoSizeTextType="uniform"
         android:text="@string/textFromWPointDistance"
         android:textAlignment="viewEnd"
-        app:layout_constraintBottom_toTopOf="@+id/textWPointTime"
+        app:layout_constraintBottom_toTopOf="@+id/textWPointDirect"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textFromWPointDistanceLabel"
         app:layout_constraintTop_toBottomOf="@+id/textFromWPoint"
         tools:targetApi="o" />
 
     <TextView
-        android:id="@+id/textWPointTime"
+        android:id="@+id/textWPointDirect"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -38,11 +38,11 @@
         android:autoSizeMinTextSize="10sp"
         android:autoSizeStepGranularity="2sp"
         android:autoSizeTextType="uniform"
-        android:text="@string/textFromWPointTime"
+        android:text="@string/textFromWPointDirect"
         android:textAlignment="viewEnd"
         app:layout_constraintBottom_toTopOf="@+id/textFromWPointSpeed"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textFromWPointTimeLabel"
+        app:layout_constraintStart_toEndOf="@+id/textFromWPointDirectLabel"
         app:layout_constraintTop_toBottomOf="@+id/textFromWPointDistance"
         tools:targetApi="o" />
 
@@ -63,7 +63,7 @@
         app:layout_constraintBottom_toTopOf="@+id/buttonResetWP"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textFromWPointSpeedLabel"
-        app:layout_constraintTop_toBottomOf="@+id/textWPointTime"
+        app:layout_constraintTop_toBottomOf="@+id/textWPointDirect"
         tools:targetApi="o" />
 
     <TextView
@@ -78,13 +78,13 @@
         android:autoSizeStepGranularity="2sp"
         android:autoSizeTextType="uniform"
         android:text="@string/textFromWPointDistanceLabel"
-        app:layout_constraintBottom_toTopOf="@+id/textFromWPointTimeLabel"
+        app:layout_constraintBottom_toTopOf="@+id/textFromWPointDirectLabel"
         app:layout_constraintStart_toStartOf="@+id/guidelineVertR"
         app:layout_constraintTop_toBottomOf="@+id/textFromWPoint"
         tools:targetApi="o" />
 
     <TextView
-        android:id="@+id/textFromWPointTimeLabel"
+        android:id="@+id/textFromWPointDirectLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -94,7 +94,7 @@
         android:autoSizeMinTextSize="10sp"
         android:autoSizeStepGranularity="2sp"
         android:autoSizeTextType="uniform"
-        android:text="@string/textFromWPointLabel"
+        android:text="@string/textFromWPointDirectLabel"
         app:layout_constraintBottom_toTopOf="@+id/textFromWPointSpeedLabel"
         app:layout_constraintStart_toStartOf="@+id/guidelineVertR"
         app:layout_constraintTop_toBottomOf="@+id/textFromWPointDistanceLabel"
@@ -114,7 +114,7 @@
         android:text="@string/textFromWPointSpeedLabel"
         app:layout_constraintBottom_toTopOf="@+id/buttonResetWP"
         app:layout_constraintStart_toStartOf="@+id/guidelineVertR"
-        app:layout_constraintTop_toBottomOf="@+id/textFromWPointTimeLabel"
+        app:layout_constraintTop_toBottomOf="@+id/textFromWPointDirectLabel"
         tools:targetApi="o" />
 
     <TextView
@@ -129,7 +129,7 @@
         android:autoSizeStepGranularity="2sp"
         android:autoSizeTextType="uniform"
         android:text="@string/textFromCPointDistanceLabel"
-        app:layout_constraintBottom_toTopOf="@+id/textFromCPointTimeLabel"
+        app:layout_constraintBottom_toTopOf="@+id/textFromCPointDirectLabel"
         app:layout_constraintStart_toStartOf="@+id/guidelineVertL"
         app:layout_constraintTop_toBottomOf="@+id/textFromCPoint"
         tools:targetApi="o" />
@@ -148,7 +148,7 @@
         android:autoSizeTextType="uniform"
         android:text="@string/textFromCPointDistance"
         android:textAlignment="viewEnd"
-        app:layout_constraintBottom_toTopOf="@+id/textCPointTime"
+        app:layout_constraintBottom_toTopOf="@+id/textCPointDirect"
         app:layout_constraintEnd_toStartOf="@+id/guidelineVertR"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/textFromCPointDistanceLabel"
@@ -156,7 +156,7 @@
         tools:targetApi="o" />
 
     <TextView
-        android:id="@+id/textFromCPointTimeLabel"
+        android:id="@+id/textFromCPointDirectLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -166,14 +166,14 @@
         android:autoSizeMinTextSize="10sp"
         android:autoSizeStepGranularity="2sp"
         android:autoSizeTextType="uniform"
-        android:text="@string/textFromCPointLabel"
+        android:text="@string/textFromCPointDirectLabel"
         app:layout_constraintBottom_toTopOf="@+id/textFromCPointSpeedLabel"
         app:layout_constraintStart_toStartOf="@+id/guidelineVertL"
         app:layout_constraintTop_toBottomOf="@+id/textFromCPointDistanceLabel"
         tools:targetApi="o" />
 
     <TextView
-        android:id="@+id/textCPointTime"
+        android:id="@+id/textCPointDirect"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -184,12 +184,12 @@
         android:autoSizeMinTextSize="10sp"
         android:autoSizeStepGranularity="2sp"
         android:autoSizeTextType="uniform"
-        android:text="@string/textFromCPointTime"
+        android:text="@string/textFromCPointDirect"
         android:textAlignment="viewEnd"
         app:layout_constraintBottom_toTopOf="@+id/textFromCPointSpeed"
         app:layout_constraintEnd_toStartOf="@+id/guidelineVertR"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/textFromCPointTimeLabel"
+        app:layout_constraintStart_toEndOf="@+id/textFromCPointDirectLabel"
         app:layout_constraintTop_toBottomOf="@+id/textFromCPointDistance"
         tools:targetApi="o" />
 
@@ -207,7 +207,7 @@
         android:text="@string/textFromCPointSpeedLabel"
         app:layout_constraintBottom_toTopOf="@+id/buttonAddCP"
         app:layout_constraintStart_toStartOf="@+id/guidelineVertL"
-        app:layout_constraintTop_toBottomOf="@+id/textFromCPointTimeLabel"
+        app:layout_constraintTop_toBottomOf="@+id/textFromCPointDirectLabel"
         tools:targetApi="o" />
 
     <TextView
@@ -300,6 +300,7 @@
         android:autoSizeStepGranularity="2sp"
         android:autoSizeTextType="uniform"
         android:maxLines="1"
+        android:onClick="onButtonCompassClick"
         android:text="@string/buttonCompass"
         app:layout_constraintBottom_toTopOf="@+id/guidelineUpper"
         app:layout_constraintEnd_toStartOf="@+id/buttonOptions"
@@ -345,20 +346,6 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintGuide_end="180dp" />
-
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineLower"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guidelineUpper"
-        app:layout_constraintVertical_bias="1.0"
-        tools:context=".MapsActivity"
-        tools:layout="@layout/activity_maps" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineVertL"
@@ -421,7 +408,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guidelineVertR"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/textFromCPointSpeedLabel"
-        app:layout_constraintTop_toBottomOf="@+id/textCPointTime"
+        app:layout_constraintTop_toBottomOf="@+id/textCPointDirect"
         tools:targetApi="o" />
 
     <TextView
@@ -450,6 +437,20 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.66" />
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineLower"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guidelineUpper"
+        app:layout_constraintVertical_bias="1.0"
+        tools:context=".MapActivity"
+        tools:layout="@layout/activity_maps" />
 
     <Button
         android:id="@+id/buttonStart"
@@ -565,5 +566,80 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textTotalTime"
         tools:targetApi="o" />
+
+    <LinearLayout
+        android:id="@+id/compass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guidelineUpper">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textCompDirLeft"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="#F57C00"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textCompCurrDir"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="#D32F2F"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Current Direction"
+                android:textAlignment="center"
+                android:textColor="#D32F2F"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textCompDirRight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="#F57C00"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

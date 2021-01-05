@@ -1,6 +1,12 @@
 package com.fenko.gpssportsmap
 
-class User(val eMail: String, val password: String, val lastName: String, val firstName: String) {
-    var token: String? = null
-    var userId: String? = null
+class User() {
+
+    val eMail: String = ""
+    val password: String = ""
+    val lastName: String = ""
+    val firstName: String = ""
+    var token: String = ""
+    var userId: String = ""
+
 }

@@ -14,6 +14,12 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/textBearingnotification"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="TextView"
+            android:textAlignment="center" />
     </LinearLayout>
 
     <LinearLayout
@@ -61,14 +67,14 @@
         android:layout_weight="1">
 
         <TextView
-            android:id="@+id/textDistanceFmCP"
+            android:id="@+id/textDirectFmCP"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="TextView" />
 
         <TextView
-            android:id="@+id/textDirectFmCP"
+            android:id="@+id/textDistanceFmCP"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -98,14 +104,14 @@
         android:layout_weight="1">
 
         <TextView
-            android:id="@+id/textDistanceToWP"
+            android:id="@+id/textDirectToWP"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="TextView" />
 
         <TextView
-            android:id="@+id/textDirectToWP"
+            android:id="@+id/textDistanceToWP"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"

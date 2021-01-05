@@ -56,14 +56,14 @@
         android:inputType="textPersonName"
         android:textAlignment="center"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/textLastName"
+        app:layout_constraintBottom_toTopOf="@+id/textNameDataRow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textFirstName" />
 
     <TextView
-        android:id="@+id/textLastName"
+        android:id="@+id/textNameDataRow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:autoSizeMaxTextSize="100sp"
@@ -94,7 +94,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textLastName" />
+        app:layout_constraintTop_toBottomOf="@+id/textNameDataRow" />
 
     <TextView
         android:id="@+id/textEmail"

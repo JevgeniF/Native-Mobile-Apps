@@ -1,4 +1,4 @@
-package com.fenko.gpssportsmap
+package com.fenko.gpssportsmap.backend
 
 import android.content.Context
 import android.text.TextUtils
@@ -48,7 +48,7 @@ class HttpSingletonHandler(context: Context) {
     }
 
     init {
-        HttpSingletonHandler.context = context
+        Companion.context = context
     }
 
 }
