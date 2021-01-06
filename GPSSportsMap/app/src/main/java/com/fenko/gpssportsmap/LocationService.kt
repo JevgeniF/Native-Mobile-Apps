@@ -76,6 +76,8 @@ class LocationService : Service() {
     //backend
     var volley = Volley()
 
+    var kalman = Kalman(5f)
+
     override fun onCreate() {
         Log.d(TAG, "onCreate")
         super.onCreate()
@@ -126,6 +128,11 @@ class LocationService : Service() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun onNewLocation(location: Location) {
         Log.i(TAG, "New location: $location")
+
+        kalman.process(location.latitude, location.longitude, location.accuracy, location.time)
+        location.latitude = kalman.getLat()
+        location.longitude = kalman.getLng()
+        location.accuracy = kalman.getAccuracy()
 
         val locationPoint = LocationPoint(location)
         if (gpsActivity!!.listOfLocations.isEmpty()) {

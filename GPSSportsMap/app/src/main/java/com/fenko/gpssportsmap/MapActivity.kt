@@ -42,9 +42,9 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 
 
-//TODO
+//TODO,
+//small fixes in UI, code cleanup,
 // toTEST: LINE COLORS,
-// locations filter,
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, SensorEventListener {
     companion object {
