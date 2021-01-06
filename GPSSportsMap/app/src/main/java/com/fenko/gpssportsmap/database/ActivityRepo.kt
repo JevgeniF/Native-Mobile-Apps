@@ -1,8 +1,12 @@
-package com.fenko.gpssportsmap
+package com.fenko.gpssportsmap.database
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import androidx.core.database.getStringOrNull
+import com.fenko.gpssportsmap.objects.GPSActivity
+import com.fenko.gpssportsmap.objects.LocationPoint
+import com.fenko.gpssportsmap.objects.User
 
 class ActivityRepo(private val context: Context) {
 
@@ -19,6 +23,16 @@ class ActivityRepo(private val context: Context) {
 
     fun close() {
         dbHelper.close()
+    }
+
+    fun addUser(user: User) {
+        val cv = ContentValues()
+        cv.put(DBHelper.USER_BACKEND_ID, user.backendId)
+        cv.put(DBHelper.USER_NAME, user.firstName)
+        cv.put(DBHelper.USER_LASTNAME, user.lastName)
+        cv.put(DBHelper.USER_EMAIL, user.eMail)
+        cv.put(DBHelper.USER_TOKEN, user.token)
+        user.id = db.insert(DBHelper.USER_TABLE_NAME, null, cv)
     }
 
     fun addActivity(gpsActivity: GPSActivity) {
@@ -53,7 +67,23 @@ class ActivityRepo(private val context: Context) {
         }
         cv.put(DBHelper.LOCATION_SPEED, locationPoint.speed)
         cv.put(DBHelper.LOCATION_TYPE_ID, locationPoint.typeId)
-        db.insert(DBHelper.LOCATION_TABLE_NAME, null, cv)
+        locationPoint.id = db.insert(DBHelper.LOCATION_TABLE_NAME, null, cv)
+    }
+
+    fun getUser(): User {
+        val user = User()
+        val cursor = db.query(DBHelper.USER_TABLE_NAME, null, null, null, null, null, null)
+
+        while (cursor.moveToNext()) {
+            user.id = cursor.getLong(0)
+            user.backendId = cursor.getString(1)
+            user.firstName = cursor.getString(2)
+            user.lastName = cursor.getString(3)
+            user.eMail = cursor.getString(4)
+            user.token = cursor.getString(5)
+        }
+        cursor.close()
+        return user
     }
 
     fun getAll(): List<GPSActivity> {
@@ -176,18 +206,24 @@ class ActivityRepo(private val context: Context) {
     }
 
     fun update(gpsActivity: GPSActivity) {
-        val contentValuesP = ContentValues()
-        contentValuesP.put(DBHelper.ACTIVITY_NAME, gpsActivity.name)
-        contentValuesP.put(DBHelper.ACTIVITY_DESCRIPTION, gpsActivity.description)
-        contentValuesP.put(DBHelper.ACTIVITY_DURATION, gpsActivity.duration)
-        contentValuesP.put(DBHelper.ACTIVITY_SPEED, gpsActivity.speed)
-        contentValuesP.put(DBHelper.ACTIVITY_SPEED, gpsActivity.distance)
+        val cv = ContentValues()
+        cv.put(DBHelper.ACTIVITY_BACKEND_ID, gpsActivity.backendId)
+        cv.put(DBHelper.ACTIVITY_NAME, gpsActivity.name)
+        cv.put(DBHelper.ACTIVITY_DESCRIPTION, gpsActivity.description)
+        cv.put(DBHelper.ACTIVITY_USER_ID, gpsActivity.userId)
+
         db.update(
             DBHelper.ACTIVITY_TABLE_NAME,
-            contentValuesP,
+            cv,
             DBHelper.ACTIVITY_ID + " = ${gpsActivity.id}",
             null
         )
+    }
+
+    fun updateUser(user: User) {
+        val cv = ContentValues()
+        cv.put(DBHelper.USER_BACKEND_ID, user.backendId)
+        db.update(DBHelper.USER_TABLE_NAME, cv, DBHelper.USER_ID + " = ${user.id}", null)
     }
 
     fun delete(id: Int) {

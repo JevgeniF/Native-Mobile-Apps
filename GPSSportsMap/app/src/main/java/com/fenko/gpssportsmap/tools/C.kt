@@ -22,6 +22,8 @@ class C {
         const val LOCATION_UPDATE_ACTION_WP_PASSED = "com.fenko.location_update.wpPassed"
         const val LOCATION_UPDATE_ACTION_WP_PACE = "com.fenko.location_update.wpPace"
 
+        const val MAIN_CLIENT_DATA = "com.fenko.main_client"
+
         const val NOTIFICATION_ID = 4321
         const val REQUEST_PERMISSIONS_REQUEST_CODE = 34
     }

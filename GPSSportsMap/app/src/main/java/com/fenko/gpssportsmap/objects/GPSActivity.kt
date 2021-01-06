@@ -1,6 +1,6 @@
-package com.fenko.gpssportsmap
+package com.fenko.gpssportsmap.objects
 
-import java.text.SimpleDateFormat
+import com.fenko.gpssportsmap.tools.Calculator
 import java.util.*
 
 class GPSActivity() {
@@ -8,10 +8,9 @@ class GPSActivity() {
     var listId: Int = 0
     var id: Long = 0L
     var backendId: String = ""
-    var name: String = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).format(
-        Calendar.getInstance(TimeZone.getTimeZone("GMT")).time)
-    var description: String = ""
-    var recordedAt: String? = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).format(Calendar.getInstance(TimeZone.getTimeZone("GMT")).time)
+    var name: String = Calculator().converterTime(Calendar.getInstance().timeInMillis)
+    var description: String = "Orienteering easy mode - training"
+    var recordedAt: String? = Calculator().converterTime(Calendar.getInstance().timeInMillis)
     var timeStart: Long = Calendar.getInstance().timeInMillis
     var duration: Long = 0L
     var speed: Float = 0f

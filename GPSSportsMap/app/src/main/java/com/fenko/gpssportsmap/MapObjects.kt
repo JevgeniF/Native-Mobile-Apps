@@ -1,33 +1,23 @@
 package com.fenko.gpssportsmap
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.graphics.Color
 import android.graphics.Color.*
 import android.location.Location
 import android.location.LocationManager
 import android.os.Parcel
 import android.os.Parcelable
-import android.util.Log
 import android.view.View
-import android.widget.Button
 import com.androidadvance.topsnackbar.TSnackbar
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
-import kotlin.math.max
-import kotlin.math.min
 
 
-class UI() : Parcelable {
+class MapObjects() : Parcelable {
 
     var mapType = 1
     var isZoomControlsEnabled = true
     var isZoomGesturesEnabled = true
     var defaultZoom = 17f
-
-    var fasterPace = 3
-    var slowerPace = 16
 
     //polylines
     var passedRouteOptions: PolylineOptions = PolylineOptions().width(10F)
@@ -45,8 +35,6 @@ class UI() : Parcelable {
         isZoomControlsEnabled = parcel.readByte() != 0.toByte()
         isZoomGesturesEnabled = parcel.readByte() != 0.toByte()
         defaultZoom = parcel.readFloat()
-        fasterPace = parcel.readInt()
-        slowerPace = parcel.readInt()
         passedRouteOptions = parcel.readParcelable(PolylineOptions::class.java.classLoader)!!
         passedRouteOptionsDef = parcel.readParcelable(PolylineOptions::class.java.classLoader)!!
         northUp = parcel.readByte() != 0.toByte()
@@ -87,20 +75,6 @@ class UI() : Parcelable {
                 .position(LatLng(location!!.latitude, location.longitude)))
     }
 
-    fun mapView(view: View, context: Context, map: GoogleMap, location: Location?) {
-        if(!northUp) {
-            northUp = true
-            (view as Button).text = context.resources.getString(R.string.northUp)
-            mapViewButtonText = context.resources.getString(R.string.northUp)
-            updateCameraBearing(map, 0f)
-        } else {
-            northUp = false
-            (view as Button).text = context.resources.getString(R.string.headUp)
-            mapViewButtonText = context.resources.getString(R.string.northUp)
-            updateCameraBearing(map, location!!.bearing)
-        }
-    }
-
         fun updateCameraBearing(map: GoogleMap?, bearing : Float) {
         if (map == null) return
         val camPos = CameraPosition
@@ -136,8 +110,6 @@ class UI() : Parcelable {
         parcel.writeByte(if (isZoomControlsEnabled) 1 else 0)
         parcel.writeByte(if (isZoomGesturesEnabled) 1 else 0)
         parcel.writeFloat(defaultZoom)
-        parcel.writeInt(fasterPace)
-        parcel.writeInt(slowerPace)
         parcel.writeParcelable(passedRouteOptions, flags)
         parcel.writeParcelable(passedRouteOptionsDef, flags)
         parcel.writeByte(if (northUp) 1 else 0)
@@ -149,12 +121,12 @@ class UI() : Parcelable {
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<UI> {
-        override fun createFromParcel(parcel: Parcel): UI {
-            return UI(parcel)
+    companion object CREATOR : Parcelable.Creator<MapObjects> {
+        override fun createFromParcel(parcel: Parcel): MapObjects {
+            return MapObjects(parcel)
         }
 
-        override fun newArray(size: Int): Array<UI?> {
+        override fun newArray(size: Int): Array<MapObjects?> {
             return arrayOfNulls(size)
         }
     }

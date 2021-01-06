@@ -1,14 +1,16 @@
 package com.fenko.gpssportsmap
 
-import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.FragmentActivity
-import androidx.recyclerview.widget.LinearLayoutManager
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.fenko.gpssportsmap.database.ActivityRepo
+import com.fenko.gpssportsmap.database.DataRecyclerViewAdapter
+import com.fenko.gpssportsmap.objects.GPSActivity
 import com.fenko.gpssportsmap.tools.Calculator
+import com.fenko.gpssportsmap.tools.GPXParser
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -17,16 +19,21 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.android.synthetic.main.activities_list.*
 import kotlinx.android.synthetic.main.activity_data.*
 
-class DataActivity : AppCompatActivity(), OnMapReadyCallback {
+class ListActivityData : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var activityRepo: ActivityRepo
     private lateinit var adapter: RecyclerView.Adapter<*>
+    private var id: Long? = null
 
     lateinit var activity: GPSActivity
-    var ui = UI()
+    var ui = MapObjects()
+    var gpxParser = GPXParser()
+
+    var goodPace: Int = 4
+    var badPace: Int = 7
+
 
     private lateinit var mMap: GoogleMap
 
@@ -40,13 +47,14 @@ class DataActivity : AppCompatActivity(), OnMapReadyCallback {
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+        id = intent.getStringExtra("id")!!.toLong()
+
         activityRepo = ActivityRepo(this).open()
 
         adapter = DataRecyclerViewAdapter(this, activityRepo)
         (adapter as DataRecyclerViewAdapter).refreshData()
 
-        println((adapter as DataRecyclerViewAdapter).dataSet.size)
-        activity = (adapter as DataRecyclerViewAdapter).dataSet.last()
+        activity = activityRepo.get(id!!)
 
         editTextActivityName.setText(activity.name)
         textRecordedAtData.text = activity.recordedAt
@@ -82,7 +90,7 @@ class DataActivity : AppCompatActivity(), OnMapReadyCallback {
         for(i in 1 until activity.listOfLocations.size) {
             ui.uiUpdate(LatLng(activity.listOfLocations[i - 1]!!.latitude, activity.listOfLocations[i - 1]!!.longitude),
                     LatLng(activity.listOfLocations[i]!!.latitude, activity.listOfLocations[i]!!.longitude),
-                    activity.listOfLocations[i]!!.speed, ui.fasterPace, ui.slowerPace, mMap)
+                    activity.listOfLocations[i]!!.speed, goodPace, badPace, mMap)
 
             if (activity.listOfLocations[i]!!.typeId == "00000000-0000-0000-0000-000000000003") {
                 ui.addCPMarker(activity.listOfLocations[i]!!, mMap)
@@ -97,17 +105,27 @@ class DataActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     fun buttonPreviousActivitiesOnClick(view: View) {
+        if (activity.name != editTextActivityName.text.toString() || activity.description != editTextDescription.text.toString()) {
+            activity.name = editTextActivityName.text.toString()
+            activity.description = editTextDescription.text.toString()
+
+            activityRepo.update(activity)
+            Toast.makeText(this, "Activity updated", Toast.LENGTH_SHORT).show()
+        }
         val viewActivitiesList = Intent(this, ListActivity::class.java)
         activityRepo.close()
         startActivity(viewActivitiesList)
         finish()
     }
 
-    fun buttonCloseOnClick(view: View) {
-        val viewListView = Intent(this, ListActivity::class.java)
-        activityRepo.close()
-        startActivity(viewListView)
-        finish()
+    fun buttonExportOnClick(view: View) {
+        if (activity.name != editTextActivityName.text.toString() || activity.description != editTextDescription.text.toString()) {
+            activity.name = editTextActivityName.text.toString()
+            activity.description = editTextDescription.text.toString()
+
+            activityRepo.update(activity)
+        }
+        gpxParser.exportFile(this, activity)
     }
 
     override fun onDestroy() {

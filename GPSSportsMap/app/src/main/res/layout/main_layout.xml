@@ -323,6 +323,7 @@
         android:autoSizeStepGranularity="2sp"
         android:autoSizeTextType="uniform"
         android:maxLines="1"
+        android:onClick="onButtonOptionsClick"
         android:text="@string/buttonOptions"
         app:layout_constraintBottom_toTopOf="@+id/guidelineUpper"
         app:layout_constraintEnd_toEndOf="parent"

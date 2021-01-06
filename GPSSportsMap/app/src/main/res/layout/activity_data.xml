@@ -199,16 +199,16 @@
         android:onClick="buttonPreviousActivitiesOnClick"
         android:text="@string/buttonPreviousActivities"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/buttonClose"
+        app:layout_constraintEnd_toStartOf="@+id/buttonExport"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/buttonClose"
+        android:id="@+id/buttonExport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:onClick="buttonShareOnClick"
+        android:onClick="buttonExportOnClick"
         android:text="@string/buttonClose"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

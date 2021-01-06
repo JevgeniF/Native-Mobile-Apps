@@ -12,9 +12,14 @@ import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import android.widget.RemoteViews
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.fenko.gpssportsmap.database.ActivityRepo
+import com.fenko.gpssportsmap.objects.GPSActivity
+import com.fenko.gpssportsmap.objects.LocationPoint
+import com.fenko.gpssportsmap.objects.User
 import com.fenko.gpssportsmap.tools.C
 import com.fenko.gpssportsmap.tools.Calculator
 import com.google.android.gms.location.*
@@ -65,10 +70,13 @@ class LocationService : Service() {
 
     //activity
     var gpsActivity: GPSActivity? = null
+    var activityType: String? = null
 
     //repo
     private lateinit var activityRepo: ActivityRepo
 
+    //backend
+    var volley = Volley()
 
     override fun onCreate() {
         Log.d(TAG, "onCreate")
@@ -89,6 +97,7 @@ class LocationService : Service() {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         mLocationCallback = object : LocationCallback() {
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
                 onNewLocation(locationResult.lastLocation)
@@ -116,6 +125,7 @@ class LocationService : Service() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun onNewLocation(location: Location) {
         Log.i(TAG, "New location: $location")
 
@@ -130,6 +140,7 @@ class LocationService : Service() {
             locationPoint.speed = currentSpeed
             activityRepo.addLocation(locationPoint)
         }
+        volley.postLU(this, gpsActivity!!, locationPoint)
         if (currentLocation == null){
             locationStart = location
             locationCP = location
@@ -184,6 +195,7 @@ class LocationService : Service() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun getLastLocation() {
         try {
             mFusedLocationClient.lastLocation
@@ -213,6 +225,7 @@ class LocationService : Service() {
         gpsActivity!!.speed = averageSpeedTotal
         gpsActivity!!.distance = distanceTotal
         activityRepo.update(gpsActivity!!)
+        activityRepo.updateUser(volley.volleyUser!!)
         // remove notifications
         NotificationManagerCompat.from(this).cancelAll()
 
@@ -234,6 +247,7 @@ class LocationService : Service() {
         super.onLowMemory()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG, "onStartCommand")
 
@@ -256,8 +270,13 @@ class LocationService : Service() {
         distanceToWPPassed = 0f
         averageSpeedToWP = 0f
 
+        volley.volleyUser = activityRepo.getUser()
         gpsActivity = GPSActivity()
         activityRepo.addActivity(gpsActivity!!)
+        if (volley.volleyUser!!.token != "") {
+            volley.postSession(this, gpsActivity!!)
+        }
+        activityRepo.update(gpsActivity!!)
 
         showNotification()
 
@@ -320,6 +339,7 @@ class LocationService : Service() {
 
 
     private inner class InnerBroadcastReceiver: BroadcastReceiver() {
+        @RequiresApi(Build.VERSION_CODES.O)
         override fun onReceive(context: Context?, intent: Intent?) {
             Log.d(TAG, intent!!.action!!)
             when(intent.action){
@@ -339,6 +359,7 @@ class LocationService : Service() {
                         showNotification()
                     }
                 }
+
                 C.NOTIFICATION_ACTION_CP_SET -> {
                     locationCP = currentLocation
                     val pointCP = LocationPoint(locationCP!!.latitude, locationCP!!.longitude, locationCP!!.accuracy, locationCP!!.altitude, locationCP!!.time)
@@ -349,6 +370,7 @@ class LocationService : Service() {
                     pointCP.typeId = "00000000-0000-0000-0000-000000000003"
                     gpsActivity!!.listOfLocations.add(pointCP)
                     activityRepo.addLocation(pointCP)
+                    volley.postCP(this@LocationService, gpsActivity!!, pointCP)
                     distanceCPDirect = 0f
                     distanceCPPassed = 0f
                     showNotification()

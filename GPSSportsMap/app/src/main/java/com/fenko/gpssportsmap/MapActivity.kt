@@ -28,6 +28,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.androidadvance.topsnackbar.TSnackbar
+import com.fenko.gpssportsmap.database.ActivityRepo
+import com.fenko.gpssportsmap.objects.User
 import com.fenko.gpssportsmap.tools.C
 import com.fenko.gpssportsmap.tools.Calculator
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -41,20 +43,16 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 
 
-//TODO UI,
+//TODO
 // toTEST: LINE COLORS,
-// camera on saved activities broken
-// ability to edit,
 // locations filter,
 // options,
-// backend
+// backend - delete activity / update activity
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, SensorEventListener {
     companion object {
         private val TAG = this::class.java.declaringClass!!.simpleName
     }
-
-    //private var volley = Volley()
 
     private val broadcastReceiver = InnerBroadcastReceiver()
     private val broadcastReceiverIntentFilter: IntentFilter = IntentFilter()
@@ -79,11 +77,17 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
     private var lastMagnetometerSet = false
     private var bearing = 0f
 
-    private var ui = UI()
+    private var mapObjects = MapObjects()
+    private var options = Options()
+    var volley = Volley()
+
+    lateinit var activityRepo: ActivityRepo
+
+    var goodPace: Int = 4
+    var badPace: Int = 7
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-
         outState.putBoolean("locationServiceActive", locationServiceActive)
         outState.putBoolean("compassOpen", compassOpen)
         outState.putParcelable("lastKnownLocation", lastKnownLocation)
@@ -93,16 +97,18 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
         if (markerWP != null) {
             outState.putParcelable("markerWPLocation", markerWPLocation)
         }
-        outState.putParcelable("ui", ui)
+        outState.putParcelable("ui", mapObjects)
+        outState.putIntegerArrayList("goodBadPace", arrayListOf(goodPace, badPace))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
         super.onCreate(savedInstanceState)
 
-        supportActionBar?.hide()
+        //supportActionBar?.hide()
         setContentView(R.layout.main_layout)
         findViewById<View>(R.id.compass).visibility = View.GONE
+        activityRepo = ActivityRepo(this).open()
 
         createNotificationChannel()
 
@@ -119,19 +125,23 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
             currentLocation = savedInstanceState.getParcelable("currentLocation")
             listOfLocations = savedInstanceState.getParcelableArrayList("listOfLocations")!!
             listOfCP = savedInstanceState.getParcelableArrayList("listOfCP")!!
-            ui = savedInstanceState.getParcelable("ui")!!
-            findViewById<Button>(R.id.buttonStart).text = ui.startButtonText
-            findViewById<Button>(R.id.buttonMapView).text = ui.mapViewButtonText
+            mapObjects = savedInstanceState.getParcelable("ui")!!
+            findViewById<Button>(R.id.buttonStart).text = mapObjects.startButtonText
+            findViewById<Button>(R.id.buttonMapView).text = mapObjects.mapViewButtonText
+            goodPace = savedInstanceState.getIntegerArrayList("goodBadPace")!![0]
+            badPace = savedInstanceState.getIntegerArrayList("goodBadPace")!![1]
         }
 
-        /*
-        login dialog popup and login to backend
-        if (volley.volleyUser== null)
-        volley.login(this)
-         */
         if (!checkPermissions()) {
             requestPermissions()
         }
+
+        //login dialog popup and login to backend
+        val user = activityRepo.getUser()
+        if (user.token == "") {
+            volley.login(this)
+        }
+
 
         broadcastReceiverIntentFilter.addAction(C.LOCATION_UPDATE_ACTION)
         broadcastReceiverIntentFilter.addAction(C.NOTIFICATION_ACTION_WP_RESET)
@@ -166,9 +176,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        mMap.mapType = ui.mapType
-        mMap.uiSettings.isZoomControlsEnabled = ui.isZoomControlsEnabled
-        mMap.uiSettings.isZoomGesturesEnabled = ui.isZoomGesturesEnabled
+        mMap.mapType = mapObjects.mapType
+        mMap.uiSettings.isZoomControlsEnabled = mapObjects.isZoomControlsEnabled
+        mMap.uiSettings.isZoomGesturesEnabled = mapObjects.isZoomGesturesEnabled
 
         mMap.setOnMapClickListener(this)
         mMap.setOnMapLongClickListener(this)
@@ -191,13 +201,13 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
                             .position(LatLng(listOfLocations[0].latitude, listOfLocations[0].longitude)))
                 }
         for(i in 1 until listOfLocations.size) {
-            ui.uiUpdate(LatLng(listOfLocations[i - 1].latitude, listOfLocations[i - 1].longitude), LatLng(listOfLocations[i].latitude, listOfLocations[i].longitude), listOfLocations[i].speed, ui.fasterPace, ui.slowerPace, mMap)
+            mapObjects.uiUpdate(LatLng(listOfLocations[i - 1].latitude, listOfLocations[i - 1].longitude), LatLng(listOfLocations[i].latitude, listOfLocations[i].longitude), listOfLocations[i].speed, goodPace, badPace, mMap)
         }
         for(i in 0 until listOfCP.size) {
-            ui.addCPMarker(listOfCP[i], mMap)
+            mapObjects.addCPMarker(listOfCP[i], mMap)
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLng(position))
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(ui.defaultZoom))
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(mapObjects.defaultZoom))
     }
 
     private fun createNotificationChannel() {
@@ -256,15 +266,19 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
                     .position(LatLng(location.latitude, location.longitude)))
         }
         if (listOfLocations.size > 1) {
-            ui.uiUpdate(LatLng(listOfLocations[listOfLocations.size - 2].latitude, listOfLocations[listOfLocations.size - 2].longitude), LatLng(location.latitude, location.longitude), location.speed, ui.slowerPace, ui.fasterPace, mMap)
+            mapObjects.uiUpdate(LatLng(listOfLocations[listOfLocations.size - 2].latitude, listOfLocations[listOfLocations.size - 2].longitude), LatLng(location.latitude, location.longitude), location.speed, goodPace, badPace, mMap)
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(location.latitude, location.longitude)))
 
-        if (ui.northUp) {
-            ui.updateCameraBearing(mMap, 0f)
+        if (mapObjects.northUp) {
+            mapObjects.updateCameraBearing(mMap, 0f)
         } else {
-            ui.updateCameraBearing(mMap, bearing)
+            mapObjects.updateCameraBearing(mMap, bearing)
         }
+    }
+
+    fun onButtonOptionsClick(view: View){
+        options.askOptions(this, this)
     }
 
     fun onButtonCompassClick(view: View) {
@@ -281,7 +295,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
             if (marker != null) {
                 marker!!.remove()
             }
-            marker = ui.addMarker(p0, locationServiceActive, mMap, findViewById(R.id.layoutMain))
+            marker = mapObjects.addMarker(p0, locationServiceActive, mMap, findViewById(R.id.layoutMain))
         }
     }
 
@@ -294,7 +308,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
             val intent = (Intent(C.MAIN_ACTION_WP))
             sendBroadcast(intent)
 
-            markerWP = ui.addWP(marker, locationServiceActive, mMap, findViewById(R.id.layoutMain))
+            markerWP = mapObjects.addWP(marker, locationServiceActive, mMap, findViewById(R.id.layoutMain))
 
             markerWPLocation = Location(LocationManager.GPS_PROVIDER)
             markerWPLocation!!.latitude = markerWP!!.position.latitude
@@ -318,12 +332,19 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
                     .setPositiveButton(resources.getText(R.string.yes)) { _: DialogInterface, _: Int ->
                         // stopping the service
                         stopService(Intent(this, LocationService::class.java))
+                        mMap.clear()
+                        listOfCP = arrayListOf()
+                        listOfLocations = arrayListOf()
+                        currentLocation = null
+                        markerWPLocation = null
+                        markerWP = null
+                        marker = null
                         TSnackbar.make(view, "Activity Completed", TSnackbar.LENGTH_LONG).show()
                         (view as Button).text = resources.getString(R.string.start)
-                        ui.startButtonText = resources.getString(R.string.start)
-                        val viewGPSActivity = Intent(this, DataActivity::class.java)
+                        mapObjects.startButtonText = resources.getString(R.string.start)
+                        val viewGPSActivity = Intent(this, LastActivityData::class.java)
                         startActivity(viewGPSActivity)
-                        finish()
+                        //finish()
                     }
                     .setNegativeButton(resources.getString(R.string.no)) { _: DialogInterface, _: Int ->
                         TSnackbar.make(view, "Activity Resumed", TSnackbar.LENGTH_LONG).show()
@@ -340,14 +361,23 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
                 startService(Intent(this, LocationService::class.java))
             }
             (view as Button).text = resources.getString(R.string.stop)
-            ui.startButtonText = resources.getString(R.string.stop)
+            mapObjects.startButtonText = resources.getString(R.string.stop)
         }
         locationServiceActive = !locationServiceActive
     }
 
     fun buttonMapViewOnClick(view: View) {
-
-        ui.mapView(view, this, mMap, currentLocation)
+        if(!mapObjects.northUp) {
+            mapObjects.northUp = true
+            (view as Button).text = resources.getString(R.string.northUp)
+            mapObjects.mapViewButtonText = resources.getString(R.string.northUp)
+            mapObjects.updateCameraBearing(mMap, 0f)
+        } else {
+            mapObjects.northUp = false
+            (view as Button).text = resources.getString(R.string.headUp)
+            mapObjects.mapViewButtonText = resources.getString(R.string.headUp)
+            mapObjects.updateCameraBearing(mMap, bearing)
+        }
     }
 
     fun buttonResetWPointOnClick(view: View) {
@@ -484,6 +514,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
     override fun onDestroy() {
         Log.d(TAG, "onDestroy")
         super.onDestroy()
+        activityRepo.close()
     }
 
     override fun onRestart() {
@@ -530,7 +561,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
                 }
                 C.NOTIFICATION_ACTION_CP_SET -> {
                     val cpLocation = intent.getParcelableExtra<Location>(C.NOTIFICATION_ACTION_CP_SET)
-                    ui.addCPMarker(cpLocation, mMap)
+                    mapObjects.addCPMarker(cpLocation, mMap)
                     listOfCP.add(cpLocation!!)
 
                 }

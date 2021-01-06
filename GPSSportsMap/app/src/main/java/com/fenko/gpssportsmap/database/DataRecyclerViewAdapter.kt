@@ -1,4 +1,4 @@
-package com.fenko.gpssportsmap
+package com.fenko.gpssportsmap.database
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -11,6 +11,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.fenko.gpssportsmap.objects.GPSActivity
+import com.fenko.gpssportsmap.ListActivityData
+import com.fenko.gpssportsmap.R
 import com.fenko.gpssportsmap.tools.Calculator
 import kotlinx.android.synthetic.main.row_view.view.*
 
@@ -29,7 +32,7 @@ class DataRecyclerViewAdapter(context: Context, private val repo: ActivityRepo) 
     }
 
     private val inflater = LayoutInflater.from(context)
-    private val openActivity = Intent(context, DataActivity::class.java)
+    private val openActivity = Intent(context, ListActivityData::class.java)
 
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -46,6 +49,7 @@ class DataRecyclerViewAdapter(context: Context, private val repo: ActivityRepo) 
                 .setMessage("Do you want to?")
                 .setNegativeButton(context.resources.getString(R.string.openButton)) { _: DialogInterface, _: Int ->
                     openActivity.putExtra("id", gpsActivity.id.toString())
+                    println(gpsActivity.id)
                     context.startActivity(openActivity)
                     (context as Activity).finish()
                 }

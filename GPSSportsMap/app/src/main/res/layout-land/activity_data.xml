@@ -53,7 +53,7 @@
         android:text="@string/textDescription"
         android:textAlignment="center"
         android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonClose"
+        app:layout_constraintBottom_toTopOf="@+id/buttonExport"
         app:layout_constraintEnd_toStartOf="@+id/editTextDescription"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -196,7 +196,7 @@
         app:layout_constraintTop_toTopOf="@+id/textDescription" />
 
     <Button
-        android:id="@+id/buttonClose"
+        android:id="@+id/buttonExport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -215,6 +215,6 @@
         android:text="@string/buttonPreviousActivities"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonClose" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonExport" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

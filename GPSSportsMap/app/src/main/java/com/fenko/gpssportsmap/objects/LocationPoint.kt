@@ -1,4 +1,4 @@
-package com.fenko.gpssportsmap
+package com.fenko.gpssportsmap.objects
 
 import android.location.Location
 import android.location.LocationManager

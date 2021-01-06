@@ -1,4 +1,4 @@
-package com.fenko.gpssportsmap
+package com.fenko.gpssportsmap.database
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
@@ -8,8 +8,16 @@ import android.database.sqlite.SQLiteOpenHelper
 class DBHelper(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     companion object {
-        const val DATABASE_NAME = "test3ActivitiesManager.db"
+        const val DATABASE_NAME = "test5ActivitiesManager.db"
         const val DATABASE_VERSION = 1
+
+        const val USER_TABLE_NAME = "USER"
+        const val USER_ID = "_id"
+        const val USER_BACKEND_ID = "id"
+        const val USER_NAME = "firstname"
+        const val USER_LASTNAME = "lastname"
+        const val USER_EMAIL = "email"
+        const val USER_TOKEN = "token"
 
         const val ACTIVITY_TABLE_NAME = "ACTIVITIES"
         const val ACTIVITY_ID = "_id"
@@ -39,6 +47,14 @@ class DBHelper(context: Context) :
         const val LOCATION_SPEED = "speed"
         const val LOCATION_TYPE_ID = "gpsLocationTypeId"
 
+        const val SQL_USER_CREATE_TABLE = "create table $USER_TABLE_NAME (" +
+                "$USER_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "$USER_BACKEND_ID TEXT, " +
+                "$USER_NAME TEXT, " +
+                "$USER_LASTNAME TEXT, " +
+                "$USER_EMAIL TEXT NOT NULL, " +
+                "$USER_TOKEN TEXT);"
+
         const val SQL_ACTIVITY_CREATE_TABLE = "create table $ACTIVITY_TABLE_NAME (" +
                 "$ACTIVITY_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "$ACTIVITY_BACKEND_ID TEXT, " +
@@ -67,11 +83,13 @@ class DBHelper(context: Context) :
                 "$LOCATION_SPEED REAL NOT NULL, " +
                 "$LOCATION_TYPE_ID TEXT NOT NULL);"
 
-        const val SQL_DELETE_TABLES = "DROP TABLE IF EXISTS $ACTIVITY_TABLE_NAME;\n" +
+        const val SQL_DELETE_TABLES = "DROP TABLE IF EXISTS $USER_TABLE_NAME;\n" +
+                "DROP TABLE IF EXISTS $ACTIVITY_TABLE_NAME;\n" +
                 "DROP TABLE IF EXISTS $LOCATION_TABLE_NAME;"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
+        db?.execSQL(SQL_USER_CREATE_TABLE)
         db?.execSQL(SQL_ACTIVITY_CREATE_TABLE)
         db?.execSQL(SQL_LOCATION_CREATE_TABLE)
     }

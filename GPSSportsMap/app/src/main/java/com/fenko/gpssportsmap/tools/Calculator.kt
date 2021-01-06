@@ -1,6 +1,8 @@
 package com.fenko.gpssportsmap.tools
 
-import com.fenko.gpssportsmap.LocationPoint
+import com.fenko.gpssportsmap.objects.LocationPoint
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class Calculator {
@@ -71,5 +73,11 @@ class Calculator {
                 TimeUnit.MILLISECONDS.toSeconds(time) -
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)))
 
+    }
+
+    fun converterTime(time: Long): String {
+        val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        //df.timeZone = TimeZone.getTimeZone("UTC")
+        return df.format(time)
     }
 }
