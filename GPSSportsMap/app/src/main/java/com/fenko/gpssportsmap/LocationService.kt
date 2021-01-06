@@ -19,9 +19,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.fenko.gpssportsmap.database.ActivityRepo
 import com.fenko.gpssportsmap.objects.GPSActivity
 import com.fenko.gpssportsmap.objects.LocationPoint
-import com.fenko.gpssportsmap.objects.User
 import com.fenko.gpssportsmap.tools.C
-import com.fenko.gpssportsmap.tools.Calculator
+import com.fenko.gpssportsmap.tools.Helpers
 import com.google.android.gms.location.*
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -34,7 +33,7 @@ class LocationService : Service() {
 
 
     // The desired intervals for location updates. Inexact. Updates may be more or less frequent.
-    private val UPDATE_INTERVAL_IN_MILLISECONDS: Long = 2000
+    private var UPDATE_INTERVAL_IN_MILLISECONDS: Long = 2000
     private val FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2
 
     private val broadcastReceiver = InnerBroadcastReceiver()
@@ -70,7 +69,6 @@ class LocationService : Service() {
 
     //activity
     var gpsActivity: GPSActivity? = null
-    var activityType: String? = null
 
     //repo
     private lateinit var activityRepo: ActivityRepo
@@ -135,7 +133,8 @@ class LocationService : Service() {
             gpsActivity!!.listOfLocations.add(locationPoint)
             activityRepo.addLocation(locationPoint)
         } else {
-            currentSpeed = Calculator().paceAtLocation(gpsActivity!!.listOfLocations.last()!!, locationPoint)
+            currentSpeed = Helpers().paceAtLocation(gpsActivity!!.listOfLocations.last()!!, locationPoint)
+            println(gpsActivity!!.listOfLocations.last()!!.distanceTo(locationPoint))
             currentLocation!!.speed = currentSpeed
             locationPoint.speed = currentSpeed
             activityRepo.addLocation(locationPoint)
@@ -148,7 +147,7 @@ class LocationService : Service() {
             // overall metrics
             val timeNow = Calendar.getInstance().timeInMillis
             distanceTotal += location.distanceTo(currentLocation)
-            timeTotal = Calculator().totalTime(timeStart, timeNow)
+            timeTotal = Helpers().totalTime(timeStart, timeNow)
             averageSpeedTotal = 50 / (3 * (distanceTotal/TimeUnit.MILLISECONDS.toSeconds(timeNow - timeStart)))
 
             //cp metrics
@@ -270,8 +269,13 @@ class LocationService : Service() {
         distanceToWPPassed = 0f
         averageSpeedToWP = 0f
 
+        var activityType = intent!!.getStringExtra("activityType")
+        var targetPace = intent.getIntegerArrayListExtra("targetPace")
+        UPDATE_INTERVAL_IN_MILLISECONDS = intent.getLongExtra("updateRate", 2000)
+
+
         volley.volleyUser = activityRepo.getUser()
-        gpsActivity = GPSActivity()
+        gpsActivity = Helpers().createGPSActivity(activityType!!, targetPace!!)
         activityRepo.addActivity(gpsActivity!!)
         if (volley.volleyUser!!.token != "") {
             volley.postSession(this, gpsActivity!!)
@@ -366,7 +370,7 @@ class LocationService : Service() {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         pointCP.verticalAccuracyMeters = locationCP!!.verticalAccuracyMeters
                     }
-                    pointCP.speed = Calculator().paceAtLocation(gpsActivity!!.listOfLocations.last()!!, pointCP)
+                    pointCP.speed = Helpers().paceAtLocation(gpsActivity!!.listOfLocations.last()!!, pointCP)
                     pointCP.typeId = "00000000-0000-0000-0000-000000000003"
                     gpsActivity!!.listOfLocations.add(pointCP)
                     activityRepo.addLocation(pointCP)

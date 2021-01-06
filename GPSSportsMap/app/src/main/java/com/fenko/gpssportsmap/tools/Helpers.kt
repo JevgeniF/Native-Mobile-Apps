@@ -1,11 +1,12 @@
 package com.fenko.gpssportsmap.tools
 
+import com.fenko.gpssportsmap.objects.GPSActivity
 import com.fenko.gpssportsmap.objects.LocationPoint
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class Calculator {
+class Helpers {
 
     fun paceAtLocation(lastLocationPoint: LocationPoint, currentLocationPoint: LocationPoint): Float {
         val lastLocationTime = lastLocationPoint.time
@@ -77,7 +78,45 @@ class Calculator {
 
     fun converterTime(time: Long): String {
         val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-        //df.timeZone = TimeZone.getTimeZone("UTC")
         return df.format(time)
+    }
+
+    fun createGPSActivity(activityType: String, targetPace: ArrayList<Int>): GPSActivity {
+        var paceMin: Int = 360
+        var paceMax: Int = 600
+        var description: String = "Running - easy"
+        when (activityType) {
+            "00000000-0000-0000-0000-000000000001" -> {
+                paceMin = 360
+                paceMax = 600
+                description = "Running - easy"
+            }
+            "00000000-0000-0000-0000-000000000002" -> {
+                paceMin = 300
+                paceMax = 420
+                description = "Running"
+            }
+            "00000000-0000-0000-0000-000000000003" -> {
+                paceMin = 360
+                paceMax = 720
+                description = "Orienteering - easy"
+            }
+            "00000000-0000-0000-0000-000000000004" -> {
+                paceMin = 300
+                paceMax = 540
+                description = "Orienteering - competition"
+            }
+            "00000000-0000-0000-0000-000000000005" -> {
+                paceMin = 180
+                paceMax = 360
+                description = "Bicycle - easy"
+            }
+            "00000000-0000-0000-0000-000000000006" -> {
+                paceMin = 120
+                paceMax = 300
+                description = "Bicycle - competition"
+            }
+        }
+        return GPSActivity(activityType, description, paceMin, paceMax, targetPace[0], targetPace[1])
     }
 }

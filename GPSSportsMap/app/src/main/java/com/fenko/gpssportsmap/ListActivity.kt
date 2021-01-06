@@ -27,8 +27,6 @@ class ListActivity : AppCompatActivity() {
     }
 
     fun onButtonCloseClick(view: View) {
-       // val viewMainScreen = Intent(this, MapActivity::class.java)
-       // startActivity(viewMainScreen)
         activityRepo.close()
         finish()
     }

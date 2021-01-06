@@ -50,6 +50,8 @@ class ActivityRepo(private val context: Context) {
         cv.put(DBHelper.ACTIVITY_PACE_MAX, gpsActivity.paceMax)
         cv.put(DBHelper.ACTIVITY_TYPE_ID, gpsActivity.gpsSessionTypeId)
         cv.put(DBHelper.ACTIVITY_USER_ID, gpsActivity.userId)
+        cv.put(DBHelper.ACTIVITY_BAD_PACE, gpsActivity.badPace)
+        cv.put(DBHelper.ACTIVITY_GOOD_PACE, gpsActivity.goodPace)
         activityId = db.insert(DBHelper.ACTIVITY_TABLE_NAME, null, cv)
         gpsActivity.id = activityId as Long
     }
@@ -95,21 +97,22 @@ class ActivityRepo(private val context: Context) {
         while (cursor.moveToNext()) {
             activities.add(
                 GPSActivity(
-                    cursor.getLong(0),
-                    cursor.getString(1),
-                    cursor.getString(2),
-                    cursor.getString(3),
-                    cursor.getString(4),
-                    cursor.getLong(5),
-                    cursor.getFloat(6),
-                    cursor.getFloat(7),
-                    cursor.getDouble(8),
-                    cursor.getDouble(9),
-                    cursor.getInt(10),
-                    cursor.getInt(11),
-                    cursor.getString(12),
-                    cursor.getString(13)
-
+                        cursor.getLong(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        cursor.getString(4),
+                        cursor.getLong(5),
+                        cursor.getFloat(6),
+                        cursor.getFloat(7),
+                        cursor.getDouble(8),
+                        cursor.getDouble(9),
+                        cursor.getInt(10),
+                        cursor.getInt(11),
+                        cursor.getString(12),
+                        cursor.getString(13),
+                        cursor.getInt(14),
+                        cursor.getInt(15)
                 )
             )
         }
@@ -175,7 +178,9 @@ class ActivityRepo(private val context: Context) {
                     cursor.getInt(10),
                     cursor.getInt(11),
                     cursor.getString(12),
-                    cursor.getString(13)
+                    cursor.getString(13),
+                    cursor.getInt(14),
+                    cursor.getInt(15)
             )
         }
         cursor.close()

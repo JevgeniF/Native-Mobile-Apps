@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper
 class DBHelper(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     companion object {
-        const val DATABASE_NAME = "test5ActivitiesManager.db"
+        const val DATABASE_NAME = "test6ActivitiesManager.db"
         const val DATABASE_VERSION = 1
 
         const val USER_TABLE_NAME = "USER"
@@ -34,6 +34,8 @@ class DBHelper(context: Context) :
         const val ACTIVITY_PACE_MAX = "paceMax"
         const val ACTIVITY_TYPE_ID = "gpsSessionTypeId"
         const val ACTIVITY_USER_ID = "appUserId"
+        const val ACTIVITY_BAD_PACE = "settedBadPace"
+        const val ACTIVITY_GOOD_PACE = "settedGoodPace"
 
         const val LOCATION_TABLE_NAME = "LOCATIONS"
         const val LOCATION_ID = "_id"
@@ -69,7 +71,9 @@ class DBHelper(context: Context) :
                 "$ACTIVITY_PACE_MIN REAL NOT NULL, " +
                 "$ACTIVITY_PACE_MAX REAL NOT NULL, " +
                 "$ACTIVITY_TYPE_ID TEXT NOT NULL, " +
-                "$ACTIVITY_USER_ID TEXT NOT NULL);"
+                "$ACTIVITY_USER_ID TEXT NOT NULL, " +
+                "$ACTIVITY_BAD_PACE INT, " +
+                "$ACTIVITY_GOOD_PACE INT);"
 
         const val SQL_LOCATION_CREATE_TABLE = "create table $LOCATION_TABLE_NAME (" +
                 "$LOCATION_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +

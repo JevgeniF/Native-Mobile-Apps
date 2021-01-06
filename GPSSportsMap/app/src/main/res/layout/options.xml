@@ -93,12 +93,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
-                android:text="Enter Max Pace (min/km)"
+                android:text="Enter Bad Pace (min/km)"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textOptionsSelectActiviy" />
 
             <EditText
-                android:id="@+id/editTextOptionsMaxPace"
+                android:id="@+id/editTextOptionsBadPace"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="32dp"
@@ -117,12 +117,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="Enter Min Pace (min/km)"
+                android:text="Enter Good Pace (min/km)"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textOptionsGoodPace" />
 
             <EditText
-                android:id="@+id/editTextNumberDecimal2"
+                android:id="@+id/editTextOptionsGoodPace"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="32dp"
@@ -159,44 +159,18 @@
                 app:layout_constraintStart_toEndOf="@+id/textOptionsGPSUpdate"
                 app:layout_constraintTop_toTopOf="@+id/textOptionsGPSUpdate" />
 
-            <TextView
-                android:id="@+id/textOptionsServerUodateRate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="16dp"
-                android:text="Server Update Rate (ms)"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textOptionsGPSUpdate"
-                app:layout_constraintVertical_bias="0.23000002" />
-
-            <EditText
-                android:id="@+id/editTextNumberSigned2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="32dp"
-                android:ems="10"
-                android:inputType="numberSigned"
-                android:textAlignment="center"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@+id/textOptionsServerUodateRate"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textOptionsServerUodateRate"
-                app:layout_constraintTop_toTopOf="@+id/textOptionsServerUodateRate" />
-
             <Button
                 android:id="@+id/buttonOptionsSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginBottom="32dp"
                 android:onClick="buttonOptionsSaveClick"
                 android:text="Save"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextNumberSigned2" />
+                app:layout_constraintTop_toBottomOf="@+id/editTextLocationUpdateRate" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

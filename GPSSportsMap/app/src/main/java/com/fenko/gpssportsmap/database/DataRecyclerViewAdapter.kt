@@ -15,7 +15,7 @@ import com.fenko.gpssportsmap.objects.GPSActivity
 import com.fenko.gpssportsmap.ListActivityData
 import com.fenko.gpssportsmap.R
 import com.fenko.gpssportsmap.Volley
-import com.fenko.gpssportsmap.tools.Calculator
+import com.fenko.gpssportsmap.tools.Helpers
 import kotlinx.android.synthetic.main.row_view.view.*
 
 
@@ -78,7 +78,7 @@ class DataRecyclerViewAdapter(context: Context, private val activityRepo: Activi
         val gpsActivity = dataSet[position]
         holder.itemView.textNameDataRow.text = gpsActivity.name
         holder.itemView.textRecordedAtDataRow.text = gpsActivity.recordedAt
-        holder.itemView.textDurationDataRow.text = Calculator().converterHMS(gpsActivity.duration)
+        holder.itemView.textDurationDataRow.text = Helpers().converterHMS(gpsActivity.duration)
         holder.itemView.textPaceDataRow.text = "%.2f min/km".format(gpsActivity.speed)
     }
 

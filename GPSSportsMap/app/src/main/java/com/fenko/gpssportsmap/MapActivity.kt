@@ -29,9 +29,8 @@ import androidx.core.app.ActivityCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.androidadvance.topsnackbar.TSnackbar
 import com.fenko.gpssportsmap.database.ActivityRepo
-import com.fenko.gpssportsmap.objects.User
 import com.fenko.gpssportsmap.tools.C
-import com.fenko.gpssportsmap.tools.Calculator
+import com.fenko.gpssportsmap.tools.Helpers
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -46,7 +45,6 @@ import com.google.android.material.snackbar.Snackbar
 //TODO
 // toTEST: LINE COLORS,
 // locations filter,
-// options,
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, SensorEventListener {
     companion object {
@@ -241,9 +239,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
                 SensorManager.getOrientation(r, orientation)
 
                 bearing = (Math.toDegrees(orientation[0].toDouble()) + 360).toFloat() % 360
-                findViewById<TextView>(R.id.textCompDirLeft).text = "${Calculator().compassDirection(bearing - 45)}   \u140A"
-                findViewById<TextView>(R.id.textCompCurrDir).text = "%d\u00b0 ${Calculator().compassDirection(bearing)}".format(bearing.toInt())
-                findViewById<TextView>(R.id.textCompDirRight).text = "\u1405   ${Calculator().compassDirection(bearing + 45)}"
+                findViewById<TextView>(R.id.textCompDirLeft).text = "${Helpers().compassDirection(bearing - 45)}   \u140A"
+                findViewById<TextView>(R.id.textCompCurrDir).text = "%d\u00b0 ${Helpers().compassDirection(bearing)}".format(bearing.toInt())
+                findViewById<TextView>(R.id.textCompDirRight).text = "\u1405   ${Helpers().compassDirection(bearing + 45)}"
             }
         }
     }
@@ -352,12 +350,16 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
             dialog.show()
 
         } else {
+            val startLocationUpdate = Intent(this, LocationService::class.java)
+            startLocationUpdate.putExtra("activityType", options.activity)
+            startLocationUpdate.putExtra("updateRate", options.locationUpdateRate)
+            startLocationUpdate.putIntegerArrayListExtra("targetPace", arrayListOf(badPace, goodPace))
             if (Build.VERSION.SDK_INT >= 26) {
                 // starting the FOREGROUND service
                 // service has to display non-dismissible notification within 5 secs
-                startForegroundService(Intent(this, LocationService::class.java))
+                startForegroundService(Intent(startLocationUpdate))
             } else {
-                startService(Intent(this, LocationService::class.java))
+                startService(Intent(startLocationUpdate))
             }
             (view as Button).text = resources.getString(R.string.stop)
             mapObjects.startButtonText = resources.getString(R.string.stop)

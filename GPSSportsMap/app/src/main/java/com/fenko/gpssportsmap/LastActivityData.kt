@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.fenko.gpssportsmap.database.ActivityRepo
 import com.fenko.gpssportsmap.database.DataRecyclerViewAdapter
 import com.fenko.gpssportsmap.objects.GPSActivity
-import com.fenko.gpssportsmap.tools.Calculator
+import com.fenko.gpssportsmap.tools.Helpers
 import com.fenko.gpssportsmap.tools.GPXParser
 
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -58,7 +58,7 @@ class LastActivityData : AppCompatActivity(), OnMapReadyCallback {
 
         editTextActivityName.setText(activity.name)
         textRecordedAtData.text = activity.recordedAt
-        textDurationData.text = Calculator().converterHMS(activity.duration)
+        textDurationData.text = Helpers().converterHMS(activity.duration)
         textPaceData.text = "%.2f min/km".format(activity.speed)
         textDistanceData.text = "%.2f m". format(activity.distance)
         editTextDescription.setText(activity.description)

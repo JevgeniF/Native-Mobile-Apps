@@ -61,7 +61,7 @@ class GPXParser {
                 out.write("<trkpt lat=\"${gpsActivity.listOfLocations[i]!!.latitude}\" lon=\"${gpsActivity.listOfLocations[i]!!.longitude}\">\n" +
                         "<ele>${gpsActivity.listOfLocations[i]!!.altitude}</ele>\n")
 
-                var time = Calculator().converterTime(gpsActivity.listOfLocations[i]!!.time)
+                var time = Helpers().converterTime(gpsActivity.listOfLocations[i]!!.time)
 
                 out.write("<time>$time</time>\n" +
                         "<speed>${gpsActivity.listOfLocations[i]!!.speed}</speed>\n")
