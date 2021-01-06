@@ -47,7 +47,6 @@ import com.google.android.material.snackbar.Snackbar
 // toTEST: LINE COLORS,
 // locations filter,
 // options,
-// backend - delete activity / update activity
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, SensorEventListener {
     companion object {

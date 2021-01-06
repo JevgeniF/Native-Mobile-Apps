@@ -3,18 +3,23 @@ package com.fenko.gpssportsmap
 import android.app.Dialog
 import android.content.Context
 import android.os.Build
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+
+import com.android.volley.VolleyError
+import com.android.volley.VolleyLog
 import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.StringRequest
 import com.fenko.gpssportsmap.database.ActivityRepo
 import com.fenko.gpssportsmap.objects.GPSActivity
 import com.fenko.gpssportsmap.objects.LocationPoint
 import com.fenko.gpssportsmap.objects.User
+import org.json.JSONException
 import org.json.JSONObject
+import java.io.UnsupportedEncodingException
+
 
 class Volley {
 
@@ -148,7 +153,7 @@ class Volley {
         jsonBody.put("verticalAccuracy", locationPoint.verticalAccuracyMeters)
         jsonBody.put("AppUserId", volleyUser!!.backendId)
         jsonBody.put("gpsSessionId", activity.backendId)
-        jsonBody.put("gpsLocationTypeId","00000000-0000-0000-0000-000000000001")
+        jsonBody.put("gpsLocationTypeId", "00000000-0000-0000-0000-000000000001")
 
         val httpRequest =
                 object : JsonObjectRequest(Method.POST, locationsUrl, jsonBody, { response ->
@@ -179,7 +184,7 @@ class Volley {
         jsonBody.put("verticalAccuracy", locationPoint.verticalAccuracyMeters)
         jsonBody.put("AppUserId", volleyUser!!.backendId)
         jsonBody.put("gpsSessionId", activity.backendId)
-        jsonBody.put("gpsLocationTypeId","00000000-0000-0000-0000-000000000003")
+        jsonBody.put("gpsLocationTypeId", "00000000-0000-0000-0000-000000000003")
 
         val httpRequest =
                 object : JsonObjectRequest(Method.POST, locationsUrl, jsonBody, { response ->
@@ -199,6 +204,7 @@ class Volley {
     fun putSession(context: Context, activity: GPSActivity) {
         val updateSessionUrl = "$url/GpsSessions/${activity.backendId}"
         val handler = HttpSingletonHandler.getInstance(context)
+        println("${activity.backendId}")
         val jsonBody = JSONObject()
         jsonBody.put("id", activity.backendId)
         jsonBody.put("name", activity.name)
@@ -206,10 +212,9 @@ class Volley {
         jsonBody.put("gpsSessionTypeId", activity.gpsSessionTypeId)
 
         val httpRequest =
-            object : JsonObjectRequest(Method.POST, updateSessionUrl, jsonBody, { response ->
+            object : JsonObjectRequest(Method.PUT, updateSessionUrl, jsonBody, { response ->
                 Toast.makeText(context, "Session Updated", Toast.LENGTH_LONG).show()
             }, { response ->
-                Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
             }) {
                 override fun getHeaders(): MutableMap<String, String> {
                     val headers = HashMap<String, String>()
@@ -218,6 +223,24 @@ class Volley {
                     return headers
                 }
             }
+        handler.addToRequestQueue(httpRequest)
+    }
+
+    fun deleteSession(context: Context, activity: GPSActivity) {
+        val deleteUrl = "$url/GpsSessions/${activity.backendId}"
+        val handler = HttpSingletonHandler.getInstance(context)
+
+        val httpRequest =
+                object : StringRequest(Method.DELETE, deleteUrl, { response ->
+                    Toast.makeText(context, "Session Deleted", Toast.LENGTH_LONG).show()
+                }, { response ->
+                }) {
+                    override fun getHeaders(): MutableMap<String, String> {
+                        val headers = HashMap<String, String>()
+                        headers["Authorization"] = "Bearer ${volleyUser!!.token}"
+                        return headers
+                    }
+                }
         handler.addToRequestQueue(httpRequest)
     }
 }

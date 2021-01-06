@@ -25,6 +25,7 @@ class LastActivityData : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var activityRepo: ActivityRepo
     private lateinit var adapter: RecyclerView.Adapter<*>
+    var volley = Volley()
 
     lateinit var activity: GPSActivity
     var ui = MapObjects()
@@ -51,8 +52,9 @@ class LastActivityData : AppCompatActivity(), OnMapReadyCallback {
         adapter = DataRecyclerViewAdapter(this, activityRepo)
         (adapter as DataRecyclerViewAdapter).refreshData()
 
-        println((adapter as DataRecyclerViewAdapter).dataSet.size)
         activity = (adapter as DataRecyclerViewAdapter).dataSet.last()
+
+        volley.volleyUser = activityRepo.getUser()
 
         editTextActivityName.setText(activity.name)
         textRecordedAtData.text = activity.recordedAt
@@ -60,6 +62,7 @@ class LastActivityData : AppCompatActivity(), OnMapReadyCallback {
         textPaceData.text = "%.2f min/km".format(activity.speed)
         textDistanceData.text = "%.2f m". format(activity.distance)
         editTextDescription.setText(activity.description)
+
     }
 
     /**
@@ -108,7 +111,9 @@ class LastActivityData : AppCompatActivity(), OnMapReadyCallback {
             activity.description = editTextDescription.text.toString()
 
             activityRepo.update(activity)
+            volley.putSession(this, activity)
             Toast.makeText(this, "Activity updated", Toast.LENGTH_SHORT).show()
+
         }
         val viewActivitiesList = Intent(this, ListActivity::class.java)
         startActivity(viewActivitiesList)
@@ -122,6 +127,7 @@ class LastActivityData : AppCompatActivity(), OnMapReadyCallback {
             activity.description = editTextDescription.text.toString()
 
             activityRepo.update(activity)
+            volley.putSession(this, activity)
         }
         gpxParser.exportFile(this, activity)
     }

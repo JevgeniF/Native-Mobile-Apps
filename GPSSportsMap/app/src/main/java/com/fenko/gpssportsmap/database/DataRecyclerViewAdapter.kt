@@ -14,17 +14,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.fenko.gpssportsmap.objects.GPSActivity
 import com.fenko.gpssportsmap.ListActivityData
 import com.fenko.gpssportsmap.R
+import com.fenko.gpssportsmap.Volley
 import com.fenko.gpssportsmap.tools.Calculator
 import kotlinx.android.synthetic.main.row_view.view.*
 
 
-class DataRecyclerViewAdapter(context: Context, private val repo: ActivityRepo) :
+class DataRecyclerViewAdapter(context: Context, private val activityRepo: ActivityRepo) :
     RecyclerView.Adapter<DataRecyclerViewAdapter.ViewHolder>() {
 
     lateinit var dataSet: List<GPSActivity>
 
     fun refreshData() {
-        dataSet = repo.getAll()
+        dataSet = activityRepo.getAll()
     }
 
     init {
@@ -33,6 +34,7 @@ class DataRecyclerViewAdapter(context: Context, private val repo: ActivityRepo) 
 
     private val inflater = LayoutInflater.from(context)
     private val openActivity = Intent(context, ListActivityData::class.java)
+    var volley = Volley()
 
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -42,6 +44,7 @@ class DataRecyclerViewAdapter(context: Context, private val repo: ActivityRepo) 
         val holder = ViewHolder(rowView)
         val context = rowView.context
         holder.itemView.setOnLongClickListener {
+            volley.volleyUser = activityRepo.getUser()
             val position = holder.adapterPosition
             val builder = AlertDialog.Builder(context)
             val gpsActivity = dataSet[position]
@@ -54,7 +57,9 @@ class DataRecyclerViewAdapter(context: Context, private val repo: ActivityRepo) 
                     (context as Activity).finish()
                 }
                 .setPositiveButton(context.resources.getText(R.string.deleteButton)) { _: DialogInterface, _: Int ->
+
                     removeItem(gpsActivity.id.toInt())
+                    volley.deleteSession(context, gpsActivity)
                     Toast.makeText(
                         context,
                         context.resources.getString(R.string.activityDeleted),
@@ -82,7 +87,7 @@ class DataRecyclerViewAdapter(context: Context, private val repo: ActivityRepo) 
     }
 
     private fun removeItem(position: Int) {
-        repo.delete(position)
+        activityRepo.delete(position)
         dataSet.drop(position)
         refreshData()
         notifyDataSetChanged()
