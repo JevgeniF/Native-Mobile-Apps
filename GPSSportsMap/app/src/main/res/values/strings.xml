@@ -63,7 +63,7 @@
     <string name="activity_name">Activity Name</string>
     <string name="buttonPreviousActivities">Save &amp; Close</string>
     <string name="buttonClose">Share GPX</string>
-    <string name="openButton">...View and Edit?</string>
+    <string name="openButton">…View and Edit?</string>
     <string name="deleteButton">Delete?</string>
     <string name="activityDeleted">Activity Deleted</string>
     <string name="current_drection">Current Drection</string>
@@ -81,6 +81,24 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_login">Login</string>
     <string name="menu_map_settings">Map Settings</string>
+    <string name="activityCompleted">Activity Completed</string>
+    <string name="activityResumed">Activity Resumed</string>
+    <string name="providePermissions">Please provide Location permissions for app functionality!</string>
+    <string name="ok">OK</string>
+    <string name="interactionCancelled">User interaction cancelled</string>
+    <string name="permissionGranted">Permission granted</string>
+    <string name="applicationMalfunction">Application is malfunction without Location permission.</string>
+    <string name="appSettings">App Settings</string>
+    <string name="loggedIn">You logged in</string>
+    <string name="registrationDone">You registered in…</string>
+    <string name="sessionStarted">Session Started</string>
+    <string name="sessionUpdated">Session updated.</string>
+    <string name="sessionDeleted">Session Deleted</string>
+    <string name="recyclerQuestion">Do you want to…</string>
+    <string name="chooser">Choose an app</string>
+    <string name="longPressForWP">Long press on map to create WayPoint on Marker position. Click to change position of Marker.</string>
+    <string name="optionsLoggedInAs">Logged in as:</string>
+    <string name="previousActivities">Previous Activities</string>
 
     <string-array name="activities">
         <item>Running - easy</item>

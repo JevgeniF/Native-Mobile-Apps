@@ -6,7 +6,11 @@ import android.database.sqlite.SQLiteOpenHelper
 
 
 class DBHelper(context: Context) :
-    SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+        SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+    /*
+    Class consists of object with database parameters and functions for initial creation of database,
+    and upgrade of database.
+     */
     companion object {
         const val DATABASE_NAME = "test6ActivitiesManager.db"
         const val DATABASE_VERSION = 1

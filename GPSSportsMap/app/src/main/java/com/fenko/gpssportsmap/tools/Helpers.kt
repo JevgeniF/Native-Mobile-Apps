@@ -7,8 +7,12 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class Helpers {
+    /*
+    Class contains helping functions, converters, calculators
+     */
 
     fun paceAtLocation(lastLocationPoint: LocationPoint, currentLocationPoint: LocationPoint): Float {
+        //function calculates pace min/km between two locations. Returns pace min/km: Float
         val lastLocationTime = lastLocationPoint.time
         val currentLocationTime = currentLocationPoint.time
 
@@ -19,6 +23,8 @@ class Helpers {
     }
 
     fun totalTime(startTime: Long, endTime: Long): String {
+        //function calculates time between two events and converts it from milliseconds to normal HH.mm.ss format
+        //returns HH.mm.ss time as String
         val passedTime = endTime - startTime
         return String.format("%02d:%02d:%02d",
                 TimeUnit.MILLISECONDS.toHours(passedTime),
@@ -28,7 +34,8 @@ class Helpers {
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(passedTime)))
     }
 
-    fun compassDirection (bearing: Float): String {
+    fun compassDirection(bearing: Float): String {
+        //function for naming directions on bearing basis. Returns name of direction as String
         var direction = ""
         if (bearing >= 356f || bearing <= 4f) {
             direction = "N"
@@ -66,7 +73,8 @@ class Helpers {
         return direction
     }
 
-    fun converterHMS (time: Long): String {
+    fun converterHMS(time: Long): String {
+        //function converts time from milliseconds to HH.mm.ss. Returns HH.mm.ss time as string
         return String.format("%02d:%02d:%02d",
                 TimeUnit.MILLISECONDS.toHours(time),
                 TimeUnit.MILLISECONDS.toMinutes(time) -
@@ -77,14 +85,18 @@ class Helpers {
     }
 
     fun converterTime(time: Long): String {
+        //function converts time from milliseconds to special pattern used in GPX and on backend server.
+        //returns time in pattern as String
         val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
         return df.format(time)
     }
 
     fun createGPSActivity(activityType: String, targetPace: ArrayList<Int>): GPSActivity {
-        var paceMin: Int = 360
-        var paceMax: Int = 600
-        var description: String = "Running - easy"
+        //functions creates and returns GPSActivity object. Used on gpsActivity start, to remove
+        //long "when" code and make code more compact
+        var paceMin = 360
+        var paceMax = 600
+        var description = "Running - easy"
         when (activityType) {
             "00000000-0000-0000-0000-000000000001" -> {
                 paceMin = 360

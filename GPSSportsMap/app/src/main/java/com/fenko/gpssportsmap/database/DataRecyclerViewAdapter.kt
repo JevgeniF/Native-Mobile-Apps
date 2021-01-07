@@ -11,20 +11,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.fenko.gpssportsmap.objects.GPSActivity
 import com.fenko.gpssportsmap.ListActivityData
 import com.fenko.gpssportsmap.R
-import com.fenko.gpssportsmap.Volley
+import com.fenko.gpssportsmap.backend.Volley
+import com.fenko.gpssportsmap.objects.GPSActivity
 import com.fenko.gpssportsmap.tools.Helpers
 import kotlinx.android.synthetic.main.row_view.view.*
 
 
 class DataRecyclerViewAdapter(context: Context, private val activityRepo: ActivityRepo) :
-    RecyclerView.Adapter<DataRecyclerViewAdapter.ViewHolder>() {
+        RecyclerView.Adapter<DataRecyclerViewAdapter.ViewHolder>() {
+    /*
+    Class adapts data from database to RecyclerView and generates RowViews for every database entry
+    Used for User interaction with recorded into Database activities.
+     */
 
-    lateinit var dataSet: List<GPSActivity>
+    lateinit var dataSet: List<GPSActivity> //set of all activities from database
 
     fun refreshData() {
+        //function updates set of all activities
         dataSet = activityRepo.getAll()
     }
 
@@ -32,40 +37,50 @@ class DataRecyclerViewAdapter(context: Context, private val activityRepo: Activi
         refreshData()
     }
 
-    private val inflater = LayoutInflater.from(context)
-    private val openActivity = Intent(context, ListActivityData::class.java)
-    var volley = Volley()
+    private val inflater = LayoutInflater.from(context) // inflater for row views
+    private val openActivity = Intent(context, ListActivityData::class.java) //intent used to open every activity data
+    private var volley = Volley() // backend requests class
 
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        /*
+        function for creation of row views "packed" into recyclerView.
+        also used by me for setting of LongClickListener for each row view.
+        By long click user can interact with every activity directly
+         */
         val rowView = inflater.inflate(R.layout.row_view, parent, false)
         val holder = ViewHolder(rowView)
         val context = rowView.context
+
         holder.itemView.setOnLongClickListener {
-            volley.volleyUser = activityRepo.getUser()
+            //listener for every row view
+            volley.volleyUser = activityRepo.getUser() //we require token for interaction with backend at the same time
+            //to get right activity, we need to know holder position, as we can get activity by position index in dataset
             val position = holder.adapterPosition
             val builder = AlertDialog.Builder(context)
             val gpsActivity = dataSet[position]
+            //alert dialog with options for user
             builder.setTitle(context.resources.getString(R.string.question))
-                .setMessage("Do you want to?")
-                .setNegativeButton(context.resources.getString(R.string.openButton)) { _: DialogInterface, _: Int ->
-                    openActivity.putExtra("id", gpsActivity.id.toString())
-                    println(gpsActivity.id)
-                    context.startActivity(openActivity)
-                    (context as Activity).finish()
-                }
-                .setPositiveButton(context.resources.getText(R.string.deleteButton)) { _: DialogInterface, _: Int ->
-
-                    removeItem(gpsActivity.id.toInt())
-                    volley.deleteSession(context, gpsActivity)
-                    Toast.makeText(
-                        context,
-                        context.resources.getString(R.string.activityDeleted),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+                    .setMessage(context.resources.getString(R.string.recyclerQuestion))
+                    .setNegativeButton(context.resources.getString(R.string.openButton)) { _: DialogInterface, _: Int ->
+                        //idea was to use same activity for view and edit, in order to save some resources
+                        openActivity.putExtra("id", gpsActivity.id.toString())
+                        context.startActivity(openActivity)
+                        //previous activity closed
+                        (context as Activity).finish()
+                    }
+                    .setPositiveButton(context.resources.getText(R.string.deleteButton)) { _: DialogInterface, _: Int ->
+                        //removes activity from database and server
+                        removeItem(gpsActivity.id.toInt())
+                        volley.deleteSession(context, gpsActivity)
+                        Toast.makeText(
+                                context,
+                                context.resources.getString(R.string.activityDeleted),
+                                Toast.LENGTH_SHORT
+                        ).show()
+                    }
             val dialog = builder.create()
             dialog.show()
             true
@@ -75,6 +90,7 @@ class DataRecyclerViewAdapter(context: Context, private val activityRepo: Activi
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        //function fills row views by activity data
         val gpsActivity = dataSet[position]
         holder.itemView.textNameDataRow.text = gpsActivity.name
         holder.itemView.textRecordedAtDataRow.text = gpsActivity.recordedAt
@@ -87,6 +103,7 @@ class DataRecyclerViewAdapter(context: Context, private val activityRepo: Activi
     }
 
     private fun removeItem(position: Int) {
+        //function removes item from database and dataset
         activityRepo.delete(position)
         dataSet.drop(position)
         refreshData()

@@ -1,9 +1,8 @@
 package com.fenko.gpssportsmap
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fenko.gpssportsmap.database.ActivityRepo
@@ -11,7 +10,11 @@ import com.fenko.gpssportsmap.database.DataRecyclerViewAdapter
 import kotlinx.android.synthetic.main.activities_list.*
 
 class ListActivity : AppCompatActivity() {
-    private lateinit var activityRepo: ActivityRepo
+    /*
+    Class Activity. Shows list of all gps activities by means of recyclerview
+     */
+
+    private lateinit var activityRepo: ActivityRepo         //local activities repo
     private lateinit var adapter: RecyclerView.Adapter<*>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,6 +23,7 @@ class ListActivity : AppCompatActivity() {
 
         activityRepo = ActivityRepo(this).open()
 
+        //generating view in layout
         recyclerViewActivities.layoutManager = LinearLayoutManager(this)
         adapter = DataRecyclerViewAdapter(this, activityRepo)
         recyclerViewActivities.adapter = adapter

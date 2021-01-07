@@ -1,5 +1,6 @@
 package com.fenko.gpssportsmap
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -10,46 +11,56 @@ import com.fenko.gpssportsmap.database.ActivityRepo
 import kotlinx.android.synthetic.main.options.*
 
 class Options {
+    /*
+    user options class
+     */
 
-    var activity: String = "00000000-0000-0000-0000-000000000001"
+    var activity: String = "00000000-0000-0000-0000-000000000001" //default
 
-    var locationUpdateRate: Long = 2000
+    var locationUpdateRate: Long = 2000                          //default
 
-    lateinit var activityRepo: ActivityRepo
+    private lateinit var activityRepo: ActivityRepo                      //activities repository
 
+    @SuppressLint("SetTextI18n")
     fun askOptions(context: Context, mapActivity: MapActivity) {
+        //function opens options dialog
 
         activityRepo = ActivityRepo(context).open()
-        var user = activityRepo.getUser()
+        val user = activityRepo.getUser()
 
         val dialog = Dialog(context)
 
         dialog.setContentView(R.layout.options)
         dialog.show()
 
-        var loginButton = dialog.findViewById<Button>(R.id.buttonOptionsLogIn)
+        val loginButton = dialog.findViewById<Button>(R.id.buttonOptionsLogIn)
 
+        //if user still not logged in, options dialog shows notification that user not logged in and login button.
+        //button opens login pop-up
         if (user.token == "") {
             loginButton.setOnClickListener {
                 mapActivity.volley.login(context)
                 dialog.dismiss()
             }
         } else {
-          dialog.findViewById<TextView>(R.id.textOptionsLoggedIn).text = "Logged in as:"
+            //if user logged in, options dialog shows notification "Logged in as: Name LastName abd previous activities button.
+            dialog.findViewById<TextView>(R.id.textOptionsLoggedIn).text = context.getString(R.string.optionsLoggedInAs)
             dialog.findViewById<TextView>(R.id.textOptionsLoggedAs).text = "${user.firstName} ${user.lastName}"
-            loginButton.text = "Previous Activities"
+            loginButton.text = context.getString(R.string.previousActivities)
             loginButton.setOnClickListener {
+                //button opens list of activities
                 val viewActivitiesList = Intent(context, ListActivity::class.java)
                 context.startActivity(viewActivitiesList)
                 dialog.dismiss()
             }
         }
 
-        var saveButton = dialog.findViewById<Button>(R.id.buttonOptionsSave)
+        val saveButton = dialog.findViewById<Button>(R.id.buttonOptionsSave)
         saveButton.setOnClickListener {
-            var activityType = dialog.spinnerOptionsSelectActivity.selectedItemPosition
+            //save button saves chosen options and closes dialog
 
-            when (activityType) {
+            //spinner with activity types
+            when (dialog.spinnerOptionsSelectActivity.selectedItemPosition) {
                 0 -> {
                     activity = "00000000-0000-0000-0000-000000000001"
                 }
@@ -69,12 +80,14 @@ class Options {
                     activity = "00000000-0000-0000-0000-000000000006"
                 }
             }
+            //pace range for polylines
             if (dialog.editTextOptionsBadPace.text.toString() != "") {
                 mapActivity.badPace = dialog.editTextOptionsBadPace.text.toString().toInt()
             }
             if (dialog.editTextOptionsGoodPace.text.toString() != "") {
                 mapActivity.goodPace = dialog.editTextOptionsGoodPace.text.toString().toInt()
             }
+            //update rate
             if (dialog.editTextLocationUpdateRate.text.toString() != "") {
                 locationUpdateRate = dialog.editTextLocationUpdateRate.text.toString().toLong()
             }

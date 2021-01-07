@@ -12,7 +12,6 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.hardware.SensorManager.SENSOR_DELAY_GAME
-import android.location.Criteria
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
@@ -28,43 +27,52 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.androidadvance.topsnackbar.TSnackbar
+import com.fenko.gpssportsmap.backend.Volley
 import com.fenko.gpssportsmap.database.ActivityRepo
+import com.fenko.gpssportsmap.objects.LocationPoint
 import com.fenko.gpssportsmap.tools.C
 import com.fenko.gpssportsmap.tools.Helpers
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.material.snackbar.Snackbar
 
 
-//TODO,
-//small fixes in UI, code cleanup,
-// toTEST: LINE COLORS,
+//TODO, toTEST: LINE COLORS, gauges
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, SensorEventListener {
     companion object {
         private val TAG = this::class.java.declaringClass!!.simpleName
     }
+    /*
+     MapActivity.class = main UI activity.
+     Shows all current gps activity actions on map
+     Passes some data to service, as all calculations and location updates made there.
+     */
 
+    //broadcast
     private val broadcastReceiver = InnerBroadcastReceiver()
     private val broadcastReceiverIntentFilter: IntentFilter = IntentFilter()
 
-    private var locationServiceActive = false
-    private var compassOpen = false
+    private var locationServiceActive = false   //indicator for locationServiceActivity
+    private var compassOpen = false             //indicator for Compass Switch
+
     private lateinit var mMap: GoogleMap
-    private var lastKnownLocation: Location? = null
+
+    //private var lastKnownLocation: Location? = null --- deprecated, as last know fuse location
+    // is the same, where the app was switched off. Also don't think that this is required.
+
+    //params used for mapObject drawing on map
+    private var startMarked = false
     var currentLocation: Location? = null
-    private var listOfLocations: ArrayList<Location> = arrayListOf()
-    var listOfCP: ArrayList<Location> = arrayListOf()
+    private var listOfLocations: ArrayList<LocationPoint?> = arrayListOf()
     private var marker: Marker? = null
     var markerWP: Marker? = null
     var markerWPLocation: Location? = null
 
+    //params for compass
     private lateinit var sensorManager: SensorManager
     private lateinit var accelerometer: Sensor
     private lateinit var magnetometer: Sensor
@@ -72,78 +80,89 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
     private var lastMagnetometer = FloatArray(3)
     private var lastAcellerometerSet = false
     private var lastMagnetometerSet = false
-    private var bearing = 0f
+    private var bearing = 0f //current compass direction, used for camera rotations
 
-    private var mapObjects = MapObjects()
-    private var options = Options()
-    var volley = Volley()
+    private var mapObjects = MapObjects() // class with map objects drawing functions and some map settings
+    private var options = Options() // class for options pop-up
+    var volley = Volley() // used in main activity for user log in
 
-    lateinit var activityRepo: ActivityRepo
+    //gps activities local repository
+    private lateinit var activityRepo: ActivityRepo
 
+    //pace range for polyline coloring
     var goodPace: Int = 4
     var badPace: Int = 7
 
     override fun onSaveInstanceState(outState: Bundle) {
+        /*
+        function used for save of some data required for proper activity work onResume
+        */
         super.onSaveInstanceState(outState)
         outState.putBoolean("locationServiceActive", locationServiceActive)
         outState.putBoolean("compassOpen", compassOpen)
-        outState.putParcelable("lastKnownLocation", lastKnownLocation)
+        outState.putBoolean("startMarked", startMarked)
+        //outState.putParcelable("lastKnownLocation", lastKnownLocation)
         outState.putParcelable("currentLocation", currentLocation)
-        outState.putParcelableArrayList("listOfLocations", listOfLocations)
-        outState.putParcelableArrayList("listOfCP", listOfCP)
         if (markerWP != null) {
             outState.putParcelable("markerWPLocation", markerWPLocation)
         }
         outState.putParcelable("ui", mapObjects)
-        outState.putIntegerArrayList("goodBadPace", arrayListOf(goodPace, badPace))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate")
         super.onCreate(savedInstanceState)
 
-        //supportActionBar?.hide()
         setContentView(R.layout.main_layout)
-        findViewById<View>(R.id.compass).visibility = View.GONE
+        findViewById<View>(R.id.compass).visibility = View.GONE //compass layout hidden by default
+
         activityRepo = ActivityRepo(this).open()
 
         createNotificationChannel()
 
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
+            //restoration of saved params
             locationServiceActive = savedInstanceState.getBoolean("locationServiceActive")
             compassOpen = savedInstanceState.getBoolean("compassOpen")
             if (compassOpen) {
                 findViewById<View>(R.id.compass).visibility = View.VISIBLE
             }
+            startMarked = savedInstanceState.getBoolean("startMarked")
             if (savedInstanceState.getParcelable<Location>("markerWPLocation") != null) {
                 markerWPLocation = savedInstanceState.getParcelable("markerWPLocation")!!
             }
-            lastKnownLocation = savedInstanceState.getParcelable("lastKnownLocation")
+            //lastKnownLocation = savedInstanceState.getParcelable("lastKnownLocation")
             currentLocation = savedInstanceState.getParcelable("currentLocation")
-            listOfLocations = savedInstanceState.getParcelableArrayList("listOfLocations")!!
-            listOfCP = savedInstanceState.getParcelableArrayList("listOfCP")!!
             mapObjects = savedInstanceState.getParcelable("ui")!!
             findViewById<Button>(R.id.buttonStart).text = mapObjects.startButtonText
             findViewById<Button>(R.id.buttonMapView).text = mapObjects.mapViewButtonText
-            goodPace = savedInstanceState.getIntegerArrayList("goodBadPace")!![0]
-            badPace = savedInstanceState.getIntegerArrayList("goodBadPace")!![1]
         }
 
+        //location permission request
         if (!checkPermissions()) {
             requestPermissions()
         }
 
-        //login dialog popup and login to backend
+        /*
+        Log-in/registration pop-up. Checks if there is any user in database.
+        If no registered user in Database (empty token), the form will pop-up on any recreation of Activity.
+        If there is registered user, activity will be started without any pop-up. Idea is that the phone is
+        for personal use and only one user will be logged in the app from this phone.
+        Another variant(maybe will add in future) - is to make logout option, then the activity in
+        database must have user ID, in order
+        to hide other users items.
+         */
         val user = activityRepo.getUser()
         if (user.token == "") {
             volley.login(this)
         }
 
-
+        //intentFilter for this activity
         broadcastReceiverIntentFilter.addAction(C.LOCATION_UPDATE_ACTION)
         broadcastReceiverIntentFilter.addAction(C.NOTIFICATION_ACTION_WP_RESET)
         broadcastReceiverIntentFilter.addAction(C.NOTIFICATION_ACTION_CP_SET)
 
+        /*
         val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val criteria = Criteria()
         val provider = locationManager.getBestProvider(criteria, true)
@@ -151,7 +170,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
             requestPermissions()
         }
         lastKnownLocation = locationManager.getLastKnownLocation(provider!!)
+         */
 
+        //sensors used for compass
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
@@ -159,6 +180,17 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        /*
+         As the location is not passing from service, while activity on Pause/Stop, activity
+         updates list of points required for track from the database on Start/Resume
+         */
+        if (locationServiceActive) {
+            val activity = activityRepo.getLast()
+            listOfLocations = activity.listOfLocations
+            badPace = activity.badPace
+            goodPace = activity.goodPace
+        }
     }
 
     /**
@@ -172,49 +204,63 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
      */
 
     override fun onMapReady(googleMap: GoogleMap) {
+        //function updates map on screen, when map is ready
         mMap = googleMap
+
+        /*
+        was planned to give to user option to switch from usual map type to hybrid, as it could
+        help in orienteering. However, sometimes the map tiles can be updated in wrong time, due to
+        big speed or bad connection. The option "mapType" left in code only.
+         */
         mMap.mapType = mapObjects.mapType
+
+        //usual google api zoom controls
         mMap.uiSettings.isZoomControlsEnabled = mapObjects.isZoomControlsEnabled
         mMap.uiSettings.isZoomGesturesEnabled = mapObjects.isZoomGesturesEnabled
 
+        //listeners for Waypoint or marker placement on click
         mMap.setOnMapClickListener(this)
         mMap.setOnMapLongClickListener(this)
 
-        var position = LatLng(59.5152974, 24.8241854)
+        var position = LatLng(59.5152974, 24.8241854) //default camera position
 
+        //restoration of Waypoint marker, if was placed before onPause/onStop
         if (markerWPLocation != null) {
-            markerWP = mMap.addMarker(MarkerOptions().icon(BitmapDescriptorFactory
-                    .fromResource(R.drawable.baseline_location_on_black_24dp))
-                    .title("WP").position(LatLng(markerWPLocation!!.latitude, markerWPLocation!!.longitude)))
+            markerWP = mapObjects.addWPfmLocation(markerWPLocation, mMap)
         }
 
+        if (currentLocation != null) {
+            position = LatLng(currentLocation!!.latitude, currentLocation!!.longitude)
+        }
 
-        if (lastKnownLocation != null) {
-            position = LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
+        //restoration of Startpoint
+        if (listOfLocations.isNotEmpty()) {
+            mapObjects.addStart(listOfLocations[0], mMap)
         }
-        if(listOfLocations.isNotEmpty()) {
-                    mMap.addMarker(MarkerOptions().icon(BitmapDescriptorFactory
-                            .fromResource(R.drawable.baseline_outlined_flag_black_24dp)).title("Start")
-                            .position(LatLng(listOfLocations[0].latitude, listOfLocations[0].longitude)))
-                }
-        for(i in 1 until listOfLocations.size) {
-            mapObjects.uiUpdate(LatLng(listOfLocations[i - 1].latitude, listOfLocations[i - 1].longitude), LatLng(listOfLocations[i].latitude, listOfLocations[i].longitude), listOfLocations[i].speed, goodPace, badPace, mMap)
+
+        //restoration of Polylines
+        for (i in 1 until listOfLocations.size) {
+            mapObjects.uiUpdate(LatLng(listOfLocations[i - 1]!!.latitude, listOfLocations[i - 1]!!.longitude), LatLng(listOfLocations[i]!!.latitude, listOfLocations[i]!!.longitude), listOfLocations[i]!!.speed, goodPace, badPace, mMap)
+
+            //restoration of Checkpoints if were placed before
+            if (listOfLocations[i]!!.typeId == "00000000-0000-0000-0000-000000000003") {
+                mapObjects.addCPMarker(listOfLocations[i], mMap)
+            }
         }
-        for(i in 0 until listOfCP.size) {
-            mapObjects.addCPMarker(listOfCP[i], mMap)
-        }
+
         mMap.moveCamera(CameraUpdateFactory.newLatLng(position))
         mMap.moveCamera(CameraUpdateFactory.zoomTo(mapObjects.defaultZoom))
     }
 
     private fun createNotificationChannel() {
+        //function creates notification channel for app
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                    C.NOTIFICATION_CHANNEL, "Default channel",
+                    C.NOTIFICATION_CHANNEL, "Default Notification",
                     NotificationManager.IMPORTANCE_LOW
             )
 
-            channel.description = "Default channel"
+            channel.description = "notification for GPS Sports Map with action buttons"
 
             val notificationManager =
                     getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -224,6 +270,14 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
 
     @SuppressLint("SetTextI18n")
     override fun onSensorChanged(event: SensorEvent?) {
+        /*
+        function for compass. Checks changes in sensors data.
+        Changes transferred to compass layout.
+        textCompDirLeft: shows Compass Direction 90 degrees left from current direction
+        textCompDirRight: shows Compass Direction 90 degrees right from current direction
+        textCompCurrDir: shows Current Compass Direction and degree (bearing)
+        @SurpressLint used as there are no text, but Android Studio counts this as small violation
+         */
         if (event!!.sensor == accelerometer) {
             lowPass(event.values, lastAcellerometer)
             lastAcellerometerSet = true
@@ -233,20 +287,21 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
         }
 
         if (lastAcellerometerSet && lastMagnetometerSet) {
-            val  r = FloatArray(9)
+            val r = FloatArray(9)
             if (SensorManager.getRotationMatrix(r, null, lastAcellerometer, lastMagnetometer)) {
                 val orientation = FloatArray(3)
                 SensorManager.getOrientation(r, orientation)
 
                 bearing = (Math.toDegrees(orientation[0].toDouble()) + 360).toFloat() % 360
-                findViewById<TextView>(R.id.textCompDirLeft).text = "${Helpers().compassDirection(bearing - 45)}   \u140A"
+                findViewById<TextView>(R.id.textCompDirLeft).text = "${Helpers().compassDirection(bearing - 90)}   \u140A"
                 findViewById<TextView>(R.id.textCompCurrDir).text = "%d\u00b0 ${Helpers().compassDirection(bearing)}".format(bearing.toInt())
-                findViewById<TextView>(R.id.textCompDirRight).text = "\u1405   ${Helpers().compassDirection(bearing + 45)}"
+                findViewById<TextView>(R.id.textCompDirRight).text = "\u1405   ${Helpers().compassDirection(bearing + 90)}"
             }
         }
     }
 
     private fun lowPass(input: FloatArray, output: FloatArray) {
+        //filter to smooth sensors values
         val alpha = 0.05f
         for (i in input.indices) {
             output[i] = output[i] + alpha * (input[i] - output[i])
@@ -256,17 +311,20 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 
     fun onLocationChanged(location: Location) {
-        listOfLocations.add(location)
-        if (listOfLocations.size == 1) {
-            mMap.addMarker(MarkerOptions().icon(BitmapDescriptorFactory
-                    .fromResource(R.drawable.baseline_outlined_flag_black_24dp)).title("Start")
-                    .position(LatLng(location.latitude, location.longitude)))
+        //function updates UI(Map) in real time. Basically same way as on Start/Resume, but for realtime activity.
+        if (listOfLocations.size >= 1) {
+            //marking of start for the first time
+            if (!startMarked) {
+                mapObjects.addStart(listOfLocations[0]!!, mMap)
+                startMarked = true
+            }
+            //marking of last track part by polyline
+            mapObjects.uiUpdate(LatLng(listOfLocations.last()!!.latitude, listOfLocations.last()!!.longitude), LatLng(location.latitude, location.longitude), location.speed, goodPace, badPace, mMap)
         }
-        if (listOfLocations.size > 1) {
-            mapObjects.uiUpdate(LatLng(listOfLocations[listOfLocations.size - 2].latitude, listOfLocations[listOfLocations.size - 2].longitude), LatLng(location.latitude, location.longitude), location.speed, goodPace, badPace, mMap)
-        }
+        listOfLocations.add(LocationPoint(location))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(location.latitude, location.longitude)))
 
+        //change of camera rotation with north always up or in accordance with user rotation(compass bearing)
         if (mapObjects.northUp) {
             mapObjects.updateCameraBearing(mMap, 0f)
         } else {
@@ -274,12 +332,14 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
         }
     }
 
-    fun onButtonOptionsClick(view: View){
+    fun onButtonOptionsClick(view: View) {
+        //function starts options pop-up from Options class
         options.askOptions(this, this)
     }
 
     fun onButtonCompassClick(view: View) {
-        if(compassOpen) {
+        //function shows compass layer on top of map layer
+        if (compassOpen) {
             findViewById<View>(R.id.compass).visibility = View.GONE
         } else {
             findViewById<View>(R.id.compass).visibility = View.VISIBLE
@@ -288,29 +348,43 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
     }
 
     override fun onMapClick(p0: LatLng?) {
+        /*
+        function gives user possibility to place marker on map by clicking on it.
+        if marker placed, second click will change marker position to a new place (where user clicked)
+         */
         if (locationServiceActive) {
             if (marker != null) {
                 marker!!.remove()
             }
-            marker = mapObjects.addMarker(p0, locationServiceActive, mMap, findViewById(R.id.layoutMain))
+            marker = mapObjects.addMarker(this, p0, locationServiceActive, mMap, findViewById(R.id.layoutMain))
         }
     }
 
     override fun onMapLongClick(p0: LatLng?) {
+        /*
+        functions adds possibility to convert placed marker into Waypoint by long click anywhere on map.
+        it is possible to add waypoint and marker at the same time, but on second long click Waypoint
+        will be moved to the position of the marker. Marker will be removed.
+
+        As marker is required during activity only, it is not added to database or server, so in order
+        to save and reproduce marker, I made a location for it.
+         */
         if (locationServiceActive) {
             if (markerWP != null) {
                 markerWP!!.remove()
             }
-
+            //as all calculations made by service, the function sends empty intent to service when Waypoint removed
             val intent = (Intent(C.MAIN_ACTION_WP))
             sendBroadcast(intent)
 
-            markerWP = mapObjects.addWP(marker, locationServiceActive, mMap, findViewById(R.id.layoutMain))
+            markerWP = mapObjects.addWPfmMarker(marker, locationServiceActive, mMap, findViewById(R.id.layoutMain))
 
+            //location made for recreation on Start/Resume
             markerWPLocation = Location(LocationManager.GPS_PROVIDER)
             markerWPLocation!!.latitude = markerWP!!.position.latitude
             markerWPLocation!!.longitude = markerWP!!.position.longitude
 
+            //as all calculations made by service, the function sends intent with location to service when Waypoint added
             intent.putExtra(C.MAIN_ACTION_WP, markerWPLocation)
             sendBroadcast(intent)
 
@@ -319,42 +393,52 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
     }
 
     fun buttonStartOnClick(view: View) {
+        /*
+        function starts/stops background location service and record of gps activity
+         */
         Log.d(TAG, "buttonStartStopOnClick. locationServiceActive: $locationServiceActive")
-        // try to start/stop the background service
 
         if (locationServiceActive) {
+
+            //alert message to confirm if user wants to finish activity
             val builder = AlertDialog.Builder(this)
             builder.setTitle(resources.getString(R.string.question))
                     .setMessage(resources.getString(R.string.questionBody))
                     .setPositiveButton(resources.getText(R.string.yes)) { _: DialogInterface, _: Int ->
-                        // stopping the service
+
+                        // stopping the service in case of confirmation
                         stopService(Intent(this, LocationService::class.java))
+                        TSnackbar.make(view, resources.getString(R.string.activityCompleted), TSnackbar.LENGTH_LONG).show()
+                        //to make it possible to start activity again without app restart, all important ui data resetted
                         mMap.clear()
-                        listOfCP = arrayListOf()
                         listOfLocations = arrayListOf()
                         currentLocation = null
                         markerWPLocation = null
                         markerWP = null
                         marker = null
-                        TSnackbar.make(view, "Activity Completed", TSnackbar.LENGTH_LONG).show()
+                        startMarked = false
                         (view as Button).text = resources.getString(R.string.start)
                         mapObjects.startButtonText = resources.getString(R.string.start)
+
+                        //completion of MapActivity opens LastActivityData (results of activity)
                         val viewGPSActivity = Intent(this, LastActivityData::class.java)
                         startActivity(viewGPSActivity)
-                        //finish()
                     }
                     .setNegativeButton(resources.getString(R.string.no)) { _: DialogInterface, _: Int ->
-                        TSnackbar.make(view, "Activity Resumed", TSnackbar.LENGTH_LONG).show()
+                        TSnackbar.make(view, resources.getString(R.string.activityResumed), TSnackbar.LENGTH_LONG).show()
                     }
             val dialog = builder.create()
             dialog.show()
 
         } else {
+            //starting service and gps activity. As all calculations and activity creation made in service,
+            //function sends some user options to service
             val startLocationUpdate = Intent(this, LocationService::class.java)
-            startLocationUpdate.putExtra("activityType", options.activity)
-            startLocationUpdate.putExtra("updateRate", options.locationUpdateRate)
-            startLocationUpdate.putIntegerArrayListExtra("targetPace", arrayListOf(badPace, goodPace))
+            startLocationUpdate.putExtra("activityType", options.activity) //type of activity chosen by user
+            startLocationUpdate.putExtra("updateRate", options.locationUpdateRate) //update rate chosen by user
+            startLocationUpdate.putIntegerArrayListExtra("targetPace", arrayListOf(badPace, goodPace)) //pace range chosen by user
             if (Build.VERSION.SDK_INT >= 26) {
+
                 // starting the FOREGROUND service
                 // service has to display non-dismissible notification within 5 secs
                 startForegroundService(Intent(startLocationUpdate))
@@ -368,7 +452,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
     }
 
     fun buttonMapViewOnClick(view: View) {
-        if(!mapObjects.northUp) {
+        //function to change map rotation by button "Map View" (always N or in accordance to compass)
+        if (!mapObjects.northUp) {
             mapObjects.northUp = true
             (view as Button).text = resources.getString(R.string.northUp)
             mapObjects.mapViewButtonText = resources.getString(R.string.northUp)
@@ -382,11 +467,13 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
     }
 
     fun buttonResetWPointOnClick(view: View) {
+        //function for reset (clear) waypoint by button "Reset WPoint"
         if (locationServiceActive) {
             if (markerWP != null) {
                 markerWP!!.remove()
                 markerWPLocation = null
             }
+            //function sends "zero" intent to service as order to reset calculations
             val intent = (Intent(C.MAIN_ACTION_WP))
             intent.putExtra(C.MAIN_ACTION_WP, 0)
             sendBroadcast(intent)
@@ -394,16 +481,16 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
     }
 
     fun buttonAddCPointOnClick(view: View) {
+        //function to mark current location as CP. function sends order to service, if order received,
+        //server sends loccation point back and ui marks CP on map.
         if (locationServiceActive) {
             Log.d(TAG, "buttonCPOnClick")
             sendBroadcast(Intent(C.NOTIFICATION_ACTION_CP_SET))
-            //ui.addCPMarker(currentLocation, mMap)
-            //listOfCP.add(currentLocation!!)
-            //volley.postCP(context, activity)
         }
     }
 
     private fun checkPermissions(): Boolean {
+        //function to check app permissions
         return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -411,6 +498,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
     }
 
     private fun requestPermissions() {
+        //function to request permissions
         val shouldProvideRationale =
                 ActivityCompat.shouldShowRequestPermissionRationale(
                         this,
@@ -422,12 +510,12 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
                     TAG,
                     "Displaying permission rationale to provide additional context."
             )
-            Snackbar.make(
-                    findViewById(R.id.layoutActivityData),
-                    "GPS required for this app functionality.",
-                    Snackbar.LENGTH_INDEFINITE
+            TSnackbar.make(
+                    findViewById(R.id.layoutMain),
+                    resources.getString(R.string.providePermissions),
+                    TSnackbar.LENGTH_INDEFINITE
             )
-                    .setAction("OK") {
+                    .setAction(resources.getString(R.string.ok)) {
                         ActivityCompat.requestPermissions(
                                 this,
                                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
@@ -446,25 +534,29 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        //function for check permission request result
         Log.i(TAG, "onRequestPermissionResult")
         if (requestCode == C.REQUEST_PERMISSIONS_REQUEST_CODE) {
             when {
-                grantResults.count() <= 0 -> { // If user interaction was interrupted, the permission request is cancelled and you
-                    // receive empty arrays.
+                grantResults.count() <= 0 -> {
+
+                    // If user interaction was interrupted, the permission request is cancelled.
                     Log.i(TAG, "User interaction was cancelled.")
-                    Toast.makeText(this, "User interaction was cancelled.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, resources.getString(R.string.interactionCancelled), Toast.LENGTH_SHORT).show()
                 }
-                grantResults[0] == PackageManager.PERMISSION_GRANTED -> {// Permission was granted.
+                grantResults[0] == PackageManager.PERMISSION_GRANTED -> {
+                    // Permission was granted.
                     Log.i(TAG, "Permission was granted")
-                    Toast.makeText(this, "Permission was granted", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, resources.getString(R.string.permissionGranted), Toast.LENGTH_SHORT).show()
                 }
-                else -> { // Permission denied.
-                    Snackbar.make(
-                            findViewById(R.id.layoutActivityData),
-                            "You denied GPS! What can I do?",
-                            Snackbar.LENGTH_INDEFINITE
+                else -> {
+                    // Permission denied.
+                    TSnackbar.make(
+                            findViewById(R.id.layoutMain),
+                            resources.getString(R.string.applicationMalfunction),
+                            TSnackbar.LENGTH_INDEFINITE
                     )
-                            .setAction("Settings") {
+                            .setAction(resources.getString(R.string.appSettings)) {
                                 val intent = Intent()
                                 intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
                                 val uri: Uri = Uri.fromParts(
@@ -526,10 +618,15 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
     private inner class InnerBroadcastReceiver : BroadcastReceiver() {
         @SuppressLint("SetTextI18n")
         override fun onReceive(context: Context?, intent: Intent?) {
+            /*
+            function receives location updates and notification actions from service, as well as calculated data and
+            passes it to activity and layout
+
+            on receive of notification actions, responds on WP reset action after WP resetting.
+             */
             Log.d(TAG, intent!!.action!!)
             when (intent.action) {
                 C.LOCATION_UPDATE_ACTION -> {
-                    //TODO UPGRADE TO WORK WITH DATABASES
                     try {
                         currentLocation = intent.getParcelableExtra(C.LOCATION_UPDATE_ACTION)
 
@@ -563,7 +660,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
                 C.NOTIFICATION_ACTION_CP_SET -> {
                     val cpLocation = intent.getParcelableExtra<Location>(C.NOTIFICATION_ACTION_CP_SET)
                     mapObjects.addCPMarker(cpLocation, mMap)
-                    listOfCP.add(cpLocation!!)
 
                 }
             }

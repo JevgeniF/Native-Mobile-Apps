@@ -16,23 +16,30 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.fenko.gpssportsmap.backend.Volley
 import com.fenko.gpssportsmap.database.ActivityRepo
 import com.fenko.gpssportsmap.objects.GPSActivity
 import com.fenko.gpssportsmap.objects.LocationPoint
 import com.fenko.gpssportsmap.tools.C
 import com.fenko.gpssportsmap.tools.Helpers
+import com.fenko.gpssportsmap.tools.Kalman
 import com.google.android.gms.location.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 
 class LocationService : Service() {
+    /*
+    Service class for locations update, starting and finishing of activity, providing of all calculations
+    service uses gpsActivity object with it's location points for calculations as the same work with
+    database is slower
+     */
     companion object {
         private val TAG = this::class.java.declaringClass!!.simpleName
     }
 
 
-    // The desired intervals for location updates. Inexact. Updates may be more or less frequent.
+    // The desired intervals for location updates.
     private var UPDATE_INTERVAL_IN_MILLISECONDS: Long = 2000
     private val FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2
 
@@ -47,27 +54,30 @@ class LocationService : Service() {
     private var currentLocation: Location? = null
     private var currentSpeed = 0f
 
+    //overall activity data
     private var distanceTotal = 0f
     private var timeTotal = "00:00:00"
     private var averageSpeedTotal = 0f
 
-    private var timeStart = 0L
-    private var locationStart: Location? = null
+    private var timeStart = 0L                      //required for time calculation
+    private var locationStart: Location? = null     //required for distance calculation
 
+    //params for CP distance and time calculation
     private var timeAtCP = 0L
     private var distanceCPDirect = 0f
     private var distanceCPPassed = 0f
     private var averageSpeedCP = 0f
     private var locationCP: Location? = null
 
+    //params for WP distance and time calculation
     private var timeWPSet = 0L
     private var locationWPSet: Location? = null
-    private var locationWP : Location? = null
+    private var locationWP: Location? = null
     private var distanceToWPDirect = 0f
     private var distanceToWPPassed = 0f
     private var averageSpeedToWP = 0f
 
-    //activity
+    //gps activity
     var gpsActivity: GPSActivity? = null
 
     //repo
@@ -76,7 +86,8 @@ class LocationService : Service() {
     //backend
     var volley = Volley()
 
-    var kalman = Kalman(5f)
+    // Kalman latlng filter
+    private var kalman = Kalman(5f)
 
     override fun onCreate() {
         Log.d(TAG, "onCreate")
@@ -84,16 +95,16 @@ class LocationService : Service() {
 
         activityRepo = ActivityRepo(this).open()
 
+        //intentFilter for this service
         broadcastReceiverIntentFilter.addAction(C.NOTIFICATION_ACTION_CP_SET)
         broadcastReceiverIntentFilter.addAction(C.NOTIFICATION_ACTION_WP_RESET)
         broadcastReceiverIntentFilter.addAction(C.MAIN_ACTION_CP)
         broadcastReceiverIntentFilter.addAction(C.MAIN_ACTION_WP)
         broadcastReceiverIntentFilter.addAction(C.LOCATION_UPDATE_ACTION)
 
-
         registerReceiver(broadcastReceiver, broadcastReceiverIntentFilter)
 
-
+        //setting up fusedLocationClient
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         mLocationCallback = object : LocationCallback() {
@@ -110,44 +121,49 @@ class LocationService : Service() {
     }
 
     private fun requestLocationUpdates() {
+        //function requests location updates
         Log.i(TAG, "Requesting location updates")
 
         try {
             mFusedLocationClient.requestLocationUpdates(
-                mLocationRequest,
-                mLocationCallback, Looper.myLooper()
+                    mLocationRequest,
+                    mLocationCallback, Looper.myLooper()
             )
         } catch (unlikely: SecurityException) {
             Log.e(
-                TAG,
-                "Lost location permission. Could not request updates. $unlikely"
+                    TAG,
+                    "Lost location permission. Could not request updates. $unlikely"
             )
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun onNewLocation(location: Location) {
+        //function filters locations, creates location points from locations, adds location points to
+        //gps activity object, repo, backend. calculates metrics.
         Log.i(TAG, "New location: $location")
 
+        //implementation of Kalman filter in order to make gps tracking smoother
         kalman.process(location.latitude, location.longitude, location.accuracy, location.time)
         location.latitude = kalman.getLat()
         location.longitude = kalman.getLng()
         location.accuracy = kalman.getAccuracy()
 
+        //creating locationPoint from location and setting speed to each location. Speed required for polylines.
         val locationPoint = LocationPoint(location)
         if (gpsActivity!!.listOfLocations.isEmpty()) {
             location.speed = 0f
-            gpsActivity!!.listOfLocations.add(locationPoint)
-            activityRepo.addLocation(locationPoint)
         } else {
             currentSpeed = Helpers().paceAtLocation(gpsActivity!!.listOfLocations.last()!!, locationPoint)
-            println(gpsActivity!!.listOfLocations.last()!!.distanceTo(locationPoint))
             currentLocation!!.speed = currentSpeed
             locationPoint.speed = currentSpeed
-            activityRepo.addLocation(locationPoint)
         }
+        //adding location point to gps activity / repo / backend
+        gpsActivity!!.listOfLocations.add(locationPoint)
+        activityRepo.addLocation(locationPoint)
         volley.postLU(this, gpsActivity!!, locationPoint)
-        if (currentLocation == null){
+
+        //calculating all metrics
+        if (currentLocation == null) {
             locationStart = location
             locationCP = location
         } else {
@@ -155,10 +171,10 @@ class LocationService : Service() {
             val timeNow = Calendar.getInstance().timeInMillis
             distanceTotal += location.distanceTo(currentLocation)
             timeTotal = Helpers().totalTime(timeStart, timeNow)
-            averageSpeedTotal = 50 / (3 * (distanceTotal/TimeUnit.MILLISECONDS.toSeconds(timeNow - timeStart)))
+            averageSpeedTotal = 50 / (3 * (distanceTotal / TimeUnit.MILLISECONDS.toSeconds(timeNow - timeStart)))
 
             //cp metrics
-            if(locationCP != location) {
+            if (locationCP != location) {
                 distanceCPDirect = locationCP!!.distanceTo(currentLocation)
                 distanceCPPassed += locationCP!!.distanceTo(currentLocation)
                 averageSpeedCP = 50 / (3 * (distanceCPPassed / TimeUnit.MILLISECONDS.toSeconds(timeNow - timeAtCP)))
@@ -194,26 +210,27 @@ class LocationService : Service() {
     }
 
     private fun createLocationRequest() {
+        //function creates location request
         mLocationRequest.interval = UPDATE_INTERVAL_IN_MILLISECONDS
         mLocationRequest.fastestInterval = FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS
         mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         mLocationRequest.maxWaitTime = UPDATE_INTERVAL_IN_MILLISECONDS
     }
 
-
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun getLastLocation() {
         try {
             mFusedLocationClient.lastLocation
-                .addOnCompleteListener { task -> if (task.isSuccessful) {
-                    Log.w(TAG, "task successful")
-                    if (task.result != null){
-                        onNewLocation(task.result!!)
-                    }
-                } else {
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Log.w(TAG, "task successful")
+                            if (task.result != null) {
+                                onNewLocation(task.result!!)
+                            }
+                        } else {
 
-                    Log.w(TAG, "Failed to get location." + task.exception)
-                }}
+                            Log.w(TAG, "Failed to get location." + task.exception)
+                        }
+                    }
         } catch (unlikely: SecurityException) {
             Log.e(TAG, "Lost location permission.$unlikely")
         }
@@ -224,12 +241,14 @@ class LocationService : Service() {
         Log.d(TAG, "onDestroy")
         super.onDestroy()
 
-        //stop location updates
+        //stops location updates
         mFusedLocationClient.removeLocationUpdates(mLocationCallback)
 
+        //writes final data to gps activity
         gpsActivity!!.duration = Calendar.getInstance().timeInMillis - gpsActivity!!.timeStart
         gpsActivity!!.speed = averageSpeedTotal
         gpsActivity!!.distance = distanceTotal
+        //updates activity in database and backend session
         activityRepo.update(gpsActivity!!)
         activityRepo.updateUser(volley.volleyUser!!)
         // remove notifications
@@ -253,8 +272,8 @@ class LocationService : Service() {
         super.onLowMemory()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        //function starts location requests, creates gps activity, starts calculations
         Log.d(TAG, "onStartCommand")
 
         // set counters and locations to 0/null
@@ -263,7 +282,7 @@ class LocationService : Service() {
         locationCP = null
         locationWPSet = null
 
-        timeStart = Calendar.getInstance().timeInMillis
+        timeStart = Calendar.getInstance().timeInMillis // time of start
         distanceTotal = 0f
         timeTotal = "00:00:00"
         averageSpeedTotal = 0f
@@ -276,19 +295,24 @@ class LocationService : Service() {
         distanceToWPPassed = 0f
         averageSpeedToWP = 0f
 
-        var activityType = intent!!.getStringExtra("activityType")
-        var targetPace = intent.getIntegerArrayListExtra("targetPace")
+        //receiving settings from user options (selected in options pop-up in mapActivity
+        val activityType = intent!!.getStringExtra("activityType")
+        val targetPace = intent.getIntegerArrayListExtra("targetPace")
         UPDATE_INTERVAL_IN_MILLISECONDS = intent.getLongExtra("updateRate", 2000)
 
-
+        //receiving user data from database for Volley
         volley.volleyUser = activityRepo.getUser()
+
+        //creating gpsActivity with received settings
         gpsActivity = Helpers().createGPSActivity(activityType!!, targetPace!!)
+
+        //writing activity to database and backend server
         activityRepo.addActivity(gpsActivity!!)
         if (volley.volleyUser!!.token != "") {
             volley.postSession(this, gpsActivity!!)
         }
-        activityRepo.update(gpsActivity!!)
 
+        //starting constant sticky notification in drawer
         showNotification()
 
         return START_STICKY
@@ -296,7 +320,7 @@ class LocationService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? {
         Log.d(TAG, "onBind")
-        TODO("not implemented")
+        return null
     }
 
     override fun onRebind(intent: Intent?) {
@@ -310,19 +334,23 @@ class LocationService : Service() {
 
     }
 
-    fun showNotification(){
+    fun showNotification() {
+        //function creates and shows notification in drawer
+
+        //notification buttons settings (pending intents)
         val intentCp = Intent(C.NOTIFICATION_ACTION_CP_SET)
         val intentWp = Intent(C.NOTIFICATION_ACTION_WP_RESET)
 
         val pendingIntentCp = PendingIntent.getBroadcast(this, 0, intentCp, 0)
         val pendingIntentWp = PendingIntent.getBroadcast(this, 0, intentWp, 0)
 
+        //notification layout settings
         val notifyview = RemoteViews(packageName, R.layout.notification)
 
         notifyview.setOnClickPendingIntent(R.id.imageButtonCP, pendingIntentCp)
         notifyview.setOnClickPendingIntent(R.id.imageButtonWP, pendingIntentWp)
 
-
+        //passing calculated data to notification
         notifyview.setTextViewText(R.id.textTime, "%s".format(timeTotal))
         notifyview.setTextViewText(R.id.textDistance, "%.2f m".format(distanceTotal))
         notifyview.setTextViewText(R.id.textSpeed, "%.2f min/km".format(averageSpeedTotal))
@@ -338,9 +366,9 @@ class LocationService : Service() {
         // construct and show notification
         val builder = NotificationCompat.Builder(applicationContext, C.NOTIFICATION_CHANNEL)
                 .setSmallIcon(R.drawable.baseline_gps_not_fixed_24)
-            .setPriority(NotificationCompat.PRIORITY_LOW)
-            .setOngoing(true)
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setOngoing(true)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
 
         builder.setContent(notifyview)
 
@@ -349,12 +377,19 @@ class LocationService : Service() {
     }
 
 
-    private inner class InnerBroadcastReceiver: BroadcastReceiver() {
+    private inner class InnerBroadcastReceiver : BroadcastReceiver() {
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onReceive(context: Context?, intent: Intent?) {
+            /*
+            function receives waypoint responds from mapActivity, as well as intents from notification buttons
+
+            on receive of actions from notifications, sends actions to main activity for ui update and receives back
+            responds on WP resetting.
+             */
             Log.d(TAG, intent!!.action!!)
-            when(intent.action){
+            when (intent.action) {
                 C.MAIN_ACTION_WP -> {
+                    //on receipt changes settings for WP calculations
                     if (intent.getParcelableExtra<Location>(C.MAIN_ACTION_WP) != null) {
                         locationWPSet = currentLocation
                         locationWP = intent.getParcelableExtra(C.MAIN_ACTION_WP)
@@ -372,8 +407,9 @@ class LocationService : Service() {
                 }
 
                 C.NOTIFICATION_ACTION_CP_SET -> {
+                    //on receipt, creates CP and changes settings for calculation
                     locationCP = currentLocation
-                    val pointCP = LocationPoint(locationCP!!.latitude, locationCP!!.longitude, locationCP!!.accuracy, locationCP!!.altitude, locationCP!!.time)
+                    val pointCP = LocationPoint(locationCP!!)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         pointCP.verticalAccuracyMeters = locationCP!!.verticalAccuracyMeters
                     }
@@ -385,12 +421,14 @@ class LocationService : Service() {
                     distanceCPDirect = 0f
                     distanceCPPassed = 0f
                     showNotification()
+                    //sending notice to mapActivity for CP marker creation
                     val setCPMarker = Intent(C.NOTIFICATION_ACTION_CP_SET)
                     setCPMarker.putExtra(C.NOTIFICATION_ACTION_CP_SET, locationCP)
                     LocalBroadcastManager.getInstance(this@LocationService).sendBroadcast(setCPMarker)
                 }
 
                 C.NOTIFICATION_ACTION_WP_RESET -> {
+                    //resets WP calculations and sends notice to mapActivity for marker reset
                     locationWP = null
                     distanceToWPDirect = 0f
                     distanceToWPPassed = 0f

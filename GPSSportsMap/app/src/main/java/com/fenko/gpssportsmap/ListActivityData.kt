@@ -1,48 +1,50 @@
 package com.fenko.gpssportsmap
 
+import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.app.AppCompatActivity
+import com.fenko.gpssportsmap.backend.Volley
 import com.fenko.gpssportsmap.database.ActivityRepo
-import com.fenko.gpssportsmap.database.DataRecyclerViewAdapter
 import com.fenko.gpssportsmap.objects.GPSActivity
-import com.fenko.gpssportsmap.tools.Helpers
+import com.fenko.gpssportsmap.objects.LocationPoint
 import com.fenko.gpssportsmap.tools.GPXParser
-
+import com.fenko.gpssportsmap.tools.Helpers
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_data.*
 
 class ListActivityData : AppCompatActivity(), OnMapReadyCallback {
+    /*
+    Activity Class. Shows chosen from list of activities gpsActivity data and track on map fragment.
+    gpsActivity name and description can be edited in activity.
+     */
 
-    private lateinit var activityRepo: ActivityRepo
-    private lateinit var adapter: RecyclerView.Adapter<*>
-    var volley = Volley()
-    private var id: Long? = null
+    private lateinit var activityRepo: ActivityRepo             //activities repository
+    var volley = Volley()                                       //volley for backend communications
+    private var id: Long? = null                                //id of activity chosen from list
 
-    lateinit var activity: GPSActivity
-    var ui = MapObjects()
-    var gpxParser = GPXParser()
+    lateinit var activity: GPSActivity                          //GPSActivity object
+    private var camLocation: LocationPoint? = null              //location for camera
+    private var mapObjects = MapObjects()                       //class for drawing on map
+    private var gpxParser = GPXParser()                         //class for sharing GPX file
 
-    var goodPace: Int = 4
-    var badPace: Int = 7
+    private var goodPace: Int = 0                               //pace range chosen by user for this activity from databse
+    private var badPace: Int = 0
 
 
-    private lateinit var mMap: GoogleMap
+    private lateinit var mMap: GoogleMap                //map fragment
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_data)
 
-        supportActionBar?.hide()
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
@@ -51,18 +53,20 @@ class ListActivityData : AppCompatActivity(), OnMapReadyCallback {
         id = intent.getStringExtra("id")!!.toLong()
 
         activityRepo = ActivityRepo(this).open()
-
-        adapter = DataRecyclerViewAdapter(this, activityRepo)
-        (adapter as DataRecyclerViewAdapter).refreshData()
-
+        //getting gps activity and user from database
         activity = activityRepo.get(id!!)
         volley.volleyUser = activityRepo.getUser()
+
+        //filling this app activity and it's layout with data
+        goodPace = activity.goodPace
+        badPace = activity.badPace
+        camLocation = activity.listOfLocations.last()
 
         editTextActivityName.setText(activity.name)
         textRecordedAtData.text = activity.recordedAt
         textDurationData.text = Helpers().converterHMS(activity.duration)
         textPaceData.text = "%.2f min/km".format(activity.speed)
-        textDistanceData.text = "%.2f m". format(activity.distance)
+        textDistanceData.text = "%.2f m".format(activity.distance)
         editTextDescription.setText(activity.description)
     }
 
@@ -78,43 +82,42 @@ class ListActivityData : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        mMap.mapType = ui.mapType
-        mMap.uiSettings.isZoomControlsEnabled = ui.isZoomControlsEnabled
-        mMap.uiSettings.isZoomGesturesEnabled = ui.isZoomGesturesEnabled
+        mMap.uiSettings.isZoomControlsEnabled = mapObjects.isZoomControlsEnabled
+        mMap.uiSettings.isZoomGesturesEnabled = mapObjects.isZoomGesturesEnabled
 
+        //drawing activity on map
         val locations = activity.listOfLocations
-        val camLocation = LatLng(locations.last()!!.latitude, locations.last()!!.longitude)
-        println("${locations[0]!!.id}, ${locations[0]!!.activityId}, ${locations[0]!!.typeId}, ${locations[0]!!.latitude}, ${locations[0]!!.longitude}")
-        mMap.addMarker(MarkerOptions().icon(BitmapDescriptorFactory
-                .fromResource(R.drawable.baseline_outlined_flag_black_24dp)).title("Start")
-                .position(LatLng(locations[0]!!.latitude, locations[0]!!.longitude)))
+        mapObjects.addStart(locations[0], mMap)
 
-        for(i in 1 until activity.listOfLocations.size) {
-            ui.uiUpdate(LatLng(activity.listOfLocations[i - 1]!!.latitude, activity.listOfLocations[i - 1]!!.longitude),
-                    LatLng(activity.listOfLocations[i]!!.latitude, activity.listOfLocations[i]!!.longitude),
-                    activity.listOfLocations[i]!!.speed, goodPace, badPace, mMap)
+        for (i in 1 until locations.size) {
+            mapObjects.uiUpdate(LatLng(locations[i - 1]!!.latitude, locations[i - 1]!!.longitude),
+                    LatLng(locations[i]!!.latitude, locations[i]!!.longitude),
+                    locations[i]!!.speed, goodPace, badPace, mMap)
 
-            if (activity.listOfLocations[i]!!.typeId == "00000000-0000-0000-0000-000000000003") {
-                ui.addCPMarker(activity.listOfLocations[i]!!, mMap)
+            if (locations[i]!!.typeId == "00000000-0000-0000-0000-000000000003") {
+                mapObjects.addCPMarker(locations[i]!!, mMap)
             }
         }
+        mapObjects.addFinish(locations.last(), mMap)
 
-        mMap.addMarker(MarkerOptions().icon(BitmapDescriptorFactory
-                .fromResource(R.drawable.baseline_flag_black_24dp)).title("Start")
-                .position(LatLng(activity.listOfLocations.last()!!.latitude, activity.listOfLocations.last()!!.longitude)))
-
-        mMap.animateCamera(CameraUpdateFactory.newLatLng(camLocation))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(camLocation!!.latitude, camLocation!!.longitude)))
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(mapObjects.defaultZoom))
     }
 
     fun buttonPreviousActivitiesOnClick(view: View) {
+        //function to get to list of activities on "Previous Activities" click.
+        //if name or description changed, it will be saved in database and on server automatically
         if (activity.name != editTextActivityName.text.toString() || activity.description != editTextDescription.text.toString()) {
+
             activity.name = editTextActivityName.text.toString()
             activity.description = editTextDescription.text.toString()
 
+            //saving process
             activityRepo.update(activity)
             volley.putSession(this, activity)
             Toast.makeText(this, "Activity updated", Toast.LENGTH_SHORT).show()
         }
+        //starting new activity, closing this one... passing to list of gps activities.
         val viewActivitiesList = Intent(this, ListActivity::class.java)
         activityRepo.close()
         startActivity(viewActivitiesList)
@@ -122,13 +125,19 @@ class ListActivityData : AppCompatActivity(), OnMapReadyCallback {
     }
 
     fun buttonExportOnClick(view: View) {
+        //function to share GPX file on "Share GPX" click.
+        //if name or description changed, it will be saved in database and on server automatically
+        //just to be sure that every change won't be lost if user will switch off app after that
         if (activity.name != editTextActivityName.text.toString() || activity.description != editTextDescription.text.toString()) {
+
             activity.name = editTextActivityName.text.toString()
             activity.description = editTextDescription.text.toString()
 
+            //saving process
             activityRepo.update(activity)
             volley.putSession(this, activity)
         }
+        //file sharing
         gpxParser.exportFile(this, activity)
     }
 

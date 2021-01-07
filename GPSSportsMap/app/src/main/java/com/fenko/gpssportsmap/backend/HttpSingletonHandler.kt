@@ -1,4 +1,4 @@
-package com.fenko.gpssportsmap
+package com.fenko.gpssportsmap.backend
 
 import android.content.Context
 import android.text.TextUtils
@@ -7,6 +7,10 @@ import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
 
 class HttpSingletonHandler(context: Context) {
+    /*
+    Singleton Handler for Volley requests
+     */
+
     companion object {
         private val TAG = HttpSingletonHandler::class.java.simpleName
         private var context: Context? = null
