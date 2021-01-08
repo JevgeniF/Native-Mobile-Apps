@@ -94,6 +94,7 @@ class DataRecyclerViewAdapter(context: Context, private val activityRepo: Activi
         val gpsActivity = dataSet[position]
         holder.itemView.textNameDataRow.text = gpsActivity.name
         holder.itemView.textRecordedAtDataRow.text = gpsActivity.recordedAt
+        holder.itemView.textDistanceDataRow.text = "%.0f m".format(gpsActivity.distance)
         holder.itemView.textDurationDataRow.text = Helpers().converterHMS(gpsActivity.duration)
         holder.itemView.textPaceDataRow.text = "%.2f min/km".format(gpsActivity.speed)
     }

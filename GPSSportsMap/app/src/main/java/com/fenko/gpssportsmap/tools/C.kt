@@ -18,11 +18,11 @@ class C {
 
         const val LOCATION_UPDATE_ACTION_CP_DIRECT = "com.fenko.location_update.cpDirect"
         const val LOCATION_UPDATE_ACTION_CP_PASSED = "com.fenko.location_update.cpPassed"
-        const val LOCATION_UPDATE_ACTION_CP_PACE = "com.fenko.location_update.cpPace"
+        const val LOCATION_UPDATE_ACTION_CP_TIME = "com.fenko.location_update.cpTime"
 
         const val LOCATION_UPDATE_ACTION_WP_DIRECT = "com.fenko.location_update.wpDirect"
         const val LOCATION_UPDATE_ACTION_WP_PASSED = "com.fenko.location_update.wpPassed"
-        const val LOCATION_UPDATE_ACTION_WP_PACE = "com.fenko.location_update.wpPace"
+        const val LOCATION_UPDATE_ACTION_WP_TIME = "com.fenko.location_update.wpTime"
 
         const val NOTIFICATION_ID = 4321
         const val REQUEST_PERMISSIONS_REQUEST_CODE = 34

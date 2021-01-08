@@ -12,6 +12,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.hardware.SensorManager.SENSOR_DELAY_GAME
+import android.location.Criteria
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
@@ -40,7 +41,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 
 
-//TODO, toTEST: LINE COLORS, gauges
+//TODO: toTEST: LINE COLORS
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, SensorEventListener {
     companion object {
@@ -60,9 +61,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
     private var compassOpen = false             //indicator for Compass Switch
 
     private lateinit var mMap: GoogleMap
-
-    //private var lastKnownLocation: Location? = null --- deprecated, as last know fuse location
-    // is the same, where the app was switched off. Also don't think that this is required.
+    private var lastKnownLocation: Location? = null
 
     //params used for mapObject drawing on map
     private var startMarked = false
@@ -162,7 +161,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
         broadcastReceiverIntentFilter.addAction(C.NOTIFICATION_ACTION_WP_RESET)
         broadcastReceiverIntentFilter.addAction(C.NOTIFICATION_ACTION_CP_SET)
 
-        /*
         val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val criteria = Criteria()
         val provider = locationManager.getBestProvider(criteria, true)
@@ -170,7 +168,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
             requestPermissions()
         }
         lastKnownLocation = locationManager.getLastKnownLocation(provider!!)
-         */
+
 
         //sensors used for compass
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
@@ -204,6 +202,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
      */
 
     override fun onMapReady(googleMap: GoogleMap) {
+        Log.d(TAG, "onMapReady")
         //function updates map on screen, when map is ready
         mMap = googleMap
 
@@ -223,6 +222,13 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
         mMap.setOnMapLongClickListener(this)
 
         var position = LatLng(59.5152974, 24.8241854) //default camera position
+
+        if (!locationServiceActive) {
+            if(lastKnownLocation != null) {
+                position = LatLng(lastKnownLocation!!.latitude, lastKnownLocation!!.longitude)
+                println(position)
+            }
+        }
 
         //restoration of Waypoint marker, if was placed before onPause/onStop
         if (markerWPLocation != null) {
@@ -248,8 +254,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
             }
         }
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(position))
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(mapObjects.defaultZoom))
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, mapObjects.defaultZoom))
     }
 
     private fun createNotificationChannel() {
@@ -322,7 +327,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
             mapObjects.uiUpdate(LatLng(listOfLocations.last()!!.latitude, listOfLocations.last()!!.longitude), LatLng(location.latitude, location.longitude), location.speed, goodPace, badPace, mMap)
         }
         listOfLocations.add(LocationPoint(location))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(location.latitude, location.longitude)))
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(LatLng(location.latitude, location.longitude)))
 
         //change of camera rotation with north always up or in accordance with user rotation(compass bearing)
         if (mapObjects.northUp) {
@@ -369,14 +374,13 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
         As marker is required during activity only, it is not added to database or server, so in order
         to save and reproduce marker, I made a location for it.
          */
-        if (locationServiceActive) {
+        if (locationServiceActive && marker != null) {
             if (markerWP != null) {
                 markerWP!!.remove()
             }
             //as all calculations made by service, the function sends empty intent to service when Waypoint removed
             val intent = (Intent(C.MAIN_ACTION_WP))
             sendBroadcast(intent)
-
             markerWP = mapObjects.addWPfmMarker(marker, locationServiceActive, mMap, findViewById(R.id.layoutMain))
 
             //location made for recreation on Start/Resume
@@ -631,17 +635,16 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
                         currentLocation = intent.getParcelableExtra(C.LOCATION_UPDATE_ACTION)
 
                         findViewById<TextView>(R.id.textFromStartSpeed).text = "%.2f min/km".format(intent.getFloatExtra(C.LOCATION_UPDATE_ACTION_TOTAL_PACE, 0f))
-                        findViewById<TextView>(R.id.textFromStartDistance).text = "%.2f m".format(intent.getFloatExtra(C.LOCATION_UPDATE_ACTION_TOTAL_DISTANCE, 0f))
+                        findViewById<TextView>(R.id.textFromStartDistance).text = "%.0f m".format(intent.getFloatExtra(C.LOCATION_UPDATE_ACTION_TOTAL_DISTANCE, 0f))
                         findViewById<TextView>(R.id.textFromStartTime).text = "%s".format(intent.getStringExtra(C.LOCATION_UPDATE_ACTION_TOTAL_TIME))
 
-                        findViewById<TextView>(R.id.textFromCPointSpeed).text = "%.2f min/km".format(intent.getFloatExtra(C.LOCATION_UPDATE_ACTION_CP_PACE, 0f))
-                        println("%.2f min/km".format(intent.getFloatExtra(C.LOCATION_UPDATE_ACTION_CP_PACE, 0f)))
-                        findViewById<TextView>(R.id.textFromCPointDistance).text = "%.2f m".format(intent.getFloatExtra(C.LOCATION_UPDATE_ACTION_CP_PASSED, 0f))
-                        findViewById<TextView>(R.id.textCPointDirect).text = "%.2f m".format(intent.getFloatExtra(C.LOCATION_UPDATE_ACTION_CP_DIRECT, 0f))
+                        findViewById<TextView>(R.id.textFromCPointDirect).text = "%.0f m".format(intent.getFloatExtra(C.LOCATION_UPDATE_ACTION_CP_DIRECT, 0f))
+                        findViewById<TextView>(R.id.textFromCPTime).text = "%s".format(intent.getStringExtra(C.LOCATION_UPDATE_ACTION_CP_TIME))
+                        findViewById<TextView>(R.id.textCPointDist).text = "%.0f m".format(intent.getFloatExtra(C.LOCATION_UPDATE_ACTION_CP_PASSED, 0f))
 
-                        findViewById<TextView>(R.id.textFromWPointSpeed).text = "%.2f min/km".format(intent.getFloatExtra(C.LOCATION_UPDATE_ACTION_WP_PACE, 0f))
-                        findViewById<TextView>(R.id.textFromWPointDistance).text = "%.2f m".format(intent.getFloatExtra(C.LOCATION_UPDATE_ACTION_WP_PASSED, 0f))
-                        findViewById<TextView>(R.id.textWPointDirect).text = "%.2f m".format(intent.getFloatExtra(C.LOCATION_UPDATE_ACTION_WP_DIRECT, 0f))
+                        findViewById<TextView>(R.id.textTillWPointDirect).text = "%.0f m".format(intent.getFloatExtra(C.LOCATION_UPDATE_ACTION_WP_DIRECT, 0f))
+                        findViewById<TextView>(R.id.textTillWPointTime).text = "%s".format(intent.getStringExtra(C.LOCATION_UPDATE_ACTION_WP_TIME))
+                        findViewById<TextView>(R.id.textTillWPointDist).text = "%.0f m".format(intent.getFloatExtra(C.LOCATION_UPDATE_ACTION_WP_PASSED, 0f))
 
                         onLocationChanged(currentLocation!!)
 

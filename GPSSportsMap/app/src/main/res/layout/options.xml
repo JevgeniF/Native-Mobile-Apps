@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/options"
     android:layout_width="415dp"
     android:layout_height="350dp">
@@ -19,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="Not logged in."
+        android:text="@string/not_logged_in"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +31,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="64dp"
-        android:text="No syncronization with online service available"
+        android:text="@string/no_syncronization_with_online_service_available"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="8dp"
-        android:text="Log In"
+        android:text="@string/log_in"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.87"
@@ -71,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:text="Select Activity"
+                android:text="@string/select_activity"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -93,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
-                android:text="Enter Bad Pace (min/km)"
+                android:text="@string/enter_bad_pace_min_km"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textOptionsSelectActiviy" />
 
@@ -106,10 +105,12 @@
                 android:inputType="numberDecimal"
                 android:textAlignment="center"
                 android:textSize="14sp"
+                android:hint="@string/i_e_16"
                 app:layout_constraintBottom_toBottomOf="@+id/textOptionsGoodPace"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textOptionsGoodPace"
-                app:layout_constraintTop_toTopOf="@+id/textOptionsGoodPace" />
+                app:layout_constraintTop_toTopOf="@+id/textOptionsGoodPace"
+                android:importantForAutofill="no" />
 
             <TextView
                 android:id="@+id/textOptionsMinPace"
@@ -117,7 +118,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="Enter Good Pace (min/km)"
+                android:text="@string/enter_good_pace_min_km"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textOptionsGoodPace" />
 
@@ -130,10 +131,12 @@
                 android:inputType="numberDecimal"
                 android:textAlignment="center"
                 android:textSize="14sp"
+                android:hint="@string/i_e_5"
                 app:layout_constraintBottom_toBottomOf="@+id/textOptionsMinPace"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textOptionsMinPace"
-                app:layout_constraintTop_toTopOf="@+id/textOptionsMinPace" />
+                app:layout_constraintTop_toTopOf="@+id/textOptionsMinPace"
+                android:importantForAutofill="no" />
 
             <TextView
                 android:id="@+id/textOptionsGPSUpdate"
@@ -141,7 +144,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
-                android:text="Location Update Rate (ms)"
+                android:text="@string/location_update_rate_ms"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textOptionsMinPace" />
 
@@ -154,10 +157,12 @@
                 android:inputType="numberSigned"
                 android:textAlignment="center"
                 android:textSize="14sp"
+                android:hint="@string/default_2000"
                 app:layout_constraintBottom_toBottomOf="@+id/textOptionsGPSUpdate"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textOptionsGPSUpdate"
-                app:layout_constraintTop_toTopOf="@+id/textOptionsGPSUpdate" />
+                app:layout_constraintTop_toTopOf="@+id/textOptionsGPSUpdate"
+                android:importantForAutofill="no" />
 
             <Button
                 android:id="@+id/buttonOptionsSave"
@@ -165,8 +170,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="32dp"
-                android:onClick="buttonOptionsSaveClick"
-                android:text="Save"
+                android:text="@string/save"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

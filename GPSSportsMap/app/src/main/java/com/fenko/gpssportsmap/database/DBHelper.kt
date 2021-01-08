@@ -85,10 +85,10 @@ class DBHelper(context: Context) :
                 "$LOCATION_RECORDED_AT REAL NOT NULL, " +
                 "$LOCATION_LATITUDE REAL NOT NULL, " +
                 "$LOCATION_LONGITUDE REAL NOT NULL, " +
-                "$LOCATION_ACCURACY REAL NOT NULL, " +
-                "$LOCATION_ALTITUDE REAL NOT NULL, " +
-                "$LOCATION_VERTICAL_ACCURACY REAL NOT NULL, " +
-                "$LOCATION_SPEED REAL NOT NULL, " +
+                "$LOCATION_ACCURACY REAL, " +
+                "$LOCATION_ALTITUDE REAL, " +
+                "$LOCATION_VERTICAL_ACCURACY REAL, " +
+                "$LOCATION_SPEED REAL, " +
                 "$LOCATION_TYPE_ID TEXT NOT NULL);"
 
         const val SQL_DELETE_TABLES = "DROP TABLE IF EXISTS $USER_TABLE_NAME;\n" +

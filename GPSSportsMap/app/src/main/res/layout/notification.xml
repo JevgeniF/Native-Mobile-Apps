@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutNotification"
     android:layout_width="match_parent"
     android:layout_height="64dp"
@@ -9,120 +10,111 @@
     android:orientation="horizontal">
 
     <LinearLayout
-        android:layout_width="48dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/textBearingnotification"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="TextView"
-            android:textAlignment="center" />
-    </LinearLayout>
-
-    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textDistance"
+            android:id="@+id/textNotifTotalTime"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="TextView" />
+            android:textAlignment="textStart" />
 
         <TextView
-            android:id="@+id/textTime"
+            android:id="@+id/textNotifTotalDistance"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="TextView" />
+            android:textAlignment="textStart" />
 
         <TextView
-            android:id="@+id/textSpeed"
+            android:id="@+id/textNotifAvgSpeed"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="TextView" />
+            android:textAlignment="textStart" />
     </LinearLayout>
 
     <ImageButton
         android:id="@+id/imageButtonCP"
-        style="@android:style/Widget.DeviceDefault.ImageButton"
         android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:backgroundTint="@color/design_default_color_secondary_variant"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:backgroundTint="#43A047"
         android:contentDescription="@string/add_cp"
-        app:srcCompat="@drawable/baseline_where_to_vote_black_24dp"
-        android:layout_weight="1" />
+        android:src="@drawable/baseline_where_to_vote_black_24dp"
+        android:tint="#FFFFFF"
+        tools:src="@drawable/baseline_where_to_vote_black_24dp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textDirectFmCP"
+            android:id="@+id/textNotifTimeFmCP"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="TextView" />
+            android:textAlignment="textStart" />
 
         <TextView
-            android:id="@+id/textDistanceFmCP"
+            android:id="@+id/textNotifDistFmCP"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="TextView" />
+            android:textAlignment="textStart" />
 
         <TextView
-            android:id="@+id/textAvgSpeedCP"
+            android:id="@+id/textNotifDirectDistFmCP"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="TextView" />
+            android:textAlignment="textStart" />
+
     </LinearLayout>
 
     <ImageButton
         android:id="@+id/imageButtonWP"
-        style="@android:style/Widget.DeviceDefault.Light.ImageButton"
         android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:backgroundTint="#43A047"
         android:contentDescription="@string/add_wp"
-        app:srcCompat="@drawable/baseline_location_on_black_24dp"
-        android:layout_weight="1" />
+        android:src="@drawable/baseline_wrong_location_black_24dp"
+        android:tint="#FFFFFF"
+        tools:src="@drawable/baseline_wrong_location_black_24dp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textDirectToWP"
+            android:id="@+id/textNotifEstTimeToWP"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="TextView" />
+            android:textAlignment="textStart" />
 
         <TextView
-            android:id="@+id/textDistanceToWP"
+            android:id="@+id/textNotifDistPassedWP"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="TextView" />
+            android:textAlignment="textStart" />
 
         <TextView
-            android:id="@+id/TextAvgSpeedToWP"
+            android:id="@+id/textNotifDirectDistToWP"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="TextView" />
+            android:textAlignment="textStart" />
+
     </LinearLayout>
 
 </LinearLayout>

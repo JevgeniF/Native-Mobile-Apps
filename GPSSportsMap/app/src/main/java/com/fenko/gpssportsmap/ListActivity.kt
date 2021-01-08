@@ -40,4 +40,9 @@ class ListActivity : AppCompatActivity() {
         super.onDestroy()
         activityRepo.close()
     }
+
+    override fun onStop() {
+        super.onStop()
+        activityRepo.close()
+    }
 }

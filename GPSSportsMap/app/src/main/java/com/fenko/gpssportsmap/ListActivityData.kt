@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.fenko.gpssportsmap.backend.Volley
 import com.fenko.gpssportsmap.database.ActivityRepo
 import com.fenko.gpssportsmap.objects.GPSActivity
-import com.fenko.gpssportsmap.objects.LocationPoint
 import com.fenko.gpssportsmap.tools.GPXParser
 import com.fenko.gpssportsmap.tools.Helpers
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -30,7 +29,7 @@ class ListActivityData : AppCompatActivity(), OnMapReadyCallback {
     private var id: Long? = null                                //id of activity chosen from list
 
     lateinit var activity: GPSActivity                          //GPSActivity object
-    private var camLocation: LocationPoint? = null              //location for camera
+    private var camLocation: LatLng? = null                 //location for camera
     private var mapObjects = MapObjects()                       //class for drawing on map
     private var gpxParser = GPXParser()                         //class for sharing GPX file
 
@@ -60,7 +59,7 @@ class ListActivityData : AppCompatActivity(), OnMapReadyCallback {
         //filling this app activity and it's layout with data
         goodPace = activity.goodPace
         badPace = activity.badPace
-        camLocation = activity.listOfLocations.last()
+        camLocation = LatLng(activity.listOfLocations.last()!!.latitude, activity.listOfLocations.last()!!.longitude)
 
         editTextActivityName.setText(activity.name)
         textRecordedAtData.text = activity.recordedAt
@@ -100,8 +99,7 @@ class ListActivityData : AppCompatActivity(), OnMapReadyCallback {
         }
         mapObjects.addFinish(locations.last(), mMap)
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(camLocation!!.latitude, camLocation!!.longitude)))
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(mapObjects.defaultZoom))
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camLocation, mapObjects.defaultZoom))
     }
 
     fun buttonPreviousActivitiesOnClick(view: View) {
@@ -144,5 +142,10 @@ class ListActivityData : AppCompatActivity(), OnMapReadyCallback {
     override fun onDestroy() {
         super.onDestroy()
         activityRepo.close()
+    }
+
+    override fun onStop() {
+        activityRepo.close()
+        super.onStop()
     }
 }

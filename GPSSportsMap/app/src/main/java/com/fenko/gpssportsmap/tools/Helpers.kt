@@ -1,7 +1,7 @@
 package com.fenko.gpssportsmap.tools
 
+import android.location.Location
 import com.fenko.gpssportsmap.objects.GPSActivity
-import com.fenko.gpssportsmap.objects.LocationPoint
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -11,13 +11,13 @@ class Helpers {
     Class contains helping functions, converters, calculators
      */
 
-    fun paceAtLocation(lastLocationPoint: LocationPoint, currentLocationPoint: LocationPoint): Float {
+    fun paceAtLocation(lastLocation: Location, currentLocation: Location): Float {
         //function calculates pace min/km between two locations. Returns pace min/km: Float
-        val lastLocationTime = lastLocationPoint.time
-        val currentLocationTime = currentLocationPoint.time
+        val lastLocationTime = lastLocation.time
+        val currentLocationTime = currentLocation.time
 
         val passedTime = currentLocationTime - lastLocationTime
-        val passedDistance = lastLocationPoint.distanceTo(currentLocationPoint)
+        val passedDistance = lastLocation.distanceTo(currentLocation)
 
         return 50 / (3 * (passedDistance / TimeUnit.MILLISECONDS.toSeconds(passedTime)))
     }
@@ -82,6 +82,13 @@ class Helpers {
                 TimeUnit.MILLISECONDS.toSeconds(time) -
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time)))
 
+    }
+
+    fun converterStoMS(time: Long): String {
+        //function converts time from seconds to mm.ss. Returns mm.ss time as string
+        return String.format("%02d:%02d",
+                TimeUnit.SECONDS.toMinutes(time),
+                time - TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(time)))
     }
 
     fun converterTime(time: Long): String {

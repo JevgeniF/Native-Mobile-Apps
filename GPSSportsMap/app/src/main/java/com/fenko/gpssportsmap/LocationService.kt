@@ -52,7 +52,6 @@ class LocationService : Service() {
 
     // last received location
     private var currentLocation: Location? = null
-    private var currentSpeed = 0f
 
     //overall activity data
     private var distanceTotal = 0f
@@ -60,22 +59,20 @@ class LocationService : Service() {
     private var averageSpeedTotal = 0f
 
     private var timeStart = 0L                      //required for time calculation
-    private var locationStart: Location? = null     //required for distance calculation
 
     //params for CP distance and time calculation
-    private var timeAtCP = 0L
+    private var locationCP: Location? = null
     private var distanceCPDirect = 0f
     private var distanceCPPassed = 0f
-    private var averageSpeedCP = 0f
-    private var locationCP: Location? = null
+    private var timeFmCP = "00:00:00"
+
+    private var timeAtCP = 0L
 
     //params for WP distance and time calculation
-    private var timeWPSet = 0L
-    private var locationWPSet: Location? = null
     private var locationWP: Location? = null
     private var distanceToWPDirect = 0f
     private var distanceToWPPassed = 0f
-    private var averageSpeedToWP = 0f
+    private var estTimeToWP = "00:00:00"
 
     //gps activity
     var gpsActivity: GPSActivity? = null
@@ -149,42 +146,42 @@ class LocationService : Service() {
         location.accuracy = kalman.getAccuracy()
 
         //creating locationPoint from location and setting speed to each location. Speed required for polylines.
-        val locationPoint = LocationPoint(location)
+
         if (gpsActivity!!.listOfLocations.isEmpty()) {
             location.speed = 0f
         } else {
-            currentSpeed = Helpers().paceAtLocation(gpsActivity!!.listOfLocations.last()!!, locationPoint)
-            currentLocation!!.speed = currentSpeed
-            locationPoint.speed = currentSpeed
+            val currentSpeed = Helpers().paceAtLocation(gpsActivity!!.listOfLocations.last()!!, location)
+            location.speed = currentSpeed
         }
+        val locationPoint = LocationPoint(location)
         //adding location point to gps activity / repo / backend
         gpsActivity!!.listOfLocations.add(locationPoint)
         activityRepo.addLocation(locationPoint)
         volley.postLU(this, gpsActivity!!, locationPoint)
 
         //calculating all metrics
-        if (currentLocation == null) {
-            locationStart = location
-            locationCP = location
-        } else {
+        val timeNow = Calendar.getInstance().timeInMillis
+        if(currentLocation != null) {
             // overall metrics
-            val timeNow = Calendar.getInstance().timeInMillis
             distanceTotal += location.distanceTo(currentLocation)
             timeTotal = Helpers().totalTime(timeStart, timeNow)
             averageSpeedTotal = 50 / (3 * (distanceTotal / TimeUnit.MILLISECONDS.toSeconds(timeNow - timeStart)))
+        }
 
+        if(locationCP != null) {
             //cp metrics
-            if (locationCP != location) {
-                distanceCPDirect = locationCP!!.distanceTo(currentLocation)
-                distanceCPPassed += locationCP!!.distanceTo(currentLocation)
-                averageSpeedCP = 50 / (3 * (distanceCPPassed / TimeUnit.MILLISECONDS.toSeconds(timeNow - timeAtCP)))
-            }
-            //wp metrics
-            if (locationWP != null) {
-                distanceToWPDirect = locationWPSet!!.distanceTo(locationWP)
-                distanceToWPPassed += locationWPSet!!.distanceTo(currentLocation)
-                averageSpeedToWP = 50 / (3 * (distanceToWPPassed / TimeUnit.MILLISECONDS.toSeconds(timeNow - timeWPSet)))
-            }
+            timeAtCP = locationCP!!.time
+            distanceCPDirect = location.distanceTo(locationCP)
+            distanceCPPassed += location.distanceTo(currentLocation)
+            timeFmCP = Helpers().totalTime(timeAtCP, timeNow)
+        }
+
+        if(locationWP != null) {
+            val currentPaceInSec = location.speed * 60
+            distanceToWPDirect = location.distanceTo(locationWP)
+            distanceToWPPassed += location.distanceTo(currentLocation)
+            val estTimeInSec = distanceToWPDirect/1000 * currentPaceInSec
+            estTimeToWP = Helpers().converterStoMS(estTimeInSec.toLong())
         }
         // save the location for calculations
         currentLocation = location
@@ -199,10 +196,10 @@ class LocationService : Service() {
         intent.putExtra(C.LOCATION_UPDATE_ACTION_TOTAL_PACE, averageSpeedTotal)
         intent.putExtra(C.LOCATION_UPDATE_ACTION_CP_DIRECT, distanceCPDirect)
         intent.putExtra(C.LOCATION_UPDATE_ACTION_CP_PASSED, distanceCPPassed)
-        intent.putExtra(C.LOCATION_UPDATE_ACTION_CP_PACE, averageSpeedCP)
+        intent.putExtra(C.LOCATION_UPDATE_ACTION_CP_TIME, timeFmCP)
         intent.putExtra(C.LOCATION_UPDATE_ACTION_WP_DIRECT, distanceToWPDirect)
         intent.putExtra(C.LOCATION_UPDATE_ACTION_WP_PASSED, distanceToWPPassed)
-        intent.putExtra(C.LOCATION_UPDATE_ACTION_WP_PACE, averageSpeedToWP)
+        intent.putExtra(C.LOCATION_UPDATE_ACTION_WP_TIME, estTimeToWP)
 
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
@@ -278,9 +275,8 @@ class LocationService : Service() {
 
         // set counters and locations to 0/null
         currentLocation = null
-        locationStart = null
         locationCP = null
-        locationWPSet = null
+        locationWP = null
 
         timeStart = Calendar.getInstance().timeInMillis // time of start
         distanceTotal = 0f
@@ -289,11 +285,10 @@ class LocationService : Service() {
         timeAtCP = 0L
         distanceCPDirect = 0f
         distanceCPPassed = 0f
-        averageSpeedCP = 0f
-        timeWPSet = 0L
+        timeFmCP = "00:00:00"
         distanceToWPDirect = 0f
         distanceToWPPassed = 0f
-        averageSpeedToWP = 0f
+        estTimeToWP = "00:00"
 
         //receiving settings from user options (selected in options pop-up in mapActivity
         val activityType = intent!!.getStringExtra("activityType")
@@ -351,22 +346,23 @@ class LocationService : Service() {
         notifyview.setOnClickPendingIntent(R.id.imageButtonWP, pendingIntentWp)
 
         //passing calculated data to notification
-        notifyview.setTextViewText(R.id.textTime, "%s".format(timeTotal))
-        notifyview.setTextViewText(R.id.textDistance, "%.2f m".format(distanceTotal))
-        notifyview.setTextViewText(R.id.textSpeed, "%.2f min/km".format(averageSpeedTotal))
+        notifyview.setTextViewText(R.id.textNotifTotalTime, "TT:%s".format(timeTotal))
+        notifyview.setTextViewText(R.id.textNotifTotalDistance, "TD:%.0f m".format(distanceTotal))
+        notifyview.setTextViewText(R.id.textNotifAvgSpeed, "AP:%.2f min/km".format(averageSpeedTotal))
 
-        notifyview.setTextViewText(R.id.textDirectFmCP, "%.2f m".format(distanceCPDirect))
-        notifyview.setTextViewText(R.id.textDistanceFmCP, "%.2f m".format(distanceCPPassed))
-        notifyview.setTextViewText(R.id.textAvgSpeedCP, "%.2f min/km".format(averageSpeedCP))
+        notifyview.setTextViewText(R.id.textNotifDirectDistFmCP, "DD:%.0f m".format(distanceCPDirect))
+        notifyview.setTextViewText(R.id.textNotifDistFmCP, "PD:%.0f m".format(distanceCPPassed))
+        notifyview.setTextViewText(R.id.textNotifTimeFmCP, "PT:%s".format(timeFmCP))
 
-        notifyview.setTextViewText(R.id.textDirectToWP, "%.2f m".format(distanceToWPDirect))
-        notifyview.setTextViewText(R.id.textDistanceToWP, "%.2f m".format(distanceToWPPassed))
-        notifyview.setTextViewText(R.id.TextAvgSpeedToWP, "%.2f min/km".format(averageSpeedToWP))
+        notifyview.setTextViewText(R.id.textNotifDirectDistToWP, "DD:%.0f m".format(distanceToWPDirect))
+        notifyview.setTextViewText(R.id.textNotifDistPassedWP, "PD:%.0f m".format(distanceToWPPassed))
+        notifyview.setTextViewText(R.id.textNotifEstTimeToWP, "ET:%s".format(estTimeToWP))
 
         // construct and show notification
         val builder = NotificationCompat.Builder(applicationContext, C.NOTIFICATION_CHANNEL)
-                .setSmallIcon(R.drawable.baseline_gps_not_fixed_24)
-                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setSmallIcon(R.drawable.baseline_satellite_black_48dp)
+                .setContentTitle("GPS Sports Map")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setOngoing(true)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
 
@@ -391,9 +387,7 @@ class LocationService : Service() {
                 C.MAIN_ACTION_WP -> {
                     //on receipt changes settings for WP calculations
                     if (intent.getParcelableExtra<Location>(C.MAIN_ACTION_WP) != null) {
-                        locationWPSet = currentLocation
                         locationWP = intent.getParcelableExtra(C.MAIN_ACTION_WP)
-                        timeWPSet = Calendar.getInstance().timeInMillis
                         distanceToWPDirect = 0f
                         distanceToWPPassed = 0f
                         showNotification()
@@ -401,7 +395,7 @@ class LocationService : Service() {
                         locationWP = null
                         distanceToWPDirect = 0f
                         distanceToWPPassed = 0f
-                        averageSpeedToWP = 0f
+                        estTimeToWP = "00:00"
                         showNotification()
                     }
                 }
@@ -413,7 +407,6 @@ class LocationService : Service() {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         pointCP.verticalAccuracyMeters = locationCP!!.verticalAccuracyMeters
                     }
-                    pointCP.speed = Helpers().paceAtLocation(gpsActivity!!.listOfLocations.last()!!, pointCP)
                     pointCP.typeId = "00000000-0000-0000-0000-000000000003"
                     gpsActivity!!.listOfLocations.add(pointCP)
                     activityRepo.addLocation(pointCP)
@@ -432,7 +425,7 @@ class LocationService : Service() {
                     locationWP = null
                     distanceToWPDirect = 0f
                     distanceToWPPassed = 0f
-                    averageSpeedToWP = 0f
+                    estTimeToWP = "00:00"
                     showNotification()
                     val resetWP = Intent(C.NOTIFICATION_ACTION_WP_RESET)
                     LocalBroadcastManager.getInstance(this@LocationService).sendBroadcast(resetWP)
