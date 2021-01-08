@@ -10,14 +10,17 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
-
-    private var settings = Settings()
-    private var game = Game()
+  /*
+  Main activity class, also responds for UI. Reflects all changes made in setting and by game logic.
+   */
+    private var settings = Settings()       // game settings
+    private var game = Game()               // game logic
 
     override fun onSaveInstanceState(outState: Bundle) {
+        //function saves game to keep same state after screen rotation
         super.onSaveInstanceState(outState)
 
-        //savingSettings
+        //saves Settings
         outState.putStringArrayList("Players",
             arrayListOf(settings.playerOneName, settings.playerTwoName))
         outState.putBoolean("SettingsOpened", settings.isSettingsWereOpened)
@@ -28,7 +31,7 @@ class MainActivity : AppCompatActivity() {
                 settings.pOneBackground,
                 settings.pTwoBackground))
 
-        //savingGame
+        //saves Game
         for (i in 0..5) {
             outState.putIntArray("$i", game.board[i].toIntArray())
         }
@@ -38,12 +41,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        //function initializes/redraws ui on game start, screen rotation
         super.onCreate(savedInstanceState)
 
-        settings.playerOneName = resources.getString(R.string.playerOneName)
-        settings.playerTwoName = resources.getString(R.string.playerTwoName)
+        settings.playerOneName = resources.getString(R.string.playerOneName)  //Player one name, can be changed in settings
+        settings.playerTwoName = resources.getString(R.string.playerTwoName)  //Player two name, can be changed in settings
 
         if (savedInstanceState != null) {
+            //if game saved, then restores on screen rotation.
+
+                //restores Settings
             val playersList = savedInstanceState.getStringArrayList("Players")
             settings.playerOneName = playersList!![0]
             settings.playerTwoName = playersList[1]
@@ -55,6 +62,7 @@ class MainActivity : AppCompatActivity() {
             settings.pOneBackground = themeSettings[2]
             settings.pTwoBackground = themeSettings[3]
 
+            //restores Game
             for (i in 0..5) {
                 game.board[i] = savedInstanceState.getIntArray("$i")!!.toList().toTypedArray()
             }
@@ -65,11 +73,11 @@ class MainActivity : AppCompatActivity() {
             game.endGame = savedInstanceState.getBoolean("EndGameState")
         }
 
-        supportActionBar?.hide()
         setContentView(R.layout.activity_main)
+        //ui update on basis of game/settings state
         updateUI()
 
-
+        // settings pop-up on game start, works when settings weren't opened yet
         if (!settings.isSettingsWereOpened) {
             settings.askSettings(this, this)
             settings.isSettingsWereOpened = true
@@ -77,12 +85,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun boardChipOnClick(view: View) {
+        //function returns row/column for current click and starts move function from game logic.
+        //updates ui after each move
         val (row, col) = getRowCol(view.tag)
         game.move(row, col, settings)
         updateUI()
     }
 
     fun butOneMoreGameOnClick(view: View) {
+        //function starts new game, but doesn't reset wins statistics (as another round)
         if (game.endGame) {
             game.gameReset()
             for (i in 0..41) {
@@ -93,6 +104,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun butResetGameOnClick(view: View) {
+        //function totally resets game, including statistics
         game.pOneWins = 0
         game.pTwoWins = 0
         settings.isPlayerOneMove = true
@@ -107,10 +119,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun butSettingsOnClick(view: View) {
+        // opens settings popup
         settings.askSettings(this, this)
     }
 
     fun updateUI() {
+        //updates ui, stats, moves, game state and sends win/draw alert
         findViewById<TextView>(R.id.textStatsPoneName).text = settings.playerOneName
         findViewById<TextView>(R.id.textStatsPtwoName).text = settings.playerTwoName
         findViewById<View>(R.id.layoutPone).setBackgroundResource(settings.pOneBackground)
@@ -151,7 +165,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun sendAlert(context: Context) {
-
+        //function creates alert pop-un on game end
         if (game.endGame) {
             var message = ""
             val congratulation = resources.getString(R.string.congratulations)
@@ -180,6 +194,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getRowCol(tag: Any?): Pair<Int, Int> {
+        //function to indicate row/column of square/chip
         val tagString = tag.toString()
         val tagInt = tagString.toInt()
         val row = tagInt / 7

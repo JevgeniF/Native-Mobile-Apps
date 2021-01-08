@@ -40,9 +40,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 
-
-//TODO: toTEST: LINE COLORS
-
 class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, SensorEventListener {
     companion object {
         private val TAG = this::class.java.declaringClass!!.simpleName
@@ -246,7 +243,10 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
 
         //restoration of Polylines
         for (i in 1 until listOfLocations.size) {
-            mapObjects.uiUpdate(LatLng(listOfLocations[i - 1]!!.latitude, listOfLocations[i - 1]!!.longitude), LatLng(listOfLocations[i]!!.latitude, listOfLocations[i]!!.longitude), listOfLocations[i]!!.speed, goodPace, badPace, mMap)
+            mapObjects.uiUpdate(LatLng(listOfLocations[i - 1]!!.latitude,
+                listOfLocations[i - 1]!!.longitude),
+                LatLng(listOfLocations[i]!!.latitude, listOfLocations[i]!!.longitude),
+                listOfLocations[i]!!.speed, goodPace, badPace, mMap, this)
 
             //restoration of Checkpoints if were placed before
             if (listOfLocations[i]!!.typeId == "00000000-0000-0000-0000-000000000003") {
@@ -324,10 +324,13 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
                 startMarked = true
             }
             //marking of last track part by polyline
-            mapObjects.uiUpdate(LatLng(listOfLocations.last()!!.latitude, listOfLocations.last()!!.longitude), LatLng(location.latitude, location.longitude), location.speed, goodPace, badPace, mMap)
+            mapObjects.uiUpdate(LatLng(listOfLocations.last()!!.latitude,
+                listOfLocations.last()!!.longitude),
+                LatLng(location.latitude, location.longitude),
+                location.speed, goodPace, badPace, mMap, this)
         }
         listOfLocations.add(LocationPoint(location))
-        mMap.animateCamera(CameraUpdateFactory.newLatLng(LatLng(location.latitude, location.longitude)))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(LatLng(location.latitude, location.longitude)))
 
         //change of camera rotation with north always up or in accordance with user rotation(compass bearing)
         if (mapObjects.northUp) {

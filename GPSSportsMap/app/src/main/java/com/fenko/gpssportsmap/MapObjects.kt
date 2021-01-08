@@ -7,6 +7,7 @@ import android.location.LocationManager
 import android.os.Parcel
 import android.os.Parcelable
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.androidadvance.topsnackbar.TSnackbar
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -103,23 +104,23 @@ class MapObjects() : Parcelable {
         map.animateCamera(CameraUpdateFactory.newCameraPosition(camPos))
     }
 
-    fun uiUpdate(position1: LatLng, position2: LatLng?, speed: Float, fasterPace: Int, slowerPace: Int, map: GoogleMap) {
+    fun uiUpdate(position1: LatLng, position2: LatLng?, speed: Float, fasterPace: Int, slowerPace: Int, map: GoogleMap, context: Context) {
         //function writes polylines on the map
         val segment = (slowerPace - fasterPace) / 3
         if (speed >= slowerPace) {
-            map.addPolyline(PolylineOptions().width(10F).color(RED).add(position1, position2))
+            map.addPolyline(PolylineOptions().width(10F).color(ContextCompat.getColor(context, R.color.red)).add(position1, position2))
         }
         if (speed >= fasterPace + segment * 2) {
-            map.addPolyline(PolylineOptions().width(10F).color(MAGENTA).add(position1, position2))
+            map.addPolyline(PolylineOptions().width(10F).color(ContextCompat.getColor(context, R.color.orange)).add(position1, position2))
         }
         if (speed >= fasterPace + segment) {
-            map.addPolyline(PolylineOptions().width(10F).color(WHITE).add(position1, position2))
+            map.addPolyline(PolylineOptions().width(10F).color(ContextCompat.getColor(context, R.color.yellow)).add(position1, position2))
+        }
+        if (speed < fasterPace) {
+            map.addPolyline(PolylineOptions().width(10F).color(ContextCompat.getColor(context, R.color.lightgreen)).add(position1, position2))
         }
         if (speed >= fasterPace) {
-            map.addPolyline(PolylineOptions().width(10F).color(YELLOW).add(position1, position2))
-        }
-        if (speed <= fasterPace) {
-            map.addPolyline(PolylineOptions().width(10F).color(GREEN).add(position1, position2))
+            map.addPolyline(PolylineOptions().width(10F).color(ContextCompat.getColor(context, R.color.green)).add(position1, position2))
         }
     }
 

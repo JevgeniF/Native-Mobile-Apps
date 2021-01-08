@@ -91,7 +91,7 @@ class ListActivityData : AppCompatActivity(), OnMapReadyCallback {
         for (i in 1 until locations.size) {
             mapObjects.uiUpdate(LatLng(locations[i - 1]!!.latitude, locations[i - 1]!!.longitude),
                     LatLng(locations[i]!!.latitude, locations[i]!!.longitude),
-                    locations[i]!!.speed, goodPace, badPace, mMap)
+                    locations[i]!!.speed, goodPace, badPace, mMap, this)
 
             if (locations[i]!!.typeId == "00000000-0000-0000-0000-000000000003") {
                 mapObjects.addCPMarker(locations[i]!!, mMap)
