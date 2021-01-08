@@ -42,7 +42,7 @@ class DBHelper(context: Context) :
         const val ACTIVITY_GOOD_PACE = "settedGoodPace"
 
         const val LOCATION_TABLE_NAME = "LOCATIONS"
-        const val LOCATION_ID = "_id"
+        private const val LOCATION_ID = "_id"
         const val LOCATION_ACTIVITY_ID = "activityId"
         const val LOCATION_RECORDED_AT = "recordedAt"
         const val LOCATION_LATITUDE = "latitude"

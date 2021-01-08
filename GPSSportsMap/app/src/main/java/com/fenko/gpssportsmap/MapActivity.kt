@@ -75,9 +75,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
     private lateinit var sensorManager: SensorManager
     private lateinit var accelerometer: Sensor
     private lateinit var magnetometer: Sensor
-    private var lastAcellerometer = FloatArray(3)
+    private var lastAccelerometer = FloatArray(3)
     private var lastMagnetometer = FloatArray(3)
-    private var lastAcellerometerSet = false
+    private var lastAccelerometerSet = false
     private var lastMagnetometerSet = false
     private var bearing = 0f //current compass direction, used for camera rotations
 
@@ -281,19 +281,19 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
         textCompDirLeft: shows Compass Direction 90 degrees left from current direction
         textCompDirRight: shows Compass Direction 90 degrees right from current direction
         textCompCurrDir: shows Current Compass Direction and degree (bearing)
-        @SurpressLint used as there are no text, but Android Studio counts this as small violation
+        @SuppressLint used as there are no text, but Android Studio counts this as small violation
          */
         if (event!!.sensor == accelerometer) {
-            lowPass(event.values, lastAcellerometer)
-            lastAcellerometerSet = true
+            lowPass(event.values, lastAccelerometer)
+            lastAccelerometerSet = true
         } else if (event.sensor == magnetometer) {
             lowPass(event.values, lastMagnetometer)
             lastMagnetometerSet = true
         }
 
-        if (lastAcellerometerSet && lastMagnetometerSet) {
+        if (lastAccelerometerSet && lastMagnetometerSet) {
             val r = FloatArray(9)
-            if (SensorManager.getRotationMatrix(r, null, lastAcellerometer, lastMagnetometer)) {
+            if (SensorManager.getRotationMatrix(r, null, lastAccelerometer, lastMagnetometer)) {
                 val orientation = FloatArray(3)
                 SensorManager.getOrientation(r, orientation)
 
@@ -413,7 +413,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
                         // stopping the service in case of confirmation
                         stopService(Intent(this, LocationService::class.java))
                         TSnackbar.make(view, resources.getString(R.string.activityCompleted), TSnackbar.LENGTH_LONG).show()
-                        //to make it possible to start activity again without app restart, all important ui data resetted
+                        //to make it possible to start activity again without app restart, all important ui data must be reset
+
                         mMap.clear()
                         listOfLocations = arrayListOf()
                         currentLocation = null
@@ -486,7 +487,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClic
 
     fun buttonAddCPointOnClick(view: View) {
         //function to mark current location as CP. function sends order to service, if order received,
-        //server sends loccation point back and ui marks CP on map.
+        //service sends location point back and ui marks CP on map.
         if (locationServiceActive) {
             Log.d(TAG, "buttonCPOnClick")
             sendBroadcast(Intent(C.NOTIFICATION_ACTION_CP_SET))

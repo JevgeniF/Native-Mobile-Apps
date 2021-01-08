@@ -76,7 +76,7 @@
     <string name="optionsLoggedInAs">Logged in as:</string>
     <string name="previousActivities">Previous Activities</string>
     <string name="not_logged_in">Not logged in.</string>
-    <string name="no_syncronization_with_online_service_available">No synchronization with online service available</string>
+    <string name="no_synchronization_with_online_service_available">No synchronization with online service available</string>
     <string name="log_in">Log In</string>
     <string name="select_activity">Select Activity</string>
     <string name="enter_bad_pace_min_km">Enter Bad Pace (min/km)</string>
@@ -88,6 +88,7 @@
     <string name="default_2000">default: 2000</string>
     <string name="distance">Distance:</string>
     <string name="current_direction">Current Direction</string>
+    <string name="close">Close</string>
 
     <string-array name="activities">
         <item>Running - easy</item>

@@ -26,7 +26,7 @@ class DataRecyclerViewAdapter(context: Context, private val activityRepo: Activi
     Used for User interaction with recorded into Database activities.
      */
 
-    lateinit var dataSet: List<GPSActivity> //set of all activities from database
+    private lateinit var dataSet: List<GPSActivity> //set of all activities from database
 
     fun refreshData() {
         //function updates set of all activities
@@ -57,7 +57,7 @@ class DataRecyclerViewAdapter(context: Context, private val activityRepo: Activi
         holder.itemView.setOnLongClickListener {
             //listener for every row view
             volley.volleyUser = activityRepo.getUser() //we require token for interaction with backend at the same time
-            //to get right activity, we need to know holder position, as we can get activity by position index in dataset
+            //to get right activity, we need to know holder position, as we can get activity by position index in dataSet
             val position = holder.adapterPosition
             val builder = AlertDialog.Builder(context)
             val gpsActivity = dataSet[position]
@@ -104,7 +104,7 @@ class DataRecyclerViewAdapter(context: Context, private val activityRepo: Activi
     }
 
     private fun removeItem(position: Int) {
-        //function removes item from database and dataset
+        //function removes item from database and dataSet
         activityRepo.delete(position)
         dataSet.drop(position)
         refreshData()

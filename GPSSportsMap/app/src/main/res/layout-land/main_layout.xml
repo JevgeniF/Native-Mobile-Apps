@@ -241,7 +241,8 @@
         app:layout_constraintStart_toStartOf="@+id/guidelineVertL"
         app:layout_constraintTop_toTopOf="parent"
         tools:context=".MapActivity"
-        tools:layout="@layout/activity_maps" />
+        tools:layout="@layout/activity_maps"
+        tools:ignore="FragmentTagUsage" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineVertL"

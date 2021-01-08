@@ -32,7 +32,7 @@ class LastActivityData : AppCompatActivity(), OnMapReadyCallback {
     private var mapObjects = MapObjects()                       //class for drawing on map
     private var gpxParser = GPXParser()                         //class for sharing GPX file
 
-    private var goodPace: Int = 0                               //pace range chosen by user for this activity from databse
+    private var goodPace: Int = 0                               //pace range chosen by user for this activity from database
     private var badPace: Int = 0
 
 

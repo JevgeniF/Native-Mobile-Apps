@@ -17,7 +17,8 @@
         app:layout_constraintStart_toStartOf="@+id/guideline5"
         app:layout_constraintTop_toTopOf="parent"
         tools:context=".MapActivity"
-        tools:layout="@layout/activity_maps" />
+        tools:layout="@layout/activity_maps"
+        tools:ignore="FragmentTagUsage" />
 
     <TextView
         android:id="@+id/textActivityName"
@@ -33,7 +34,7 @@
         app:layout_constraintTop_toTopOf="@+id/editTextActivityName" />
 
     <TextView
-        android:id="@+id/textActivtyTime"
+        android:id="@+id/textActivityTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -96,7 +97,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textActivtyTime" />
+        app:layout_constraintTop_toBottomOf="@+id/textActivityTime" />
 
     <TextView
         android:id="@+id/textPaceData"
@@ -158,11 +159,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textActivtyTime"
+        app:layout_constraintBottom_toBottomOf="@+id/textActivityTime"
         app:layout_constraintEnd_toStartOf="@+id/map"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/textActivtyTime"
-        app:layout_constraintTop_toTopOf="@+id/textActivtyTime" />
+        app:layout_constraintStart_toEndOf="@+id/textActivityTime"
+        app:layout_constraintTop_toTopOf="@+id/textActivityTime" />
 
     <TextView
         android:id="@+id/textDistanceData"

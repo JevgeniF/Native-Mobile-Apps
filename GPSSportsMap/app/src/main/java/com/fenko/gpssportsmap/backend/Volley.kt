@@ -55,7 +55,7 @@ class Volley {
         buttonLogin.setOnClickListener {
             // on press tries to login user with entered data
 
-            val eMail = dialog.findViewById(R.id.textFieldeMail) as EditText
+            val eMail = dialog.findViewById(R.id.textFieldEMail) as EditText
             val password = dialog.findViewById(R.id.textFieldPassword) as EditText
 
             //request body
@@ -93,7 +93,7 @@ class Volley {
             val buttonRegister = dialog.findViewById(R.id.buttonRegister) as Button
             buttonRegister.setOnClickListener {
                 //tries to register user with inserted data
-                val eMail = dialog.findViewById(R.id.textFieldeMail) as EditText
+                val eMail = dialog.findViewById(R.id.textFieldEMail) as EditText
                 val password = dialog.findViewById(R.id.textFieldPassword) as EditText
                 val firstName = dialog.findViewById(R.id.textFieldFirstName) as EditText
                 val lastName = dialog.findViewById(R.id.textFieldLastName) as EditText
